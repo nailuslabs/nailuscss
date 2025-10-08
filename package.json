@@ -24,14 +24,27 @@
     "url": "git+https://nailuslabs@github.com/nailuslabs/nailuscss.git"
   },
   "license": "MIT",
-  "author": "Naïloth Esdras Nsounda Nsilulu",
-  "type": "module",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
+  "author":  "Naïloth Esdras Nsounda Nsilulu",
+  "type":    "module",
+  "main":   "index.js",
+  "module": "index.mjs",
+  "types":  "index.d.ts",
+  "bin": {
+    "nailus": "./cli/index.cjs"
   },
+  "engines": {
+    "node": ">= 18"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test",
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
