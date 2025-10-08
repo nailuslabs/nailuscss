@@ -1,0 +1,36 @@
+{
+  "name": "nailuscss",
+  "version": "1.0.0",
+  "description": "Instant on-demand atomic css generator engine (firts-utility).",
+  "keywords": [
+    "nailuscss",
+    "nailuslabs",
+    "tailwindcss",
+    "unocss",
+    "pandacss",
+    "css",
+    "javascript",
+    "typescript",
+    "python",
+    "AI",
+    "compiler"
+  ],
+  "homepage": "https://github.com/nailuslabs/nailuscss#readme",
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailuscss/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://nailuslabs@github.com/nailuslabs/nailuscss.git"
+  },
+  "license": "MIT",
+  "author": "Naïloth Esdras Nsounda Nsilulu",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
