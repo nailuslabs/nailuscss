@@ -24,11 +24,11 @@
     "url": "git+https://nailuslabs@github.com/nailuslabs/nailuscss.git"
   },
   "license": "MIT",
-  "author":  "Naïloth Esdras Nsounda Nsilulu",
-  "type":    "module",
-  "main":   "index.js",
+  "author": "Naïloth Esdras Nsounda Nsilulu",
+  "type": "module",
+  "main": "index.js",
   "module": "index.mjs",
-  "types":  "index.d.ts",
+  "types": "index.d.ts",
   "bin": {
     "nailus": "./cli/index.cjs"
   },
@@ -42,9 +42,90 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "test": "node --test",
-    "build": "rollup -c",
-    "dev": "rollup -c -w"
+    "dev": "rollup -cw",
+    "watch": "concurrently -r \"rollup -cw\" \"tsc -p tsconfig.build.json --watch\"",
+    "build": "tsc -p tsconfig.build.json && rollup -c",
+    "build:prod": "cross-env NODE_ENV=production pnpm build",
+    "typecheck": "tsc -p tsconfig.dev.json --noEmit",
+    "types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "pnpm lint -- --fix",
+    "test": "sucrase-node test/run.ts",
+    "test:update": "cross-env UPDATE_SNAPSHOT=true pnpm test",
+    "test:dts": "tsc -p test/dts --noEmit",
+    "coverage": "nyc --nycrc-path=.nycrc.json pnpm test",
+    "release": "bumpp --tag --commit --push"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./colors": {
+      "import": "./colors.mjs",
+      "require": "./colors.js"
+    },
+    "./defaultConfig": {
+      "import": "./defaultConfig.mjs",
+      "require": "./defaultConfig.js"
+    },
+    "./defaultTheme": {
+      "import": "./defaultTheme.mjs",
+      "require": "./defaultTheme.js"
+    },
+    "./config": {
+      "import": "./config/index.mjs",
+      "require": "./config/index.js"
+    },
+    "./lib": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js"
+    },
+    "./plugin": {
+      "import": "./plugin/index.mjs",
+      "require": "./plugin/index.js"
+    },
+    "./plugin/aspect-ratio": {
+      "import": "./plugin/aspect-ratio/index.js",
+      "require": "./plugin/aspect-ratio/index.js"
+    },
+    "./plugin/filters": {
+      "import": "./plugin/filters/index.js",
+      "require": "./plugin/filters/index.js"
+    },
+    "./plugin/forms": {
+      "import": "./plugin/forms/index.js",
+      "require": "./plugin/forms/index.js"
+    },
+    "./plugin/line-clamp": {
+      "import": "./plugin/line-clamp/index.js",
+      "require": "./plugin/line-clamp/index.js"
+    },
+    "./plugin/typography": {
+      "import": "./plugin/typography/index.js",
+      "require": "./plugin/typography/index.js"
+    },
+    "./plugin/scroll-snap": {
+      "import": "./plugin/scroll-snap/index.js",
+      "require": "./plugin/scroll-snap/index.js"
+    },
+    "./helpers": {
+      "import": "./helpers/index.mjs",
+      "require": "./helpers/index.js"
+    },
+    "./utils": {
+      "import": "./utils/index.mjs",
+      "require": "./utils/index.js"
+    },
+    "./utils/parser": {
+      "import": "./utils/parser/index.mjs",
+      "require": "./utils/parser/index.js"
+    },
+    "./utils/style": {
+      "import": "./utils/style/index.mjs",
+      "require": "./utils/style/index.js"
+    }
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
@@ -68,6 +149,7 @@
     "bumpp": "^10.3.1",
     "caller-path": "^4.0.0",
     "color-string": "^2.1.2",
+    "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "diff": "^8.0.2",
     "domhandler": "^5.0.3",
