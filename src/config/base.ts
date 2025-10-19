@@ -3,6 +3,8 @@ import { keyframes } from './keyframes';
 import { variantOrder } from './order';
 import plugin from '../plugin';
 import type { Config } from '../interfaces';
+import { inherits } from 'util';
+import { alignContent } from '@/lib/utilities/align/alignContent';
 
 export const defaultColors = {
   transparent: 'transparent',
@@ -63,6 +65,15 @@ export const baseConfig: Config = {
   attributify: false,
   darkMode: 'class', // or 'media'
   theme: {
+    alignContent: {
+      inherit: 'inherit',
+      initial: 'initial',
+      unset: 'unset',
+    },
+    alignItems: (theme) => theme('alignContent'),
+    alignSelf:  (theme) => theme('alignContent'),
+
+
     orientation: {
       portrait: 'portrait',
       landscape: 'landscape',

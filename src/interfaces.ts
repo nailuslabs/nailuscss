@@ -96,6 +96,10 @@ export interface PluginOutputWithOptions<T = DictStr> extends PluginOutput {
 export type ThemeType = ConfigUtil | Record<string, any> | undefined
 
 export interface BaseTheme {
+  alignContent: ThemeType
+  alignItems:   ThemeType
+  alignSelf:    ThemeType
+
   vars: ThemeType
   orientation: ThemeType
   screens: ThemeType
