@@ -1,140 +1,192 @@
 export const pseudoClassNames = [
-  'active',
-  'active-view-transition',
-  'any-link',
-  'autofill',
-  'blankExperimental',
-  'buffering',
-  'checked',
-  'default',
-  'defined',
-  // 'dir()',
-  'disabled',
-  'empty',
-  'enabled',
-  'first',
-  'first-child',
-  'first-of-type',
-  'focus',
-  'focus-visible',
-  'focus-within',
-  'fullscreen',
-  'future',
-  'has-slotted',
-  // 'has()',
-  'host',
-  // 'host()',
-  'hover',
-  'in-range',
-  'indeterminate',
-  'invalid',
-  // 'is()',
-  'lang()',
-  'last-child',
-  'last-of-type',
-  'left',
-  'link',
-  'modal',
-  'muted',
-  'not()',
-  // 'nth-child()',
-  // 'nth-last-child()',
-  // 'nth-last-of-type()',
-  // 'nth-of-type()',
-  'only-child',
-  'only-of-type',
-  'open',
-  'optional',
-  'out-of-range',
-  'past',
-  'paused',
-  'picture-in-picture',
-  'placeholder-shown',
-  'playing',
-  'popover-open',
-  'read-only',
-  'read-write',
-  'required',
-  'right',
-  'root',
-  'scope',
-  'seeking',
-  'stalled',
-  // 'state()',
-  'target',
-  'user-invalid',
-  'user-valid',
-  'valid',
-  'visited',
-  'volume-locked',
-  // 'where()',
+  // États d’interaction
+  'hover', 'focus', 'active', 'visited', 'link', 'target',
+  'focus-visible', 'focus-within', 'checked',
+
+  // États des formulaires
+  'default', 'disabled', 'enabled', 'indeterminate', 'invalid', 'valid',
+  'optional', 'required', 'placeholder-shown', 'read-only', 'read-write',
+
+  // Sélecteurs de structure
+  'first-of-type', 'last-of-type', 'only-child', 'only-of-type',
+
+  // Racine / contenu vide
+  'root', 'empty',
+
+  // Nouveaux pseudo-classes pour Tailwind v4+
+  'open',  'group-open',  'peer-open',  'has-*',  'group-has-*',  'peer-has-*',
+
+  // aria-*
+  'aria-checked', 'aria-disabled', 'aria-expanded', 'aria-selected', 'aria-pressed', 'aria-readonly', 'aria-required', 'aria-hidden',
+
+  // data-*
+  'data-*',
 ];
 
 export const variantOrder = [
+  // Pseudo-classes classiques
   ...pseudoClassNames,
 
-  'after',
-  'backdrop',
-  'before',
-  'cue',
-  'details-content',
-  'file-selector-button',
-  'first-letter',
-  'first-line',
-  'grammar-error',
-  // 'highlight()',
-  'marker',
-  // 'part()',
-  'placeholder',
+  // Négation / not
+  'not-checked', 'not-disabled', 'not-first-of-type', 'not-last-of-type',
+  'not-only-child', 'not-only-of-type', 'not-first', 'not-last',
 
-  // 'not-checked',
-  // 'not-disabled',
-  // 'not-first-of-type',
-  // 'not-last-of-type',
-  // 'not-first',
-  // 'last',
-  // 'not-last',
-  // 'not-only-child',
-  // 'not-only-of-type',
-  // 'even',
-  // 'odd',
-  // 'even-of-type',
-  // 'odd-of-type',
+  // Sélecteurs positionnels
+  'first', 'last', 'even', 'odd', 'even-of-type', 'odd-of-type',
 
-  // 'file',
-  // 'selection',
-  // 'svg',
-  // 'all',
-  // 'children',
-  // 'siblings',
-  // 'sibling',
-  // 'ltr',
-  // 'rtl',
-  // ...pseudoClassNames.map(pseudoClassName => `group-${pseudoClassName}`),
-  // 'motion-safe',
-  // 'motion-reduce',
-  // ...pseudoClassNames.map(pseudoClassName => `peer-${pseudoClassName}`),
-  // ...pseudoClassNames.map(pseudoClassName => `peer-not-${pseudoClassName}`),
+  // Pseudo-éléments
+  'before', 'after', 'first-letter', 'first-line', 'file-selector-button', 'file',
+  'selection', 'marker', 'svg', 'all',
+
+  // Sélecteurs relationnels
+  'children', 'siblings', 'sibling',
+
+  // Direction
+  'ltr', 'rtl',
+
+  // group-*, peer-*, peer-not-*
+  ...pseudoClassNames.map(pseudoClassName => `group-${pseudoClassName}`), 'group-open', 'group-has-*',
+
+  ...pseudoClassNames.map(pseudoClassName => `peer-${pseudoClassName}`), 'peer-open', 'peer-has-*',
+
+  ...pseudoClassNames.map(pseudoClassName => `peer-not-${pseudoClassName}`),
+
+  // Motion
+  'motion-safe', 'motion-reduce',
+
+  // aria-*,
+  'aria-checked', 'aria-disabled', 'aria-expanded', 'aria-selected', 'aria-pressed', 'aria-readonly', 'aria-required', 'aria-hidden',
+
+  // data-* / Supports /
+  'data-*', 'open', '@supports',
+
+  // has-*
+  'has-*',
 ];
 
 export enum layerOrder {
-  base = 10,
-  components = 150,
-  shortcuts = 160,
-  utilities = 20000,
+  // ────────────── Core layers ──────────────
+  base         = 0,   // reset / preflight
+  components   = 10,  // UI components
+  utilities    = 20,  // utilitaires générés
+  variants     = 30,  // pseudo-classes, responsive, etc.
+
+  // ────────────── Sub-layers ──────────────
+  defaults     = 40,  // styles par défaut
+  screens      = 50,  // sm:, md:, lg:, xl:
+  darkMode     = 60,  // dark:
+  supports     = 70,  // @supports()
+  container    = 75,  // @container queries
+  print        = 80,  // @media print
+
+  // États / Interaction
+  hover        = 90,
+  focus        = 100,
+  active       = 110,
+  disabled     = 120,
+
+  // Motion
+  motionSafe   = 130,
+  motionReduce = 140,
+
+  // Direction
+  rtl          = 150,
+  ltr          = 151,
+
+  // Attributs
+  aria         = 160, // aria-[state]
+  data         = 170, // data-[attr]
+  group        = 180, // group-/peer-
+
+  // Special
+  containerData = 190, // data-[] inside container queries
+  shortcuts = 200, // shortcuts
 }
 
 export enum pluginOrder {
+  'accentColor'                 = 10,
+  'alignContent'                = 20,
+  'alignItems'                  = 30,
+  'alignSelf'                   = 40,
+  'alignBaseline'               = 50,
+  'all'                         = 60,
+
+  // Propriétés d'ancrage - regroupées et ordonnées logiquement
+  'anchor'                      = 70,
+  'anchorName'                  = 80,
+  'anchorPosition'              = 90,
+  'anchorTop'                   = 100,
+  'anchorBottom'                = 110,
+  'anchorLeft'                  = 120,
+  'anchorRight'                 = 130,
+  'anchorStart'                 = 140,
+  'anchorEnd'                   = 150,
+  'anchorInlineStart'           = 160,
+  'anchorInlineEnd'             = 170,
+  'anchorInset'                 = 180,
+  'anchorInsetBlock'            = 190,
+  'anchorInsetInline'           = 200,
+  'anchorSizeWidth'             = 210,
+  'anchorSizeHeight'            = 220,
+  'anchorSizeMinWidth'          = 230,
+  'anchorSizeMinHeight'         = 240,
+  'anchorSizeMaxWidth'          = 250,
+  'anchorSizeMaxHeight'         = 260,
+  'anchorSizeBlock'             = 270,
+  'anchorSizeInline'            = 280,
+  'anchorSizeMinBlock'          = 290,
+  'anchorSizeMinInline'         = 300,
+  'anchorSizeMaxBlock'          = 310,
+  'anchorSizeMaxInline'         = 320,
+  'anchorSizeMargin'            = 330,
+  'anchorSizeMarginTop'         = 340,
+  'anchorSizeMarginBottom'      = 350,
+  'anchorSizeMarginLeft'        = 360,
+  'anchorSizeMarginRight'       = 370,
+  'anchorSizeMarginBlock'       = 380,
+  'anchorSizeMarginInline'      = 390,
+  'anchorSizeMarginBlockStart'  = 400,
+  'anchorSizeMarginBlockEnd'    = 410,
+  'anchorSizeMarginInlineStart' = 420,
+  'anchorSizeMarginInlineEnd'   = 430,
+
+  'animation'                   = 450,
+  'animationComposition'        = 460,
+  'animationDelay'              = 470,
+  'animationDirection'          = 480,
+  'animationDuration'           = 490,
+  'animationFillMode'           = 500,
+  'animationIterationCount'     = 510,
+  'animationName'               = 520,
+  'animationPlayState'          = 530,
+  'animationRange'              = 540,
+  'animationRangeEnd'           = 550,
+  'animationRangeStart'         = 560,
+  'animationTimeline'           = 570,
+  'animationTimingFunction'     = 580,
+  'appearance'                  = 590,
+  'aspectRatio'                 = 600,
+
+  'backdropFilter'              = 610,
+  'backdropBlur'                = 620,
+  'backdropBrightness'          = 630,
+  'backdropContrast'            = 640,
+  'backdropGrayscale'           = 650,
+  'backdropHueRotate'           = 660,
+  'backdropInvert'              = 670,
+  'backdropOpacity'             = 680,
+  'backdropSaturate'            = 690,
+  'backdropSepia'               = 700,
+  'backfaceVisibility'          = 710,
+
   'columns' = 80,
-  'container' = 100,
+  'container' = 300,
   'space' = 200,
   'divideWidth' = 300,
   'divideColor' = 400,
   'divideStyle' = 500,
   'divideOpacity' = 600,
   'accessibility' = 700,
-  'appearance' = 800,
-  'backgroundAttachment' = 900,
   'backgroundClip' = 1000,
   'backgroundColor' = 1100,
   'backgroundImage' = 1200,
@@ -162,9 +214,6 @@ export enum pluginOrder {
   'placeItems' = 2900,
   'placeContent' = 3000,
   'placeSelf' = 3100,
-  'alignItems' = 3200,
-  'alignContent' = 3300,
-  'alignSelf' = 3400,
   'justifyItems' = 3500,
   'justifyContent' = 3600,
   'justifySelf' = 3700,
@@ -239,7 +288,6 @@ export enum pluginOrder {
   'userSelect' = 8900,
   'verticalAlign' = 9000,
   'visibility' = 9100,
-  'backfaceVisibility' = 9150,
   'whitespace' = 9200,
   'wordBreak' = 9300,
   'writingMode' = 9340,
@@ -272,7 +320,6 @@ export enum pluginOrder {
   'transitionDuration' = 11600,
   'transitionDelay' = 11700,
   'keyframes' = 11800,
-  'animation' = 11900,
   'imageRendering' = 11950,
   'mixBlendMode' = 12000,
   'backgroundBlendMode' = 12100,
@@ -286,18 +333,7 @@ export enum pluginOrder {
   'invert' = 12900,
   'saturate' = 13000,
   'sepia' = 13100,
-  'backdropFilter' = 13200,
-  'backdropBlur' = 13300,
-  'backdropBrightness' = 13400,
-  'backdropContrast' = 13500,
-  'backdropGrayscale' = 13600,
-  'backdropHueRotate' = 13700,
-  'backdropInvert' = 13800,
-  'backdropOpacity' = 13900,
-  'backdropSaturate' = 14000,
-  'backdropSepia' = 14100,
   'willChange' = 14200,
   'touchAction' = 14300,
   'scrollBehavior' = 14400,
-  'accentColor' = 14500,
 }

@@ -1,11 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "sourceMap": true,
-    "inlineSources": true,
-    "incremental": true
-  },
-  "include": ["src", "test", "example", "test-dts"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["./src", "./test", "./test-dts", "./example"]
 }

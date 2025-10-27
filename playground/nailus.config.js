@@ -1,10 +1,13 @@
-/** @type {import('nailuscss').Config} */
-export default {
+module.exports = {
   extract: {
     include: ['**/*.html'],
   },
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'nailus-dark': '#171717',
+        'nailus-blue': '#48b0f1',
+      },
+    },
   },
-  plugins: [],
-}
+};

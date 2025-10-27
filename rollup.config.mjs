@@ -9,171 +9,310 @@ import json from '@rollup/plugin-json';
 import pkg from './package.json' with { type: 'json' };
 
 const output_dir = './dist';
+const isWatch = process.env.ROLLUP_WATCH; // ← Détecte le mode watch
+
 const prod = process.env.NODE_ENV === 'production';
 
 const ts_plugin = prod
   ? typescript({
-      target: 'es5',
-      include: 'src/**',
-      outDir: output_dir,
-      typescript: require('typescript'),
-    })
+    target: 'es5',
+    include: 'src/**',
+    outDir: output_dir,
+    typescript: require('typescript'),
+    incremental: isWatch, // ← Active la compilation incrémentale
+  })
   : sucrase({
-      exclude: ['node_modules/**'],
-      transforms: ['typescript'],
-    });
+    exclude: ['node_modules/**'],
+    transforms: ['typescript'],
+  });
 
 const dump = (file) => path.join(output_dir, file);
 
 const copy = (files) => files.forEach((file) => fs.copyFileSync(file, dump(file)));
 
-const rmdir = (dir) => {
-  if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
-    fs.rmSync(dir, { recursive: true, force: true });
+const rmdir = (dir) =>  fs.existsSync(dir) && fs.statSync(dir).isDirectory() && fs.rmSync(dir, { recursive: true, force: true });
+
+const mkdir = (dir) => !(fs.existsSync(dir) && fs.statSync(dir).isDirectory()) && fs.mkdirSync(dir);
+
+const pack = (dir, formats = ['js', 'cjs', 'mjs']) => {
+  return {
+    writeBundle() {
+      const packageJson = {
+        main: './index.js',
+        types: './index.d.ts',
+      };
+
+      if (formats.includes('mjs')) {
+        packageJson.module = './index.mjs';
+      }
+      if (formats.includes('cjs')) {
+        packageJson.main = './index.cjs';
+      }
+
+      fs.writeFileSync(
+        `${dump(dir)}/package.json`,
+        JSON.stringify(packageJson, null, '  ')
+      );
+    },
+  };
+};
+
+const types = (dest = "index.d.ts", src = "../types/index", module = "*") => {
+  return {
+    writeBundle() {
+      fs.writeFileSync(dump(dest), `export ${module} from "${src}";`);
+    },
+  };
+};
+
+// Configuration de base pour toutes les builds
+const baseConfig = {
+  plugins: [ts_plugin],
+  watch: {
+    clearScreen: false,
+    buildDelay: 100,
+    exclude: 'node_modules/**'
   }
 };
 
-const mkdir = (dir) =>
-  !(fs.existsSync(dir) && fs.statSync(dir).isDirectory()) &&
-  fs.mkdirSync(dir);
-
-const pack = (dir) => ({
-  writeBundle() {
-    fs.writeFileSync(
-      `${dump(dir)}/package.json`,
-      JSON.stringify(
-        {
-          main: './index.js',
-          module: './index.mjs',
-          types: './index.d.ts',
-        },
-        null,
-        '  '
-      )
-    );
-  },
-});
-
-const types = (dest = 'index.d.ts', src = '../types/index', module = '*') => ({
-  writeBundle() {
-    fs.writeFileSync(dump(dest), `export ${module} from "${src}";`);
-  },
-});
-
 export default [
-  // MAIN
+  // main - SEULEMENT CETTE CONFIG NETTOIE LE DOSSIER
   {
+    ...baseConfig,
     input: 'src/index.ts',
     output: [
       {
         file: dump('index.js'),
         format: 'cjs',
         exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+      },
+      {
+        file: dump('index.cjs'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
       {
         file: dump('index.mjs'),
         format: 'esm',
+        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      },
+    ],
+    external: (id) => id.startsWith('./'),
+    plugins: [
+      // Nettoyage UNIQUEMENT pour le build initial, pas en watch
+      ...(isWatch ? [] : [{
+        buildStart() {
+          rmdir(output_dir);
+          mkdir(output_dir);
+          copy(['package.json', 'README.md', 'LICENSE']);
+        }
+      }]),
+      ts_plugin,
+      types("index.d.ts", "./types/lib", "{ Processor as default }"),
+    ],
+  },
+
+  // colors - PAS de nettoyage ici
+  {
+    ...baseConfig,
+    input: 'src/colors.ts',
+    output: [
+      {
+        file: dump('colors.js'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+      },
+      {
+        file: dump('colors.cjs'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+      },
+      {
+        file: dump('colors.mjs'),
+        format: 'esm',
+        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
       },
     ],
     external: (id) => id.startsWith('./'),
     plugins: [
       ts_plugin,
-      rmdir(output_dir),
-      mkdir(output_dir),
-      copy(['package.json', 'README.md', 'LICENSE']),
-      types('index.d.ts', './types/lib', '{ Processor as default }'),
+      types("colors.d.ts", "./types/config", "{ colors as default }"),
     ],
   },
 
-  // COLORS
+  // defaultConfig - PAS de nettoyage ici
   {
-    input: 'src/colors.ts',
-    output: [
-      { file: dump('colors.js'), format: 'cjs', exports: 'default' },
-      { file: dump('colors.mjs'), format: 'esm' },
-    ],
-    external: (id) => id.startsWith('./'),
-    plugins: [ts_plugin, types('colors.d.ts', './types/config', '{ colors as default }')],
-  },
-
-  // DEFAULT CONFIG
-  {
+    ...baseConfig,
     input: 'src/defaultConfig.ts',
     output: [
-      { file: dump('defaultConfig.js'), format: 'cjs', exports: 'default' },
-      { file: dump('defaultConfig.mjs'), format: 'esm' },
+      {
+        file: dump('defaultConfig.js'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+      },
+      {
+        file: dump('defaultConfig.cjs'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+      },
+      {
+        file: dump('defaultConfig.mjs'),
+        format: 'esm',
+        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      },
     ],
     external: (id) => id.startsWith('./'),
-    plugins: [ts_plugin, types('defaultConfig.d.ts', './types/defaultConfig', '{ default }')],
+    plugins: [
+      ts_plugin,
+      types("defaultConfig.d.ts", "./types/defaultConfig", "{ default }")],
   },
 
-  // DEFAULT THEME
+  // defaultTheme - PAS de nettoyage ici
   {
+    ...baseConfig,
     input: 'src/defaultTheme.ts',
     output: [
-      { file: dump('defaultTheme.js'), format: 'cjs', exports: 'default' },
-      { file: dump('defaultTheme.mjs'), format: 'esm' },
+      {
+        file: dump('defaultTheme.js'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+      },
+      {
+        file: dump('defaultTheme.cjs'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+      },
+      {
+        file: dump('defaultTheme.mjs'),
+        format: 'esm',
+        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      },
     ],
     external: (id) => id.startsWith('./'),
-    plugins: [ts_plugin, types('defaultTheme.d.ts', './types/defaultTheme', '{ default }')],
+    plugins: [
+      ts_plugin,
+      types("defaultTheme.d.ts", "./types/defaultTheme", "{ default }")
+    ],
   },
 
-  // RESOLVECONFIG
+  // resolveConfig - PAS de nettoyage ici
   {
+    ...baseConfig,
     input: 'src/resolveConfig.ts',
     output: [
-      { file: dump('resolveConfig.js'), format: 'cjs', exports: 'default' },
-      { file: dump('resolveConfig.mjs'), format: 'esm' },
+      {
+        file: dump('resolveConfig.js'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+      },
+      {
+        file: dump('resolveConfig.cjs'),
+        format: 'cjs',
+        exports: 'default',
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+      },
+      {
+        file: dump('resolveConfig.mjs'),
+        format: 'esm',
+        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+      },
     ],
     external: (id) => id.startsWith('./'),
-    plugins: [ts_plugin, types('resolveConfig.d.ts', './types/resolveConfig', '{ default }')],
+    plugins: [
+      ts_plugin,
+      types("resolveConfig.d.ts", "./types/resolveConfig", "{ default }")
+    ],
   },
 
-  // PLUGIN
+  // plugin - PAS de nettoyage ici
   {
+    ...baseConfig,
     input: 'src/plugin/index.ts',
     output: [
-      { file: dump('plugin/index.js'), format: 'cjs', exports: 'default' },
-      { file: dump('plugin/index.mjs'), format: 'esm' },
+      {
+        file: dump('plugin/index.js'),
+        exports: 'default',
+        format: 'cjs',
+      },
+      {
+        file: dump('plugin/index.cjs'),
+        exports: 'default',
+        format: 'cjs',
+      },
+      {
+        file: dump('plugin/index.mjs'),
+        format: 'esm',
+      },
     ],
-    plugins: [ts_plugin, resolve(), pack('plugin'), types('plugin/index.d.ts', '../types/plugin/index', '{ default }')],
+    plugins: [
+      ts_plugin,
+      resolve(),
+      pack('plugin'),
+      types(`plugin/index.d.ts`, `../types/plugin/index`, "{ default }"),
+    ],
   },
 
-  // PLUGIN DEEP
-  ...fs
-    .readdirSync('src/plugin')
-    .filter((dir) => fs.statSync(`src/plugin/${dir}`).isDirectory())
+  // plugin deep - PAS de nettoyage ici
+  ...fs.readdirSync('src/plugin').filter(dir => fs.statSync(`src/plugin/${dir}`).isDirectory())
     .map((dir) => ({
+      ...baseConfig,
       input: `src/plugin/${dir}/index.ts`,
-      output: [{ file: dump(`plugin/${dir}/index.js`), format: 'cjs', exports: 'default' }],
+      output: [
+        {
+          file: dump(`plugin/${dir}/index.js`),
+          exports: 'default',
+          format: 'cjs',
+        },
+        {
+          file: dump(`plugin/${dir}/index.cjs`),
+          exports: 'default',
+          format: 'cjs',
+        },
+      ],
       plugins: [
         ts_plugin,
         resolve(),
         commonjs(),
-        types(`plugin/${dir}/index.d.ts`, `../../types/plugin/${dir}/index`, '{ default }'),
+        types(`plugin/${dir}/index.d.ts`, `../../types/plugin/${dir}/index`, "{ default }"),
       ],
     })),
 
-  // CLI avec 3 formats : .js, .mjs, .d.ts
+  // cli - PAS de nettoyage ici
   {
+    ...baseConfig,
     input: 'src/cli/index.ts',
     output: [
       {
         file: dump('cli/index.js'),
         banner: '#!/usr/bin/env node',
         format: 'cjs',
-        exports: 'auto',
+        paths: (id) =>
+          id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
+          `../${path.dirname(path.relative('./src', id))}/index.js`,
       },
       {
-        file: dump('cli/index.mjs'),
+        file: dump('cli/index.cjs'),
         banner: '#!/usr/bin/env node',
-        format: 'esm',
+        format: 'cjs',
+        paths: (id) =>
+          id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
+          `../${path.dirname(path.relative('./src', id))}/index.cjs`,
       },
     ],
     onwarn: (warning) => {
       if (warning.code === 'CIRCULAR_DEPENDENCY') return;
     },
-    external: (id) => id.match(/\/src\/(lib|utils|plugin|config|colors)/),
+    external: (id) =>
+      id.match(/\/src\/(lib|utils|plugin|config|colors)/),
     plugins: [
       replace({
         preventAssignment: true,
@@ -183,20 +322,27 @@ export default [
       ts_plugin,
       resolve(),
       commonjs(),
-      pack('cli'), // crée package.json local pour CLI
-      types('cli/index.d.ts', '../types/cli/index', '{ default }'),
     ],
   },
 
-  // UTILS
-  ...fs
-    .readdirSync('src/')
-    .filter((dir) => ['config', 'lib', 'utils', 'helpers'].includes(dir) && fs.statSync(`src/${dir}`).isDirectory())
+  // utils - PAS de nettoyage ici
+  ...fs.readdirSync('src/').filter((dir) => ['config', 'lib', 'utils', 'helpers'].includes(dir) && fs.statSync(`src/${dir}`).isDirectory())
     .map((dir) => ({
+      ...baseConfig,
       input: `src/${dir}/index.ts`,
       output: [
-        { file: dump(`${dir}/index.js`), format: 'cjs' },
-        { file: dump(`${dir}/index.mjs`), format: 'esm' },
+        {
+          file: dump(`${dir}/index.js`),
+          format: 'cjs',
+        },
+        {
+          file: dump(`${dir}/index.cjs`),
+          format: 'cjs',
+        },
+        {
+          file: dump(`${dir}/index.mjs`),
+          format: 'esm',
+        },
       ],
       plugins: [
         ts_plugin,
@@ -208,15 +354,29 @@ export default [
       ],
     })),
 
-  // UTILS DEEP
+  // utils deep - PAS de nettoyage ici
   ...fs
     .readdirSync('src/utils')
-    .filter((dir) => dir !== 'algorithm' && fs.statSync(`src/utils/${dir}`).isDirectory())
+    .filter(
+      (dir) =>
+        dir !== 'algorithm' && fs.statSync(`src/utils/${dir}`).isDirectory()
+    )
     .map((dir) => ({
+      ...baseConfig,
       input: `src/utils/${dir}/index.ts`,
       output: [
-        { file: dump(`utils/${dir}/index.js`), format: 'cjs' },
-        { file: dump(`utils/${dir}/index.mjs`), format: 'esm' },
+        {
+          file: dump(`utils/${dir}/index.js`),
+          format: 'cjs',
+        },
+        {
+          file: dump(`utils/${dir}/index.cjs`),
+          format: 'cjs',
+        },
+        {
+          file: dump(`utils/${dir}/index.mjs`),
+          format: 'esm',
+        },
       ],
       plugins: [
         ts_plugin,

@@ -11,7 +11,7 @@
   "author": "Naïloth Esdras Nsounda Nsilulu",
   "main": "index.js",
   "scripts": {
-    "build": "node ../dist/cli/index.js -to nailus.css --dev -f nailus.config.js --style",
+    "build": "node ../dist/cli/index.cjs -to nailus.css --dev -f nailus.config.js --style",
     "dev": "chokidar -d 1000 '../dist/**/*' -c \"npm run build\""
   }
 }

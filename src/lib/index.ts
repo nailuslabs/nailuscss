@@ -553,7 +553,7 @@ export class Processor {
 
   compile(
     classNames: string,
-    prefix = 'nailus-',
+    prefix = 'windi-',
     showComment = false,
     ignoreGenerated = false,
     handleIgnored?: (ignored:string) => Style | Style[] | undefined,

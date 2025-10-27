@@ -47,19 +47,13 @@ export function generateStates(
     children: () => new Style().child('> *'),
     siblings: () => new Style().child('~ *'),
     sibling: () => new Style().child('+ *'),
-    // https://www.w3schools.com/CSS/css_pseudo_elements.asp
 
-    // Directions
     ltr: () => new Style().wrapSelector(selector => `[dir='ltr'] ${selector}, [dir='ltr']${selector}`),
     rtl: () => new Style().wrapSelector(selector => `[dir='rtl'] ${selector}, [dir='rtl']${selector}`),
 
-    // Group states
-    // You'll need to add className="group" to an ancestor to make these work
-    // https://github.com/ben-rogerson/twin.macro/blob/master/docs/group.md
+
     ...groupStates,
 
-    // Motion control
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
     'motion-safe': () => new Style().atRule('@media (prefers-reduced-motion: no-preference)'),
     'motion-reduce': () => new Style().atRule('@media (prefers-reduced-motion: reduce)'),
 

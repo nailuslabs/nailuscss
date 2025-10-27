@@ -1,14 +1,23 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "./types",
     "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": false,
-    "sourceMap": false,
-    "inlineSources": false,
-    "noEmitOnError": true
+    "emitDeclarationOnly": true,
+    "noEmit": false
   },
-  "include": ["src"],
-  "exclude": ["test", "example", "node_modules"]
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "test-dts",
+    "example",
+    "playground",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.test-d.tsx"
+  ]
 }

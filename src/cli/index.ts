@@ -1,5 +1,3 @@
-// nailuscss/src/cli/index.ts
-
 import arg from 'arg';
 import { deepCopy, Console } from '../utils/tools';
 import { resolve, dirname, join, extname } from 'path';
@@ -46,52 +44,6 @@ Options:
   --style               Parse and transform nailus style block.
   --init PATH           Start a new project on the path.
 `;
-
-// Fonction pour charger la configuration avec support ESM et CommonJS
-async function loadConfig(configPath: string): Promise<any> {
-  if (!existsSync(configPath)) {
-    return undefined;
-  }
-
-  try {
-    // Essayer d'abord avec require (CommonJS)
-    const config = require(configPath);
-
-    // Gérer les deux syntaxes
-    if (config && typeof config === 'object') {
-      // Cas CommonJS: module.exports = { ... }
-      if (!config.__esModule) {
-        return config;
-      }
-      // Cas ESM avec interop: export default { ... }
-      if (config.default) {
-        return config.default;
-      }
-    }
-
-    return config;
-  } catch (error) {
-    // Si require échoue (fichier ESM pur), utiliser import dynamique
-    try {
-      const config = await import(configPath);
-
-      // Gérer les exports ESM
-      if (config && typeof config === 'object') {
-        // export default
-        if (config.default) {
-          return config.default;
-        }
-        // export nommés
-        return config;
-      }
-
-      return config;
-    } catch (importError) {
-      Console.error(`Error loading config file ${configPath}:`, importError);
-      return undefined;
-    }
-  }
-}
 
 const args = arg({
   // Types
@@ -149,20 +101,10 @@ if (args['--init']) {
 const configFile = args['--config'] ? resolve(args['--config']) : undefined;
 let preflights: { [key:string]: StyleSheet } = {};
 let styleSheets: { [key:string]: StyleSheet } = {};
-let processor: Processor;
-let safelist: unknown;
+let processor = new Processor(configFile ? require(configFile) : undefined);
+let safelist = processor.config('safelist');
 
-// Fonction asynchrone pour initialiser le processeur avec la configuration
-async function initializeProcessor() {
-  let config;
-  if (configFile) {
-    Console.log('Config file:', configFile);
-    config = await loadConfig(configFile);
-  }
-
-  processor = new Processor(config);
-  safelist = processor.config('safelist');
-}
+if (configFile) Console.log('Config file:', configFile);
 
 function compile(files: string[]) {
   // compilation mode
@@ -323,6 +265,7 @@ function build(files: string[], update = false) {
       Console.log('Output file:', resolve(filePath));
     }
   }
+
 }
 
 function buildSafeList(safelist: unknown) {
@@ -344,115 +287,99 @@ function buildSafeList(safelist: unknown) {
   }
 }
 
-async function main() {
-  await initializeProcessor();
+const patterns = args._
+  .concat(processor.config('extract.include', []) as string[])
+  .concat((processor.config('extract.exclude', []) as string[]).map(i => '!' + i));
 
-  const patterns = args._
-    .concat(processor.config('extract.include', []) as string[])
-    .concat((processor.config('extract.exclude', []) as string[]).map(i => '!' + i));
+let matchFiles = globArray(patterns);
 
-  let matchFiles = globArray(patterns);
-
-  if (matchFiles.length === 0) {
-    Console.error('No files were matched!');
-    process.exit();
-  }
-
-  buildSafeList(safelist);
-  build(matchFiles);
-
-  function watchBuild(file: string) {
-    watch(file, (event, path) => {
-      if (event === 'rename') {
-        const newFiles = globArray(patterns);
-        const renamed = matchFiles.filter(i => !(newFiles.includes(i)))[0];
-        if (path && existsSync(path)) {
-          Console.log('File', `'${renamed}'`, 'has been renamed to', `'${path}'`);
-          matchFiles = newFiles;
-          Console.log('Matched files:', matchFiles);
-        } else {
-          Console.log('File', `'${file}'`, 'has been deleted');
-          unwatchFile(file);
-          matchFiles = newFiles;
-          delete styleSheets[file];
-          delete preflights[file];
-          if (matchFiles.length > 0) {
-            Console.log('Matched files:', matchFiles);
-            Console.time('Building');
-          }
-          build([], true);
-          if (matchFiles.length > 0) {
-            Console.timeEnd('Building');
-          } else {
-            Console.error('No files were matched!');
-            process.exit();
-          }
-        }
-      }
-      if (event === 'change') {
-        Console.log('File', `'${path}'`, 'has been changed');
-        Console.time('Building');
-        build([file], true);
-        Console.timeEnd('Building');
-      }
-    });
-  }
-
-  async function watchConfig(file?: string) {
-    if (!file) return;
-    let stamp = 0;
-    watch(file, async (event, path) => {
-      if (event === 'change' && (stamp === 0 || + new Date() - stamp > 500)) {
-        // fix fire twice event when change config file
-        stamp = + new Date();
-        Console.log('Config', `'${path}'`, 'has been changed');
-        Console.time('Building');
-
-        // Recharger la configuration
-        if (configFile) {
-          delete require.cache[configFile];
-          const config = await loadConfig(configFile);
-          processor = new Processor(config);
-          safelist = processor.config('safelist');
-        }
-
-        styleSheets = {};
-        preflights = {};
-        buildSafeList(safelist);
-        build(matchFiles, true);
-        Console.timeEnd('Building');
-      }
-    });
-  }
-
-  if (args['--dev']) {
-    watchConfig(configFile);
-    for (const file of matchFiles) {
-      watchBuild(file);
-    }
-    for (const dir of Array.from(new Set(matchFiles.map(f => dirname(f))))) {
-      watch(dir, (event, path) => {
-        if (event === 'rename' && path && existsSync(join(dir, path))) {
-          // when create new file
-          const newFiles = globArray(patterns);
-          if (newFiles.length > matchFiles.length) {
-            const newFile = newFiles.filter(i => !matchFiles.includes(i))[0];
-            Console.log('New file', `'${newFile}'`,  'added');
-            matchFiles.push(newFile);
-            Console.log('Matched files:', matchFiles);
-            Console.time('Building');
-            build([newFile], true);
-            watchBuild(newFile);
-            Console.timeEnd('Building');
-          }
-        }
-      });
-    }
-  }
+if (matchFiles.length === 0) {
+  Console.error('No files were matched!');
+  process.exit();
 }
 
-// Démarrer l'application
-main().catch((error) => {
-  Console.error('Failed to start application:', error);
-  process.exit(1);
-});
+buildSafeList(safelist);
+build(matchFiles);
+
+function watchBuild(file: string) {
+  watch(file, (event, path) => {
+    if (event === 'rename') {
+      const newFiles = globArray(patterns);
+      const renamed = matchFiles.filter(i => !(newFiles.includes(i)))[0];
+      if (path && existsSync(path)) {
+        Console.log('File', `'${renamed}'`, 'has been renamed to', `'${path}'`);
+        matchFiles = newFiles;
+        Console.log('Matched files:', matchFiles);
+      } else {
+        Console.log('File', `'${file}'`, 'has been deleted');
+        unwatchFile(file);
+        matchFiles = newFiles;
+        delete styleSheets[file];
+        delete preflights[file];
+        if (matchFiles.length > 0) {
+          Console.log('Matched files:', matchFiles);
+          Console.time('Building');
+        }
+        build([], true);
+        if (matchFiles.length > 0) {
+          Console.timeEnd('Building');
+        } else {
+          Console.error('No files were matched!');
+          process.exit();
+        }
+      }
+    }
+    if (event === 'change') {
+      Console.log('File', `'${path}'`, 'has been changed');
+      Console.time('Building');
+      build([file], true);
+      Console.timeEnd('Building');
+    }
+  });
+}
+
+function watchConfig(file?: string) {
+  if (!file) return;
+  let stamp = 0;
+  watch(file, (event, path) => {
+    if (event === 'change' && (stamp === 0 || + new Date() - stamp > 500)) {
+      // fix fire twice event when change config file
+      stamp = + new Date();
+      Console.log('Config', `'${path}'`, 'has been changed');
+      Console.time('Building');
+      configFile && delete require.cache[configFile];
+      processor = new Processor(configFile ? require(configFile) : undefined);
+      safelist = processor.config('safelist');
+      styleSheets = {};
+      preflights = {};
+      buildSafeList(safelist);
+      build(matchFiles, true);
+      Console.timeEnd('Building');
+    }
+  });
+}
+
+if (args['--dev']) {
+  watchConfig(configFile);
+  for (const file of matchFiles) {
+    watchBuild(file);
+  }
+  for (const dir of Array.from(new Set(matchFiles.map(f => dirname(f))))) {
+    watch(dir, (event, path) => {
+      if (path && event === 'rename' && existsSync(join(dir, path))) {
+        // when create new file
+        const newFiles = globArray(patterns);
+        if (newFiles.length > matchFiles.length) {
+          const newFile = newFiles.filter(i => !matchFiles.includes(i))[0];
+          Console.log('New file', `'${newFile}'`,  'added');
+          matchFiles.push(newFile);
+          Console.log('Matched files:', matchFiles);
+          Console.time('Building');
+          build([newFile], true);
+          watchBuild(newFile);
+          Console.timeEnd('Building');
+        }
+      }
+    });
+  }
+}
