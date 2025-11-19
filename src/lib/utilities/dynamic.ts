@@ -1,1 +1,0 @@
-export { dynamicUtilities } from './dynamics'
