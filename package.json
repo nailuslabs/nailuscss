@@ -1,0 +1,30 @@
+{
+  "name": "@nailuscss/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "description": "The instant on demand atomic css (frist utility) engine",
+  "keywords": [
+    "css",
+    "nailuscss",
+    "windicss",
+    "tailwindcss",
+    "unocss",
+    "bootstrap"
+  ],
+  "homepage": "https://github.com/nailuslabs/nailuscss#readme",
+  "bugs": {
+    "url": "https://github.com/nailuslabs/nailuscss/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nailuslabs/nailuscss.git"
+  },
+  "license": "MIT",
+  "author": "Naïloth Esdras Nsounda Nsilulu",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

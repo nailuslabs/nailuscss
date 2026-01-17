@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    "jsx": "preserve",
+    
+    "lib": [
+      "esnext"
+    ],
+    
+    "module": "esnext",
+    "moduleResolution": "bundler",
+
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+
+    "strict": true,
+    "strictNullChecks": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+
+    "target": "es2024",
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    ".src",
+    "./test", "./test-dts",
+    "example"
+  ],
+  "exclude": [
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/playground/**",
+    "**/examples/**",
+    "**/test/assets**",
+    "**/./test/helpers**"
+  ]
+}
