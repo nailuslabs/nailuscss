@@ -6,7 +6,11 @@ import sucrase from '@rollup/plugin-sucrase';
 import typescript from '@rollup/plugin-typescript';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import pkg from './package.json';
+
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
+
 
 const output_dir = './dist';
 
