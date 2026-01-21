@@ -198,25 +198,39 @@ export function toType(
 }
 
 export function deepCopy<T>(source: T): T {
-  return Array.isArray(source)
-    ? (source as unknown[]).map((item: unknown) => deepCopy(item))
-    : source instanceof Date
-      ? new Date(source.getTime())
-      : source && typeof source === 'object'
-        ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
-          const descriptor = Object.getOwnPropertyDescriptor(source, prop);
-          if (descriptor) {
-            Object.defineProperty(o, prop, descriptor);
-            if (source && typeof source === 'object') {
-              o[prop] = deepCopy(
-                ((source as unknown) as { [key: string]: unknown })[prop]
-              );
-            }
-          }
-          return o;
-        }, Object.create(Object.getPrototypeOf(source)))
-        : (source as T);
+  if (Array.isArray(source)) {
+    return (source as unknown[]).map(
+      (item: unknown) => deepCopy(item)
+    ) as unknown as T;
+  }
+
+  if (source instanceof Date) {
+    return new Date(source.getTime()) as unknown as T;
+  }
+
+  if (source && typeof source === 'object') {
+    const target = Object.create(
+      Object.getPrototypeOf(source)
+    ) as Record<string, unknown>;
+
+    Object.getOwnPropertyNames(source).forEach((prop) => {
+      const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+      if (descriptor) {
+        if ('value' in descriptor) {
+          descriptor.value = deepCopy(
+            (source as Record<string, unknown>)[prop]
+          );
+        }
+        Object.defineProperty(target, prop, descriptor);
+      }
+    });
+
+    return target as unknown as T;
+  }
+
+  return source;
 }
+
 
 export function isTagName(name: string): boolean {
   return ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embd', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'meta', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'svg', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'].includes(name);

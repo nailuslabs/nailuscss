@@ -15,7 +15,7 @@ export type Variants = {
 
 export function resolveVariants(config: Config): Variants {
   return {
-    orientation: generateOrientations(((config.theme as BaseTheme)?.orientation ?? {})),
+    orientation: generateOrientations(((config.theme as BaseTheme)?.orientation ?? {}) as Record<string, string>),
     screen: generateScreens(((config.theme as BaseTheme)?.screens ?? {}) as DictStr),
     theme: generateThemes(config.darkMode),
     state: generateStates(config.variantOrder ?? []),

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import fg from 'fast-glob';
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 
 export function globArray(patterns: string[], options?: fg.Options): string[] {
   const list: string[] = [];

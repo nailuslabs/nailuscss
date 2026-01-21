@@ -1,5 +1,6 @@
 import colorString from 'color-string';
-import type { Color } from 'color-string';
+
+export type RGBA = [number, number, number, number?];
 
 export function hsl2rgb(h: number, s: number, l: number): [number, number, number] {
   l /= 100;
@@ -48,34 +49,49 @@ export function hwb2rgb(h: number, w: number, b: number): [number, number, numbe
   return rgb;
 }
 
-export function toRGBA(color: string): Color | undefined {
+export function toRGBA(color: string): RGBA | undefined {
   if (/^hsla?/.test(color)) {
-    const color_array = colorString.get.hsl(color);
-    if (!color_array) return;
-    return [...hsl2rgb(color_array[0], color_array[1], color_array[2]), color_array[3]];
-  } else if (/^rgba?/.test(color)) {
-    const color_array = colorString.get.rgb(color);
-    if (!color_array) return;
-    return color_array;
-  } else if (color.startsWith('hwb')) {
-    const color_array = colorString.get.hwb(color);
-    if (!color_array) return;
-    return [...hwb2rgb(color_array[0], color_array[1], color_array[2]), color_array[3]];
+    const c = colorString.get.hsl(color);
+    if (!c) return;
+    return [...hsl2rgb(c[0], c[1], c[2]), c[3]];
   }
-  return colorString.get(color)?.value;
+
+  if (/^rgba?/.test(color)) {
+    const c = colorString.get.rgb(color);
+    if (!c) return;
+    return c as RGBA;
+  }
+
+  if (color.startsWith('hwb')) {
+    const c = colorString.get.hwb(color);
+    if (!c) return;
+    return [...hwb2rgb(c[0], c[1], c[2]), c[3]];
+  }
+
+  const parsed = colorString.get(color)?.value;
+  if (parsed && parsed.length >= 3) {
+    return parsed as RGBA;
+  }
 }
 
-export function toRGB(color: string): number[] | undefined {
+export function toRGB(color: string): [number, number, number] | undefined {
   const rgba = toRGBA(color);
   if (!rgba) return;
-  rgba.pop();
-  return rgba;
+  const [r, g, b] = rgba;
+  return [r, g, b];
 }
 
-export function toColor(color_string: string) : { color: string, opacity: string } {
+export function toColor(color_string: string): { color: string; opacity: string } {
   const rgba = toRGBA(color_string);
-  const color = rgba ? rgba.slice(0, 3).join(', ') : color_string;
-  const opacity = rgba ? rgba[3].toString() : '1';
+
+  const color = rgba
+    ? rgba.slice(0, 3).join(', ')
+    : color_string;
+
+  const opacity =
+    rgba && rgba[3] !== undefined
+      ? rgba[3].toString()
+      : '1';
 
   return { color, opacity };
 }

@@ -306,7 +306,7 @@ function watchBuild(file: string) {
     if (event === 'rename') {
       const newFiles = globArray(patterns);
       const renamed = matchFiles.filter(i => !(newFiles.includes(i)))[0];
-      if (existsSync(path)) {
+      if (path && existsSync(path)) {
         Console.log('File', `'${renamed}'`, 'has been renamed to', `'${path}'`);
         matchFiles = newFiles;
         Console.log('Matched files:', matchFiles);
@@ -366,7 +366,7 @@ if (args['--dev']) {
   }
   for (const dir of Array.from(new Set(matchFiles.map(f => dirname(f))))) {
     watch(dir, (event, path) => {
-      if (event === 'rename' && existsSync(join(dir, path))) {
+      if (event === 'rename' && path && existsSync(join(dir, path))) {
         // when create new file
         const newFiles = globArray(patterns);
         if (newFiles.length > matchFiles.length) {
