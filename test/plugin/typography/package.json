@@ -1,0 +1,22 @@
+{
+  "name": "typography",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.26"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.0.1",
+    "@vue/compiler-sfc": "^3.2.26",
+    "typescript": "^4.5.4",
+    "vite": "^2.7.3",
+    "vite-plugin-md": "^0.11.6",
+    "vite-plugin-nailuscss": "^1.5.4",
+    "vue-tsc": "^0.29.8",
+    "nailuscss": "file:../../../dist"
+  }
+}

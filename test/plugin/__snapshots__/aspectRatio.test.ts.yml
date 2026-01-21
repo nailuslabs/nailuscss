@@ -1,0 +1,116 @@
+Tools / add completions / completions / 0: |-
+  {
+    "aspectRatio": [
+      "aspect-w-{float}",
+      "aspect-h-{float}",
+      "aspect-{fraction}"
+    ]
+  }
+Tools / interpret test / aspect-ratio base / 0: |-
+  .aspect-none {
+    position: static;
+    padding-bottom: 0;
+  }
+  .aspect-none > * {
+    position: static;
+    height: auto;
+    width: auto;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+  .aspect-auto {
+    aspect-ratio: auto;
+  }
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+  .aspect-w-16 {
+    --tw-aspect-w: 16;
+    position: relative;
+    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  }
+  .aspect-w-16 > * {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  .aspect-h-9 {
+    --tw-aspect-h: 9;
+  }
+  .aspect-9\/16 {
+    position: relative;
+    padding-bottom: 56.25%;
+  }
+  .aspect-9\/16 > * {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+Tools / works with prefix / aspect-ratio with prefix / 0: |-
+  .nailus-aspect-none {
+    position: static;
+    padding-bottom: 0;
+  }
+  .nailus-aspect-none > * {
+    position: static;
+    height: auto;
+    width: auto;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+  .nailus-aspect-auto {
+    aspect-ratio: auto;
+  }
+  .nailus-aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+  .nailus-aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+  .nailus-aspect-w-16 {
+    --tw-aspect-w: 16;
+    position: relative;
+    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  }
+  .nailus-aspect-w-16 > * {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  .nailus-aspect-h-9 {
+    --tw-aspect-h: 9;
+  }
+  @media (min-width: 640px) {
+    .sm\:nailus-aspect-9\/16 {
+      position: relative;
+      padding-bottom: 56.25%;
+    }
+    .sm\:nailus-aspect-9\/16 > * {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  }

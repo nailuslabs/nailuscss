@@ -29,11 +29,7 @@
       "node"
     ]
   },
-  "include": [
-    ".src",
-    "./test", "./test-dts",
-    "example"
-  ],
+  "include": ["**/*.ts"],
   "exclude": [
     "**/dist/**",
     "**/node_modules/**",

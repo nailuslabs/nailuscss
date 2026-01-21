@@ -1,5 +1,5 @@
 {
-  "name": "@nailuscss/monorepo",
+  "name": "nailuscss",
   "version": "1.0.0",
   "packageManager": "pnpm@10.28.0",
   "description": "The instant on demand atomic css (frist utility) engine and components",
@@ -26,8 +26,95 @@
   "author": "Naïloth Esdras Nsounda Nsilulu",
   "type": "module",
   "main": "index.js",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "bin": {
+    "nailuscss": "cli/index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "rollup -cw",
+    "tsd": "tsc -p ./src --emitDeclarationOnly",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
+    "typecheck": "tsc -p ./src --noEmit",
+    "build": "rollup -c && pnpm tsd",
+    "build:prod": "cross-env NODE_ENV=production pnpm build",
+    "test": "sucrase-node test/run.ts",
+    "test:update": "cross-env UPDATE_SNAPSHOT=true sucrase-node test/run.ts",
+    "test:dts": "tsc -p ./test/dts --noEmit",
+    "coverage": "nyc --nycrc-path=.nycrc.json pnpm test",
+    "release": "bumpp --tag --commit --push"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    },
+    "./colors": {
+      "import": "./colors.mjs",
+      "require": "./colors.js"
+    },
+    "./defaultConfig": {
+      "import": "./defaultConfig.mjs",
+      "require": "./defaultConfig.js"
+    },
+    "./defaultTheme": {
+      "import": "./defaultTheme.mjs",
+      "require": "./defaultTheme.js"
+    },
+    "./config": {
+      "import": "./config/index.mjs",
+      "require": "./config/index.js"
+    },
+    "./lib": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.js"
+    },
+    "./plugin": {
+      "import": "./plugin/index.mjs",
+      "require": "./plugin/index.js"
+    },
+    "./plugin/aspect-ratio": {
+      "import": "./plugin/aspect-ratio/index.js",
+      "require": "./plugin/aspect-ratio/index.js"
+    },
+    "./plugin/filters": {
+      "import": "./plugin/filters/index.js",
+      "require": "./plugin/filters/index.js"
+    },
+    "./plugin/forms": {
+      "import": "./plugin/forms/index.js",
+      "require": "./plugin/forms/index.js"
+    },
+    "./plugin/line-clamp": {
+      "import": "./plugin/line-clamp/index.js",
+      "require": "./plugin/line-clamp/index.js"
+    },
+    "./plugin/typography": {
+      "import": "./plugin/typography/index.js",
+      "require": "./plugin/typography/index.js"
+    },
+    "./plugin/scroll-snap": {
+      "import": "./plugin/scroll-snap/index.js",
+      "require": "./plugin/scroll-snap/index.js"
+    },
+    "./helpers": {
+      "import": "./helpers/index.mjs",
+      "require": "./helpers/index.js"
+    },
+    "./utils": {
+      "import": "./utils/index.mjs",
+      "require": "./utils/index.js"
+    },
+    "./utils/parser": {
+      "import": "./utils/parser/index.mjs",
+      "require": "./utils/parser/index.js"
+    },
+    "./utils/style": {
+      "import": "./utils/style/index.mjs",
+      "require": "./utils/style/index.js"
+    }
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
