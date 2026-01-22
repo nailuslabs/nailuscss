@@ -1,97 +1,29 @@
-import arg from 'arg';
-import { deepCopy, Console } from '../utils/tools';
-import { resolve, dirname, join, extname } from 'path';
-import { pathToFileURL } from 'url';
+// src/cli/index.ts
+
+import { resolve, dirname } from 'path';
 import { Processor } from '../lib';
-import { mkdirSync, readFileSync, writeFile, watch, unwatchFile, existsSync } from 'fs';
-import { HTMLParser, CSSParser } from '../utils/parser';
 import { StyleSheet } from '../utils/style';
-import {
-  getVersion,
-  globArray,
-  generateTemplate,
-  fuzzy,
-} from './utils';
-import type { Extractor } from '../interfaces';
+import { parseArgs, DOC, getVersion } from './cli-start';
+import { loadConfig, globArray, generateTemplate, CLIProcessor } from './cli';
+import { FileWatcher } from './watcher';
+import { Logger } from './debug';
+import { handleError, NoFilesMatchedError } from './errors';
+import type { CLIArgs, CLIConfig } from './types';
 
-const doc = `Generate css from text files that containing nailus classes.
-By default, it will use interpretation mode to generate a single css file.
+const args: CLIArgs = parseArgs();
 
-Usage:
-  nailuscss [filenames]
-  nailuscss [filenames] -c -m -d
-  nailuscss [filenames] -c -s -m -d
-  nailuscss [filenames] [-c | -i] [-a] [-b | -s] [-m] [-d] [-p <prefix:string>] [-o <path:string>] [--args arguments]
-
-Options:
-  -h, --help            Print this help message and exit.
-  -v, --version         Print nailuscss current version and exit.
-
-  -i, --interpret       Interpretation mode, generate class selectors. This is the default behavior.
-  -c, --compile         Compilation mode, combine the class name in each row into a single class.
-  -a, --attributify     Attributify mode, generate attribute selectors. Attributify mode can be mixed with the other two modes.
-  -t, --preflight       Add preflights, default is false.
-
-  -b, --combine         Combine all css into one single file. This is the default behavior.
-  -s, --separate        Generate a separate css file for each input file.
-
-  -d, --dev             Enable hot reload and watch mode.
-  -m, --minify          Generate minimized css file.
-  -z, --fuzzy           Enable fuzzy match, only works in interpration mode.
-  -p, --prefix PREFIX   Set the css class name prefix, only valid in compilation mode. The default prefix is 'nailus-'.
-  -o, --output PATH     Set output css file path.
-  -f, --config PATH     Set config file path.
-
-  --style               Parse and transform nailus style block.
-  --init PATH           Start a new project on the path.
-`;
-
-const args = arg({
-  // Types
-  '--help': Boolean,
-  '--version': Boolean,
-  '--compile': Boolean,
-  '--interpret': Boolean,
-  '--attributify': Boolean,
-  '--preflight': Boolean,
-  '--combine': Boolean,
-  '--separate': Boolean,
-  '--dev': Boolean,
-  '--minify': Boolean,
-  '--fuzzy': Boolean,
-  '--style': Boolean,
-  '--init': String,
-  '--prefix': String,
-  '--output': String,
-  '--config': String,
-
-  // Aliases
-  '-h': '--help',
-  '-v': '--version',
-  '-i': '--interpret',
-  '-c': '--compile',
-  '-a': '--attributify',
-  '-t': '--preflight',
-  '-b': '--combine',
-  '-s': '--separate',
-  '-d': '--dev',
-  '-m': '--minify',
-  '-p': '--prefix',
-  '-o': '--output',
-  '-f': '--config',
-  '-z': '--fuzzy',
-});
-
+// Handle help and version
 if (args['--help'] || (args._.length === 0 && Object.keys(args).length === 1)) {
-  Console.log(doc);
-  process.exit();
+  Logger.log(DOC);
+  process.exit(0);
 }
 
 if (args['--version']) {
-  Console.log(getVersion());
-  process.exit();
+  Logger.log(getVersion());
+  process.exit(0);
 }
 
+// Handle init
 if (args['--init']) {
   const template = generateTemplate(args['--init'], args['--output']);
   args._.push(template.html);
@@ -99,351 +31,146 @@ if (args['--init']) {
   args['--output'] = template.css;
 }
 
-// Cache des configurations chargées pour le mode dev
-const configCache = new Map<string, any>();
+// Global configuration state
+const config: CLIConfig = {
+  configFile: args['--config'] ? resolve(args['--config']) : undefined,
+  preflights: {},
+  styleSheets: {},
+  processor: new Processor(),
+  safelist: undefined,
+  patterns: [],
+  matchFiles: [],
+};
 
 /**
- * Charge un fichier de configuration de manière dynamique (ESM ou CJS)
- * @param configPath Chemin absolu vers le fichier de config
- * @returns Configuration chargée
+ * Initialize the CLI configuration
  */
-async function loadConfig(configPath: string): Promise<any> {
-  const ext = extname(configPath);
-  
-  // Pour les fichiers .cjs (CommonJS)
-  if (ext === '.cjs') {
-    // En mode dev, on doit vider le cache pour recharger
-    if (args['--dev']) {
-      // Supprimer du cache Node.js si présent
-      const moduleId = require.resolve(configPath);
-      delete require.cache[moduleId];
-    }
+async function initialize(): Promise<void> {
+  try {
+    const loadedConfig = config.configFile
+      ? await loadConfig(config.configFile, args['--dev'] ?? false)
+      : undefined;
     
-    // Utiliser l'import dynamique qui supporte CJS
-    const config = await import(pathToFileURL(configPath).href + `?update=${Date.now()}`);
-    return config.default || config;
-  }
-  
-  // Pour les fichiers .mjs, .js (ESM)
-  if (ext === '.mjs' || ext === '.js') {
-    // Ajouter un timestamp pour contourner le cache en mode dev
-    const importPath = args['--dev'] 
-      ? `${pathToFileURL(configPath).href}?update=${Date.now()}`
-      : pathToFileURL(configPath).href;
+    config.processor = new Processor(loadedConfig);
+    config.safelist = config.processor.config('safelist');
     
-    const config = await import(importPath);
-    return config.default || config;
+    if (config.configFile) {
+      Logger.configFile(config.configFile);
+    }
+  } catch (error) {
+    handleError(error as Error);
   }
+}
+
+/**
+ * Reload configuration (for dev mode)
+ */
+async function reloadConfig(): Promise<void> {
+  if (!config.configFile) return;
   
-  // Fallback pour autres extensions
-  const config = await import(pathToFileURL(configPath).href);
-  return config.default || config;
-}
-
-const configFile = args['--config'] ? resolve(args['--config']) : undefined;
-let preflights: { [key:string]: StyleSheet } = {};
-let styleSheets: { [key:string]: StyleSheet } = {};
-let processor: Processor;
-let safelist: unknown;
-let patterns: string[] = [];
-let matchFiles: string[] = [];
-
-// Initialisation asynchrone
-async function initialize() {
-  const config = configFile ? await loadConfig(configFile) : undefined;
-  processor = new Processor(config);
-  safelist = processor.config('safelist');
+  const loadedConfig = await loadConfig(config.configFile, true);
+  config.processor = new Processor(loadedConfig);
+  config.safelist = config.processor.config('safelist');
   
-  if (configFile) Console.log('Config file:', configFile);
+  // Reset stylesheets
+  config.styleSheets = {};
+  config.preflights = {};
+  
+  // Rebuild
+  const cliProcessor = new CLIProcessor(config, args);
+  cliProcessor.buildSafeList();
+  cliProcessor.build(config.matchFiles, true);
 }
 
-function compile(files: string[]) {
-  // compilation mode
-  const prefix = args['--prefix'] ?? 'nailus-';
-  files.forEach((file) => {
-    let indexStart = 0;
-    const outputStyle: StyleSheet[] = [];
-    const outputHTML: string[] = [];
-    const html = readFileSync(file).toString();
-    const parser = new HTMLParser(html);
+/**
+ * Main CLI entry point
+ */
+async function main(): Promise<void> {
+  try {
+    await initialize();
+    
+    // Build patterns
+    config.patterns = args._
+      .concat(config.processor.config('extract.include', []) as string[])
+      .concat(
+        (config.processor.config('extract.exclude', []) as string[]).map((i: string) => '!' + i)
+      );
 
-    // Match ClassName then replace with new ClassName
-    parser.parseClasses().forEach((p) => {
-      outputHTML.push(html.substring(indexStart, p.start));
-      const utility = processor.compile(p.result, prefix, true, args['--dev']); // Set third argument to false to hide comments;
-      outputStyle.push(utility.styleSheet);
-      outputHTML.push([utility.className, ...utility.ignored].join(' '));
-      indexStart = p.end;
-    });
-    outputHTML.push(html.substring(indexStart));
-    const added = (
-      outputStyle.reduce(
-        (previousValue: StyleSheet, currentValue: StyleSheet) =>
-          previousValue.extend(currentValue),
-        new StyleSheet()
-      )
-    );
-    styleSheets[file] = args['--dev'] ? (styleSheets[file]? styleSheets[file].extend(added) : added) : added;
+    config.matchFiles = globArray(config.patterns);
 
-    const outputFile = file.replace(/(?=\.\w+$)/, '.nailus');
-    writeFile(outputFile, outputHTML.join(''), () => null);
-    Console.log(`${file} -> ${outputFile}`);
-    if (args['--preflight']) {
-      if (args['--dev']) {
-        const preflight = processor.preflight(html, true, true, true, true);
-        preflights[file] = preflights[file] ? preflights[file].extend(preflight) : preflight;
-      } else {
-        preflights[file] = processor.preflight(html);
-      }
+    if (config.matchFiles.length === 0) {
+      throw new NoFilesMatchedError();
     }
-  });
-}
 
-function interpret(files: string[]) {
-  // interpretation mode
-  files.forEach((file) => {
-    const content = readFileSync(file).toString();
-    let classes: string[] = [];
-    if (args['--fuzzy']) {
-      classes = fuzzy(content);
-    } else {
-      const parser = new HTMLParser(content);
-      classes = parser.parseClasses().map((i) => i.result);
-    }
-    const extractors = processor.config('extract.extractors') as Extractor[] | undefined;
-    if (extractors) {
-      for (const { extractor, extensions } of extractors) {
-        if (extensions.includes(extname(file).slice(1))) {
-          const result = extractor(content);
-          if ('classes' in result && result.classes) {
-            classes = [...classes, ...result.classes];
-          }
-        }
-      }
-    }
+    // Build
+    const cliProcessor = new CLIProcessor(config, args);
+    cliProcessor.buildSafeList();
+    cliProcessor.build(config.matchFiles);
+
+    // Watch mode
     if (args['--dev']) {
-      const utility = processor.interpret(classes.join(' '), true);
-      styleSheets[file] = styleSheets[file] ? styleSheets[file].extend(utility.styleSheet) : utility.styleSheet;
-      if (args['--preflight']) {
-        const preflight = processor.preflight(content, true, true, true, true);
-        preflights[file] = preflights[file] ? preflights[file].extend(preflight) : preflight;
-      }
-    } else {
-      const utility = processor.interpret(classes.join(' '));
-      styleSheets[file] = utility.styleSheet;
-      if (args['--preflight']) preflights[file] = processor.preflight(content);
-    }
-  });
-}
-
-function attributify(files: string[]) {
-  // attributify mode
-  files.forEach((file) => {
-    const parser = new HTMLParser(readFileSync(file).toString());
-    const attrs: { [key: string]: string | string[] } = parser
-      .parseAttrs()
-      .reduceRight((a: { [key: string]: string | string[] }, b) => {
-        if (b.key === 'class' || b.key === 'className') return a;
-        if (b.key in a) {
-          a[b.key] = Array.isArray(a[b.key])
-            ? Array.isArray(b.value)? [ ...(a[b.key] as string[]), ...b.value ]: [ ...(a[b.key] as string[]), b.value ]
-            : [ a[b.key] as string, ...(Array.isArray(b.value) ? b.value : [b.value]) ];
-          return a;
-        }
-        return Object.assign(a, { [b.key]: b.value });
-      }, {});
-    if (args['--dev']) {
-      const utility = processor.attributify(attrs, true);
-      styleSheets[file] = styleSheets[file] ? styleSheets[file].extend(utility.styleSheet) : utility.styleSheet;
-    } else {
-      const utility = processor.attributify(attrs);
-      styleSheets[file] = utility.styleSheet;
-    }
-  });
-}
-
-function styleBlock(files: string[]) {
-  files.forEach((file) => {
-    const content = readFileSync(file).toString();
-    const block = content.match(/(?<=<style[\r\n]*\s*lang\s?=\s?['"]nailus["']>)[\s\S]*(?=<\/style>)/);
-    if (block && block.index) {
-      const css = content.slice(block.index, block.index + block[0].length);
-      const parser = new CSSParser(css, processor);
-      styleSheets[file] = styleSheets[file].extend(parser.parse());
-    }
-  });
-}
-
-function build(files: string[], update = false) {
-  if (args['--compile']) {
-    compile(files);
-  } else {
-    interpret(files);
-  }
-  if (args['--attributify']) attributify(files);
-  if (args['--style']) styleBlock(files);
-  if (args['--separate']) {
-    for (const [file, sheet] of Object.entries(styleSheets)) {
-      const outfile = file.replace(/\.\w+$/, '.nailus.css');
-      writeFile(outfile, (args['--preflight'] ? deepCopy(sheet).extend(preflights[file], false) : sheet).build(args['--minify']), () => null);
-      Console.log(`${file} -> ${outfile}`);
-    }
-  } else {
-    let outputStyle = Object.values(styleSheets)
-      .reduce(
-        (previousValue: StyleSheet, currentValue: StyleSheet) =>
-          previousValue.extend(currentValue),
-        new StyleSheet()
-      )
-      .sort()
-      .combine();
-    if (args['--preflight'])
-      outputStyle = Object.values(preflights)
-        .reduce(
-          (previousValue: StyleSheet, currentValue: StyleSheet) =>
-            previousValue.extend(currentValue),
-          new StyleSheet()
-        )
-        .sort()
-        .combine()
-        .extend(outputStyle);
-    const filePath = args['--output'] ?? 'nailus.css';
-    const dir = dirname(filePath);
-    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-    writeFile(filePath, outputStyle.build(args['--minify']), () => null);
-    if (!update) {
-      Console.log('Matched files:', files);
-      Console.log('Output file:', resolve(filePath));
-    }
-  }
-}
-
-function buildSafeList(safelist: unknown) {
-  if (safelist) {
-    let classes: string[] = [];
-    if (typeof safelist === 'string') {
-      classes = safelist.split(/\s/).filter(i => i);
-    }
-    if (Array.isArray(safelist)) {
-      for (const item of safelist) {
-        if (typeof item === 'string') {
-          classes.push(item);
-        } else if (Array.isArray(item)) {
-          classes = classes.concat(item);
-        }
-      }
-    }
-    styleSheets['safelist'] = processor.interpret(classes.join(' ')).styleSheet;
-  }
-}
-
-function watchBuild(file: string) {
-  watch(file, (event, path) => {
-    if (event === 'rename') {
-      const newFiles = globArray(patterns);
-      const renamed = matchFiles.filter((i: string) => !(newFiles.includes(i)))[0];
-      if (path && existsSync(path)) {
-        Console.log('File', `'${renamed}'`, 'has been renamed to', `'${path}'`);
-        matchFiles = newFiles;
-        Console.log('Matched files:', matchFiles);
-      } else {
-        Console.log('File', `'${file}'`, 'has been deleted');
-        unwatchFile(file);
-        matchFiles = newFiles;
-        delete styleSheets[file];
-        delete preflights[file];
-        if (matchFiles.length > 0) {
-          Console.log('Matched files:', matchFiles);
-          Console.time('Building');
-        }
-        build([], true);
-        if (matchFiles.length > 0) {
-          Console.timeEnd('Building');
-        } else {
-          Console.error('No files were matched!');
-          process.exit();
-        }
-      }
-    }
-    if (event === 'change') {
-      Console.log('File', `'${path}'`, 'has been changed');
-      Console.time('Building');
-      build([file], true);
-      Console.timeEnd('Building');
-    }
-  });
-}
-
-function watchConfig(file?: string) {
-  if (!file) return;
-  let stamp = 0;
-  watch(file, async (event, path) => {
-    if (event === 'change' && (stamp === 0 || + new Date() - stamp > 500)) {
-      // fix fire twice event when change config file
-      stamp = + new Date();
-      Console.log('Config', `'${path}'`, 'has been changed');
-      Console.time('Building');
-      
-      // Recharger la config
-      const config = await loadConfig(file);
-      processor = new Processor(config);
-      safelist = processor.config('safelist');
-      
-      styleSheets = {};
-      preflights = {};
-      buildSafeList(safelist);
-      build(matchFiles, true);
-      Console.timeEnd('Building');
-    }
-  });
-}
-
-// Point d'entrée principal (async)
-async function main() {
-  await initialize();
-  
-  patterns = args._
-    .concat(processor.config('extract.include', []) as string[])
-    .concat((processor.config('extract.exclude', []) as string[]).map((i: string) => '!' + i));
-
-  matchFiles = globArray(patterns);
-
-  if (matchFiles.length === 0) {
-    Console.error('No files were matched!');
-    process.exit();
-  }
-
-  buildSafeList(safelist);
-  build(matchFiles);
-
-  if (args['--dev']) {
-    watchConfig(configFile);
-    for (const file of matchFiles) {
-      watchBuild(file);
-    }
-    for (const dir of Array.from(new Set(matchFiles.map((f: string) => dirname(f))))) {
-      watch(dir, (event, path) => {
-        if (event === 'rename' && path && existsSync(join(dir, path))) {
-          // when create new file
-          const newFiles = globArray(patterns);
-          if (newFiles.length > matchFiles.length) {
-            const newFile = newFiles.filter((i: string) => !matchFiles.includes(i))[0];
-            Console.log('New file', `'${newFile}'`,  'added');
-            matchFiles.push(newFile);
-            Console.log('Matched files:', matchFiles);
-            Console.time('Building');
-            build([newFile], true);
-            watchBuild(newFile);
-            Console.timeEnd('Building');
+      const watcher = new FileWatcher({
+        onFileChange: (file: string) => {
+          Logger.time('Building');
+          const processor = new CLIProcessor(config, args);
+          processor.build([file], true);
+          Logger.timeEnd('Building');
+        },
+        
+        onFileRename: (oldFile: string, newFile: string) => {
+          config.matchFiles = globArray(config.patterns);
+          Logger.matchedFiles(config.matchFiles);
+        },
+        
+        onFileDelete: (file: string) => {
+          delete config.styleSheets[file];
+          delete config.preflights[file];
+          config.matchFiles = globArray(config.patterns);
+          
+          if (config.matchFiles.length > 0) {
+            Logger.matchedFiles(config.matchFiles);
+            Logger.time('Building');
+            const processor = new CLIProcessor(config, args);
+            processor.build([], true);
+            Logger.timeEnd('Building');
+          } else {
+            throw new NoFilesMatchedError();
           }
-        }
+        },
+        
+        onFileCreate: (newFile: string) => {
+          config.matchFiles.push(newFile);
+          Logger.matchedFiles(config.matchFiles);
+          Logger.time('Building');
+          const processor = new CLIProcessor(config, args);
+          processor.build([newFile], true);
+          Logger.timeEnd('Building');
+          watcher.watchFile(newFile, config.patterns, config.matchFiles, globArray);
+        },
+        
+        onConfigChange: async () => {
+          await reloadConfig();
+        },
       });
+
+      // Watch config file
+      watcher.watchConfig(config.configFile);
+
+      // Watch matched files
+      for (const file of config.matchFiles) {
+        watcher.watchFile(file, config.patterns, config.matchFiles, globArray);
+      }
+
+      // Watch directories for new files
+      const uniqueDirs = Array.from(new Set(config.matchFiles.map((f: string) => dirname(f))));
+      for (const dir of uniqueDirs) {
+        watcher.watchDirectory(dir, config.patterns, config.matchFiles, globArray);
+      }
     }
+  } catch (error) {
+    handleError(error as Error);
   }
 }
 
-// Exécuter le CLI
-main().catch((error) => {
-  Console.error('Fatal error:', error);
-  process.exit(1);
-});
+// Execute CLI
+main();
