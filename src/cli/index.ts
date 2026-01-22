@@ -1,6 +1,7 @@
 import arg from 'arg';
 import { deepCopy, Console } from '../utils/tools';
 import { resolve, dirname, join, extname } from 'path';
+import { pathToFileURL } from 'url';
 import { Processor } from '../lib';
 import { mkdirSync, readFileSync, writeFile, watch, unwatchFile, existsSync } from 'fs';
 import { HTMLParser, CSSParser } from '../utils/parser';
@@ -98,13 +99,63 @@ if (args['--init']) {
   args['--output'] = template.css;
 }
 
+// Cache des configurations chargées pour le mode dev
+const configCache = new Map<string, any>();
+
+/**
+ * Charge un fichier de configuration de manière dynamique (ESM ou CJS)
+ * @param configPath Chemin absolu vers le fichier de config
+ * @returns Configuration chargée
+ */
+async function loadConfig(configPath: string): Promise<any> {
+  const ext = extname(configPath);
+  
+  // Pour les fichiers .cjs (CommonJS)
+  if (ext === '.cjs') {
+    // En mode dev, on doit vider le cache pour recharger
+    if (args['--dev']) {
+      // Supprimer du cache Node.js si présent
+      const moduleId = require.resolve(configPath);
+      delete require.cache[moduleId];
+    }
+    
+    // Utiliser l'import dynamique qui supporte CJS
+    const config = await import(pathToFileURL(configPath).href + `?update=${Date.now()}`);
+    return config.default || config;
+  }
+  
+  // Pour les fichiers .mjs, .js (ESM)
+  if (ext === '.mjs' || ext === '.js') {
+    // Ajouter un timestamp pour contourner le cache en mode dev
+    const importPath = args['--dev'] 
+      ? `${pathToFileURL(configPath).href}?update=${Date.now()}`
+      : pathToFileURL(configPath).href;
+    
+    const config = await import(importPath);
+    return config.default || config;
+  }
+  
+  // Fallback pour autres extensions
+  const config = await import(pathToFileURL(configPath).href);
+  return config.default || config;
+}
+
 const configFile = args['--config'] ? resolve(args['--config']) : undefined;
 let preflights: { [key:string]: StyleSheet } = {};
 let styleSheets: { [key:string]: StyleSheet } = {};
-let processor = new Processor(configFile ? require(configFile) : undefined);
-let safelist = processor.config('safelist');
+let processor: Processor;
+let safelist: unknown;
+let patterns: string[] = [];
+let matchFiles: string[] = [];
 
-if (configFile) Console.log('Config file:', configFile);
+// Initialisation asynchrone
+async function initialize() {
+  const config = configFile ? await loadConfig(configFile) : undefined;
+  processor = new Processor(config);
+  safelist = processor.config('safelist');
+  
+  if (configFile) Console.log('Config file:', configFile);
+}
 
 function compile(files: string[]) {
   // compilation mode
@@ -265,7 +316,6 @@ function build(files: string[], update = false) {
       Console.log('Output file:', resolve(filePath));
     }
   }
-
 }
 
 function buildSafeList(safelist: unknown) {
@@ -287,25 +337,11 @@ function buildSafeList(safelist: unknown) {
   }
 }
 
-const patterns = args._
-  .concat(processor.config('extract.include', []) as string[])
-  .concat((processor.config('extract.exclude', []) as string[]).map(i => '!' + i));
-
-let matchFiles = globArray(patterns);
-
-if (matchFiles.length === 0) {
-  Console.error('No files were matched!');
-  process.exit();
-}
-
-buildSafeList(safelist);
-build(matchFiles);
-
 function watchBuild(file: string) {
   watch(file, (event, path) => {
     if (event === 'rename') {
       const newFiles = globArray(patterns);
-      const renamed = matchFiles.filter(i => !(newFiles.includes(i)))[0];
+      const renamed = matchFiles.filter((i: string) => !(newFiles.includes(i)))[0];
       if (path && existsSync(path)) {
         Console.log('File', `'${renamed}'`, 'has been renamed to', `'${path}'`);
         matchFiles = newFiles;
@@ -341,15 +377,18 @@ function watchBuild(file: string) {
 function watchConfig(file?: string) {
   if (!file) return;
   let stamp = 0;
-  watch(file, (event, path) => {
+  watch(file, async (event, path) => {
     if (event === 'change' && (stamp === 0 || + new Date() - stamp > 500)) {
       // fix fire twice event when change config file
       stamp = + new Date();
       Console.log('Config', `'${path}'`, 'has been changed');
       Console.time('Building');
-      configFile && delete require.cache[configFile];
-      processor = new Processor(configFile ? require(configFile) : undefined);
+      
+      // Recharger la config
+      const config = await loadConfig(file);
+      processor = new Processor(config);
       safelist = processor.config('safelist');
+      
       styleSheets = {};
       preflights = {};
       buildSafeList(safelist);
@@ -359,27 +398,52 @@ function watchConfig(file?: string) {
   });
 }
 
-if (args['--dev']) {
-  watchConfig(configFile);
-  for (const file of matchFiles) {
-    watchBuild(file);
+// Point d'entrée principal (async)
+async function main() {
+  await initialize();
+  
+  patterns = args._
+    .concat(processor.config('extract.include', []) as string[])
+    .concat((processor.config('extract.exclude', []) as string[]).map((i: string) => '!' + i));
+
+  matchFiles = globArray(patterns);
+
+  if (matchFiles.length === 0) {
+    Console.error('No files were matched!');
+    process.exit();
   }
-  for (const dir of Array.from(new Set(matchFiles.map(f => dirname(f))))) {
-    watch(dir, (event, path) => {
-      if (event === 'rename' && path && existsSync(join(dir, path))) {
-        // when create new file
-        const newFiles = globArray(patterns);
-        if (newFiles.length > matchFiles.length) {
-          const newFile = newFiles.filter(i => !matchFiles.includes(i))[0];
-          Console.log('New file', `'${newFile}'`,  'added');
-          matchFiles.push(newFile);
-          Console.log('Matched files:', matchFiles);
-          Console.time('Building');
-          build([newFile], true);
-          watchBuild(newFile);
-          Console.timeEnd('Building');
+
+  buildSafeList(safelist);
+  build(matchFiles);
+
+  if (args['--dev']) {
+    watchConfig(configFile);
+    for (const file of matchFiles) {
+      watchBuild(file);
+    }
+    for (const dir of Array.from(new Set(matchFiles.map((f: string) => dirname(f))))) {
+      watch(dir, (event, path) => {
+        if (event === 'rename' && path && existsSync(join(dir, path))) {
+          // when create new file
+          const newFiles = globArray(patterns);
+          if (newFiles.length > matchFiles.length) {
+            const newFile = newFiles.filter((i: string) => !matchFiles.includes(i))[0];
+            Console.log('New file', `'${newFile}'`,  'added');
+            matchFiles.push(newFile);
+            Console.log('Matched files:', matchFiles);
+            Console.time('Building');
+            build([newFile], true);
+            watchBuild(newFile);
+            Console.timeEnd('Building');
+          }
         }
-      }
-    });
+      });
+    }
   }
 }
+
+// Exécuter le CLI
+main().catch((error) => {
+  Console.error('Fatal error:', error);
+  process.exit(1);
+});

@@ -231,12 +231,12 @@ export default [
     input: 'src/cli/index.ts',
     output: [
       {
-        file: dump('cli/index.js'),
+        file: dump('cli/index.mjs'),
         banner: '#!/usr/bin/env node',
-        format: 'cjs',
+        format: 'esm',
         paths: (id) =>
           id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
-          `../${path.dirname(path.relative('./src', id))}/index.cjs`,
+          `../${path.dirname(path.relative('./src', id))}/index.mjs`,
       },
     ],
     onwarn: (warning) => {
