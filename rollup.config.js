@@ -11,9 +11,7 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
-
 const output_dir = './dist';
-
 const prod = process.env.NODE_ENV === 'production';
 
 const ts_plugin = prod
@@ -32,18 +30,18 @@ const dump = (file) => path.join(output_dir, file);
 
 const copy = (files) => files.forEach((file) => fs.copyFileSync(file, dump(file)));
 
-const rmdir = (dir) =>  fs.existsSync(dir) && fs.statSync(dir).isDirectory() && fs.rmdirSync(dir, { recursive: true });
+const rmdir = (dir) => fs.existsSync(dir) && fs.statSync(dir).isDirectory() && fs.rmdirSync(dir, { recursive: true });
 
 const mkdir = (dir) => !(fs.existsSync(dir) && fs.statSync(dir).isDirectory()) && fs.mkdirSync(dir);
 
-const pack = (dir, mjs = true) => {
+const pack = (dir) => {
   return {
     writeBundle() {
       fs.writeFileSync(
         `${dump(dir)}/package.json`,
         JSON.stringify(
           {
-            main: './index.js',
+            main: './index.cjs',
             module: './index.mjs',
             types: './index.d.ts',
           },
@@ -69,10 +67,10 @@ export default [
     input: 'src/index.ts',
     output: [
       {
-        file: dump('index.js'),
+        file: dump('index.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
       {
         file: dump('index.mjs'),
@@ -95,10 +93,10 @@ export default [
     input: 'src/colors.ts',
     output: [
       {
-        file: dump('colors.js'),
+        file: dump('colors.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
       {
         file: dump('colors.mjs'),
@@ -118,10 +116,10 @@ export default [
     input: 'src/defaultConfig.ts',
     output: [
       {
-        file: dump('defaultConfig.js'),
+        file: dump('defaultConfig.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
       {
         file: dump('defaultConfig.mjs'),
@@ -132,8 +130,8 @@ export default [
     external: (id) => id.startsWith('./'),
     plugins: [
       ts_plugin,
-      types("defaultConfig.d.ts", "./types/defaultConfig", "{ default }")],
-
+      types("defaultConfig.d.ts", "./types/defaultConfig", "{ default }")
+    ],
   },
 
   // defaultTheme
@@ -141,10 +139,10 @@ export default [
     input: 'src/defaultTheme.ts',
     output: [
       {
-        file: dump('defaultTheme.js'),
+        file: dump('defaultTheme.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
       {
         file: dump('defaultTheme.mjs'),
@@ -164,10 +162,10 @@ export default [
     input: 'src/resolveConfig.ts',
     output: [
       {
-        file: dump('resolveConfig.js'),
+        file: dump('resolveConfig.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.js`,
+        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
       },
       {
         file: dump('resolveConfig.mjs'),
@@ -187,7 +185,7 @@ export default [
     input: 'src/plugin/index.ts',
     output: [
       {
-        file: dump('plugin/index.js'),
+        file: dump('plugin/index.cjs'),
         exports: 'default',
         format: 'cjs',
       },
@@ -210,9 +208,14 @@ export default [
       input: `src/plugin/${dir}/index.ts`,
       output: [
         {
-          file: dump(`plugin/${dir}/index.js`),
+          file: dump(`plugin/${dir}/index.cjs`),
           exports: 'default',
           format: 'cjs',
+        },
+        {
+          file: dump(`plugin/${dir}/index.mjs`),
+          exports: 'default',
+          format: 'esm',
         },
       ],
       plugins: [
@@ -233,7 +236,7 @@ export default [
         format: 'cjs',
         paths: (id) =>
           id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
-          `../${path.dirname(path.relative('./src', id))}/index.js`,
+          `../${path.dirname(path.relative('./src', id))}/index.cjs`,
       },
     ],
     onwarn: (warning) => {
@@ -259,7 +262,7 @@ export default [
       input: `src/${dir}/index.ts`,
       output: [
         {
-          file: dump(`${dir}/index.js`),
+          file: dump(`${dir}/index.cjs`),
           format: 'cjs',
         },
         {
@@ -288,7 +291,7 @@ export default [
       input: `src/utils/${dir}/index.ts`,
       output: [
         {
-          file: dump(`utils/${dir}/index.js`),
+          file: dump(`utils/${dir}/index.cjs`),
           format: 'cjs',
         },
         {

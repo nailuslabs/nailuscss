@@ -13,6 +13,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node ../dist/cli/index.js -to nailus.css --dev -f nailus.config.cjs --style",
+    "dev": "chokidar -d 1000 '../dist/**/*' -c \"npm run build\""
+  },
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0"
   }
 }

@@ -25,7 +25,7 @@
   "license": "MIT",
   "author": "Naïloth Esdras Nsounda Nsilulu",
   "type": "module",
-  "main": "index.js",
+  "main": "index.cjs",
   "module": "index.mjs",
   "types": "index.d.ts",
   "bin": {
@@ -49,71 +49,71 @@
     "./package.json": "./package.json",
     ".": {
       "import": "./index.mjs",
-      "require": "./index.js"
+      "require": "./index.cjs"
     },
     "./colors": {
       "import": "./colors.mjs",
-      "require": "./colors.js"
+      "require": "./colors.cjs"
     },
     "./defaultConfig": {
       "import": "./defaultConfig.mjs",
-      "require": "./defaultConfig.js"
+      "require": "./defaultConfig.cjs"
     },
     "./defaultTheme": {
       "import": "./defaultTheme.mjs",
-      "require": "./defaultTheme.js"
+      "require": "./defaultTheme.cjs"
     },
     "./config": {
       "import": "./config/index.mjs",
-      "require": "./config/index.js"
+      "require": "./config/index.cjs"
     },
     "./lib": {
       "import": "./lib/index.mjs",
-      "require": "./lib/index.js"
+      "require": "./lib/index.cjs"
     },
     "./plugin": {
       "import": "./plugin/index.mjs",
-      "require": "./plugin/index.js"
+      "require": "./plugin/index.cjs"
     },
     "./plugin/aspect-ratio": {
-      "import": "./plugin/aspect-ratio/index.js",
-      "require": "./plugin/aspect-ratio/index.js"
+      "import": "./plugin/aspect-ratio/index.mjs",
+      "require": "./plugin/aspect-ratio/index.cjs"
     },
     "./plugin/filters": {
-      "import": "./plugin/filters/index.js",
-      "require": "./plugin/filters/index.js"
+      "import": "./plugin/filters/index.mjs",
+      "require": "./plugin/filters/index.cjs"
     },
     "./plugin/forms": {
-      "import": "./plugin/forms/index.js",
-      "require": "./plugin/forms/index.js"
+      "import": "./plugin/forms/index.mjs",
+      "require": "./plugin/forms/index.cjs"
     },
     "./plugin/line-clamp": {
-      "import": "./plugin/line-clamp/index.js",
-      "require": "./plugin/line-clamp/index.js"
+      "import": "./plugin/line-clamp/index.mjs",
+      "require": "./plugin/line-clamp/index.cjs"
     },
     "./plugin/typography": {
-      "import": "./plugin/typography/index.js",
-      "require": "./plugin/typography/index.js"
+      "import": "./plugin/typography/index.mjs",
+      "require": "./plugin/typography/index.cjs"
     },
     "./plugin/scroll-snap": {
-      "import": "./plugin/scroll-snap/index.js",
-      "require": "./plugin/scroll-snap/index.js"
+      "import": "./plugin/scroll-snap/index.mjs",
+      "require": "./plugin/scroll-snap/index.cjs"
     },
     "./helpers": {
       "import": "./helpers/index.mjs",
-      "require": "./helpers/index.js"
+      "require": "./helpers/index.cjs"
     },
     "./utils": {
       "import": "./utils/index.mjs",
-      "require": "./utils/index.js"
+      "require": "./utils/index.cjs"
     },
     "./utils/parser": {
       "import": "./utils/parser/index.mjs",
-      "require": "./utils/parser/index.js"
+      "require": "./utils/parser/index.cjs"
     },
     "./utils/style": {
       "import": "./utils/style/index.mjs",
-      "require": "./utils/style/index.js"
+      "require": "./utils/style/index.cjs"
     }
   },
   "devDependencies": {
