@@ -29,10 +29,14 @@
       "node"
     ]
   },
-  "include": ["**/*.ts"],
+  "include": [
+    ".src",
+    "./test", "./test-dts",
+    "example"
+  ],
   "exclude": [
     "**/dist/**",
-    "**/node_modules/**",
+    "**/node_modules/**", 
     "**/playground/**",
     "**/examples/**",
     "**/test/assets**",
