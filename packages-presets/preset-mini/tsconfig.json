@@ -20,7 +20,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "paths": {
-      "@nailuscss/core": ["../core/src"]
+      "@nailuscss/core": ["../../packages-engine/core/src"]
     }
   },
   "include": ["src/**/*.ts"],

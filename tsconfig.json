@@ -2,44 +2,40 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    
     "jsx": "preserve",
-    
-    "lib": [
-      "esnext"
-    ],
-    
+    "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",
-
     "resolveJsonModule": true,
     "rootDir": ".",
     "baseUrl": ".",
-
     "strict": true,
     "strictNullChecks": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-
     "target": "es2024",
-    "types": [
-      "node"
-    ]
+    "types": ["node"],
+    "paths": {
+      "@nailuscss/core": ["packages-engine/core/src"],
+      "@nailuscss/config": ["packages-engine/config/src"],
+      "@nailuscss/cli": ["packages-engine/cli/src"],
+      "@nailuscss/inspector": ["packages-engine/inspector/src"],
+      "@nailuscss/preset-mini": ["packages-presets/preset-mini/src"]
+    }
   },
   "include": [
-    ".src",
-    "./test", "./test-dts",
-    "example"
+    "packages-engine/**/*.ts",
+    "packages-presets/**/*.ts",
+    "packages-integrations/**/*.ts",
+    "test/**/*.ts",
+    "example/**/*.ts"
   ],
   "exclude": [
     "**/dist/**",
-    "**/node_modules/**", 
+    "**/node_modules/**",
     "**/playground/**",
-    "**/examples/**",
-    "**/test/assets**",
-    "**/./test/helpers**"
+    "**/examples/**"
   ]
 }
