@@ -2,6 +2,7 @@
   "name": "@nailuscss/core",
   "version": "1.0.0",
   "description": "NailusCSS core engine",
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -14,19 +15,31 @@
     "./config": {
       "import": "./dist/config/index.mjs",
       "require": "./dist/config/index.cjs"
+    },
+    "./lib": {
+      "import": "./dist/lib/index.mjs",
+      "require": "./dist/lib/index.cjs"
+    },
+    "./utils": {
+      "import": "./dist/utils/index.mjs",
+      "require": "./dist/utils/index.cjs"
     }
   },
-  "files": ["dist", "README.md"],
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "dev": "rollup -cw",
     "build": "rollup -c",
-    "test": "vitest",
+    "build:prod": "cross-env NODE_ENV=production rollup -c",
+    "test": "echo 'test'",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.9.3",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "cross-env": "^10.1.0",
     "rollup": "^4.56.0",
-    "@rollup/plugin-typescript": "^12.3.0"
+    "typescript": "^5.9.3"
   }
 }

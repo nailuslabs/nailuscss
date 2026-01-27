@@ -2,14 +2,13 @@
   "name": "nailuscss",
   "version": "1.0.0",
   "packageManager": "pnpm@10.28.0",
-  "description": "The instant on demand atomic css (frist utility) engine and components",
+  "description": "The instant on demand atomic css engine - Monorepo",
   "keywords": [
     "css",
     "nailuscss",
     "windicss",
     "tailwindcss",
-    "unocss",
-    "bootstrap"
+    "unocss"
   ],
   "engines": {
     "node": ">= 20"
@@ -24,97 +23,20 @@
   },
   "license": "MIT",
   "author": "Naïloth Esdras Nsounda Nsilulu",
+  "private": true,
   "type": "module",
-  "main": "index.cjs",
-  "module": "index.mjs",
-  "types": "index.d.ts",
-  "bin": {
-    "nailuscss": "cli/index.mjs"
-  },
   "scripts": {
-    "dev": "rollup -cw",
-    "tsd": "tsc -p ./src --emitDeclarationOnly",
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r --parallel build",
+    "build:prod": "cross-env NODE_ENV=production pnpm -r --parallel build",
+    "test": "pnpm -r test",
+    "test:update": "cross-env UPDATE_SNAPSHOT=true pnpm -r test",
+    "test:dts": "pnpm -r test:dts",
     "lint": "eslint . --ext .ts",
-    "lint:fix": "npm run lint -- --fix",
-    "typecheck": "tsc -p ./src --noEmit",
-    "build": "rollup -c && pnpm tsd",
-    "build:prod": "cross-env NODE_ENV=production pnpm build",
-    "test": "sucrase-node test/run.ts",
-    "test:update": "cross-env UPDATE_SNAPSHOT=true sucrase-node test/run.ts",
-    "test:dts": "tsc -p ./test/dts --noEmit",
-    "coverage": "nyc --nycrc-path=.nycrc.json pnpm test",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "typecheck": "pnpm -r typecheck",
+    "coverage": "pnpm -r coverage",
     "release": "bumpp --tag --commit --push"
-  },
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.cjs"
-    },
-    "./colors": {
-      "import": "./colors.mjs",
-      "require": "./colors.cjs"
-    },
-    "./defaultConfig": {
-      "import": "./defaultConfig.mjs",
-      "require": "./defaultConfig.cjs"
-    },
-    "./defaultTheme": {
-      "import": "./defaultTheme.mjs",
-      "require": "./defaultTheme.cjs"
-    },
-    "./config": {
-      "import": "./config/index.mjs",
-      "require": "./config/index.cjs"
-    },
-    "./lib": {
-      "import": "./lib/index.mjs",
-      "require": "./lib/index.cjs"
-    },
-    "./plugin": {
-      "import": "./plugin/index.mjs",
-      "require": "./plugin/index.cjs"
-    },
-    "./plugin/aspect-ratio": {
-      "import": "./plugin/aspect-ratio/index.mjs",
-      "require": "./plugin/aspect-ratio/index.cjs"
-    },
-    "./plugin/filters": {
-      "import": "./plugin/filters/index.mjs",
-      "require": "./plugin/filters/index.cjs"
-    },
-    "./plugin/forms": {
-      "import": "./plugin/forms/index.mjs",
-      "require": "./plugin/forms/index.cjs"
-    },
-    "./plugin/line-clamp": {
-      "import": "./plugin/line-clamp/index.mjs",
-      "require": "./plugin/line-clamp/index.cjs"
-    },
-    "./plugin/typography": {
-      "import": "./plugin/typography/index.mjs",
-      "require": "./plugin/typography/index.cjs"
-    },
-    "./plugin/scroll-snap": {
-      "import": "./plugin/scroll-snap/index.mjs",
-      "require": "./plugin/scroll-snap/index.cjs"
-    },
-    "./helpers": {
-      "import": "./helpers/index.mjs",
-      "require": "./helpers/index.cjs"
-    },
-    "./utils": {
-      "import": "./utils/index.mjs",
-      "require": "./utils/index.cjs"
-    },
-    "./utils/parser": {
-      "import": "./utils/parser/index.mjs",
-      "require": "./utils/parser/index.cjs"
-    },
-    "./utils/style": {
-      "import": "./utils/style/index.mjs",
-      "require": "./utils/style/index.cjs"
-    }
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
@@ -123,42 +45,15 @@
     "@rollup/plugin-replace": "^6.0.3",
     "@rollup/plugin-sucrase": "^5.0.2",
     "@rollup/plugin-typescript": "^12.3.0",
-    "@types/color-string": "^1.5.5",
-    "@types/diff": "^7.0.2",
-    "@types/estree": "^1.0.8",
-    "@types/fs-extra": "^11.0.4",
-    "@types/jasmine": "^5.1.15",
-    "@types/js-yaml": "^4.0.9",
-    "@types/json-schema": "^7.0.15",
-    "@types/lodash": "^4.17.23",
-    "@types/lodash.merge": "^4.6.9",
-    "@types/minimatch": "^5.1.2",
     "@types/node": "^25.0.9",
     "@types/react": "^19.2.8",
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
-    "arg": "^5.0.2",
     "bumpp": "^10.4.0",
-    "caller-path": "^4.0.0",
-    "color-string": "^2.1.4",
     "cross-env": "^10.1.0",
-    "diff": "^8.0.3",
-    "domhandler": "^5.0.3",
     "eslint": "^9.39.2",
-    "fast-glob": "^3.3.3",
-    "fs-extra": "^11.3.3",
-    "jasmine": "^6.0.0",
-    "jasmine-spec-reporter": "^7.0.0",
-    "js-yaml": "^4.1.1",
-    "lodash": "^4.17.21",
-    "mini-svg-data-uri": "^1.4.4",
-    "minimatch": "^10.1.1",
-    "picocolors": "^1.1.1",
-    "pirates": "^4.0.7",
     "rollup": "^4.56.0",
     "sucrase": "^3.35.1",
-    "tosource": "^2.0.0-alpha.3",
-    "tslib": "^2.8.1",
     "typescript": "^5.9.3"
   }
 }

@@ -1,0 +1,22 @@
+{
+  "name": "@nailuscss/nailuscss",
+  "version": "1.0.0",
+  "description": "NailusCSS preset",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "rollup -c",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nailuscss/core": "workspace:*"
+  },
+  "devDependencies": {
+    "rollup": "^4.56.0",
+    "typescript": "^5.9.3"
+  }
+}

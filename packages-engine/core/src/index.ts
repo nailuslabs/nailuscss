@@ -1,6 +1,5 @@
-export * from './types';
 export * from './config';
-export * from './generators';
-export * from './extractors';
+export * from './lib';
 export * from './utils';
-export { PRESET_DEFAULTS } from './constants';
+export * from './types';
+export { defaultTheme, defaultConfig, resolveConfig } from './config/index';
