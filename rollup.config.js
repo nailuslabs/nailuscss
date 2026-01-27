@@ -226,9 +226,9 @@ export default [
       ],
     })),
 
-  // cli
+  // cli - CHEMIN MODIFIÉ ICI
   {
-    input: 'src/cli/index.ts',
+    input: 'src/packages-engine/cli/index.ts',
     output: [
       {
         file: dump('cli/index.mjs'),

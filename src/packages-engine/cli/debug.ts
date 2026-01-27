@@ -1,6 +1,6 @@
 // src/cli/debug.ts
 
-import { Console } from '../utils/tools';
+import { Console } from '../../utils/tools';
 
 export class Logger {
   private static timers: Map<string, number> = new Map();

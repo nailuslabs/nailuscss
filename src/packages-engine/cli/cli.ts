@@ -5,15 +5,15 @@ import { pathToFileURL } from 'url';
 import { mkdirSync, readFileSync, writeFile, existsSync } from 'fs';
 import fg from 'fast-glob';
 import { minimatch } from 'minimatch';
-import { Processor } from '../lib';
-import { deepCopy } from '../utils/tools';
-import { HTMLParser, CSSParser } from '../utils/parser';
-import { StyleSheet } from '../utils/style';
+import { Processor } from '../../lib';
+import { deepCopy } from '../../utils/tools';
+import { HTMLParser, CSSParser } from '../../utils/parser';
+import { StyleSheet } from '../../utils/style';
 import { Logger } from './debug';
 import { ConfigLoadError } from './errors';
 import { fuzzy } from './cli-start';
 import type { CLIArgs, CLIConfig, TemplateResult } from './types';
-import type { Extractor } from '../interfaces';
+import type { Extractor } from '../../interfaces';
 
 export function globArray(patterns: string[], options?: fg.Options): string[] {
   const list: string[] = [];

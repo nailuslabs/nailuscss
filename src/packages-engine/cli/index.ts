@@ -1,8 +1,8 @@
 // src/cli/index.ts
 
 import { resolve, dirname } from 'path';
-import { Processor } from '../lib';
-import { StyleSheet } from '../utils/style';
+import { Processor } from '../../lib';
+import { StyleSheet } from '../../utils/style';
 import { parseArgs, DOC, getVersion } from './cli-start';
 import { loadConfig, globArray, generateTemplate, CLIProcessor } from './cli';
 import { FileWatcher } from './watcher';
