@@ -1,5 +1,0 @@
-packages:
-  - "packages-engine/*"
-  - "packages-presets/*"
-  - "packages-integrations/*"
-  - "playground"
