@@ -1,0 +1,32 @@
+{
+  "name": "@nailuscss/core",
+  "version": "1.0.0",
+  "description": "NailusCSS core engine",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./config": {
+      "import": "./dist/config/index.mjs",
+      "require": "./dist/config/index.cjs"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "dev": "rollup -cw",
+    "build": "rollup -c",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "rollup": "^4.56.0",
+    "@rollup/plugin-typescript": "^12.3.0"
+  }
+}

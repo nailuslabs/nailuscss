@@ -1,23 +1,16 @@
 {
-  "name": "@nailuscss/config",
+  "name": "@nailuscss/preset-mini",
   "version": "1.0.0",
-  "description": "NailusCSS configuration resolver",
+  "description": "NailusCSS minimal preset",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
-  },
   "files": ["dist", "README.md"],
   "scripts": {
     "dev": "rollup -cw",
     "build": "rollup -c",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "test": "vitest"
   },
   "dependencies": {
     "@nailuscss/core": "workspace:*"
