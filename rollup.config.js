@@ -243,8 +243,7 @@ export default [
       if (warning.code === 'CIRCULAR_DEPENDENCY') return;
     },
     external: (id) =>
-      id.match(/\/src\/(lib|utils|plugin|config|colors)/) ||
-      id.match(/@nailuscss\/core/),
+      id.match(/\/src\/(lib|utils|plugin|config|colors)/),
     plugins: [
       replace({
         preventAssignment: true,
