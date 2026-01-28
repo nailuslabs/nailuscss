@@ -226,9 +226,9 @@ export default [
       ],
     })),
 
-  // cli - CHEMIN MODIFIÉ ICI
+  // cli - CHEMIN CORRIGÉ
   {
-    input: 'src/packages-engine/cli/index.ts',
+    input: 'src/packages-engine/cli/src/index.ts',
     output: [
       {
         file: dump('cli/index.mjs'),
@@ -243,7 +243,8 @@ export default [
       if (warning.code === 'CIRCULAR_DEPENDENCY') return;
     },
     external: (id) =>
-      id.match(/\/src\/(lib|utils|plugin|config|colors)/),
+      id.match(/\/src\/(lib|utils|plugin|config|colors)/) ||
+      id.match(/@nailuscss\/core/),
     plugins: [
       replace({
         preventAssignment: true,

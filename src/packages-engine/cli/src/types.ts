@@ -1,7 +1,7 @@
 // src/cli/types.ts
 
-import type { Processor } from '../../lib';
-import type { StyleSheet } from '../../utils/style';
+import type { Processor } from '../../../lib';
+import type { StyleSheet } from '../../../utils/style';
 
 export interface CLIArgs {
   '--help'?: boolean;
