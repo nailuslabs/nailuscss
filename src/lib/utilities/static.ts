@@ -1,4 +1,5 @@
 import type { StaticUtility } from '../../interfaces';
+import { staticUtilities as rulesStaticUtilities } from './rules';
 
 const fontVariants = {
   '--tw-ordinal': 'var(--tw-empty,/*!*/ /*!*/)',
@@ -10,6 +11,7 @@ const fontVariants = {
 };
 
 export const staticUtilities: StaticUtility = {
+  ...rulesStaticUtilities,
   // https://nailuscss.org/utilities/behaviors.html#box-decoration-break
   'decoration-slice': {
     'utility': {
