@@ -62,23 +62,30 @@ h1 {
   font-size: inherit;
   font-weight: inherit;
 }
-.flex {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
+.inl {
+  display: inline;
+}
+.float-start {
+  float: inline-start;
+}
+.clear-end {
+  clear: inline-end;
+}
+.bka-auto {
+  break-after: auto;
+}
+.flx-wrp {
+  flex: wrap;
+}
+.flx-nwrp {
+  flex: nowrap;
+}
+.flx {
   display: flex;
 }
-.justify-center {
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
+.grd {
+  display: grid;
 }
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-.text-yellow-800 {
-  --tw-text-opacity: 1;
-  color: rgba(146, 64, 14, var(--tw-text-opacity));
+.grid {
+  display: grid;
 }

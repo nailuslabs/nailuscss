@@ -1,10 +1,11 @@
-import type { StaticUtility, DynamicUtility } from '../../../interfaces';
-import { allStaticFlexUtilities } from './flex';
-import { allStaticGridUtilities } from './grid';
-import { allStaticAlignUtilities } from './align';
+import type {
+  StaticUtility,
+  DynamicUtility
+} from '../../../interfaces';
+import { allflexUtilityConfigs } from './flex';
+import {allLayoutUtilityConfigs } from './layout';
 
 export const staticUtilities: StaticUtility = {
-  ...allStaticFlexUtilities,
-  ...allStaticGridUtilities,
-  ...allStaticAlignUtilities,
+  ...allLayoutUtilityConfigs,
+  ...allflexUtilityConfigs
 };

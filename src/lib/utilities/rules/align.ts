@@ -13,301 +13,159 @@ import {
   type SimpleUtilityConfig
 } from '../handlers/template-generator';
 
-// ============================================================================
-// JUSTIFY CONTENT
-// ============================================================================
-
-const JUSTIFY_CONTENT_TEMPLATES: UtilityTemplate[] = [
+export const JUSTIFY_CONTENT_CONFIGS: UtilityTemplate[] = [
   {
     base: 'justify',
-    aliases: ['justify-content', 'jc'],
-    suffixes: ['start', 'end', 'center', 'between', 'around', 'evenly', 'stretch'],
-    utility: (suffix: string) => {
-      const valueMap: Record<string, any> = {
+    aliases: ['jc'],
+    suffixes: [
+      'normal', 'start', 'end', 'center', 'between', 'around', 'evenly', 
+      'stretch', 'flex-start', 'flex-end', 'space-between', 'space-around', 'space-evenly'
+    ],
+    utility: (suffix) => {
+      const values: Record<string, string> = {
         'start': 'flex-start',
         'end': 'flex-end',
-        'center': 'center',
         'between': 'space-between',
         'around': 'space-around',
         'evenly': 'space-evenly',
-        'stretch': 'stretch',
+        'flex-start': 'flex-start',
+        'flex-end': 'flex-end',
+        'space-between': 'space-between',
+        'space-around': 'space-around',
+        'space-evenly': 'space-evenly',
       };
-      
-      const value = valueMap[suffix];
-      const prefixedValue = suffix === 'between' ? 'justify' : (suffix === 'around' ? 'distribute' : suffix);
-      
-      return {
-        '-webkit-box-pack': suffix === 'stretch' ? 'stretch' : prefixedValue,
-        '-ms-flex-pack': prefixedValue,
-        '-webkit-justify-content': value,
-        'justify-content': value,
-      };
+      return { 'justify-content': values[suffix] || suffix };
     },
-    meta: { group: 'justifyContent', order: 1 },
+    meta: { group: 'alignment', order: 1 },
   },
 ];
 
-// ============================================================================
-// JUSTIFY ITEMS
-// ============================================================================
-
-const JUSTIFY_ITEMS_TEMPLATES: UtilityTemplate[] = [
+export const JUSTIFY_ITEMS_CONFIGS: UtilityTemplate[] = [
   {
     base: 'justify-items',
     aliases: ['ji'],
-    suffixes: ['start', 'end', 'center', 'stretch', 'auto'],
-    utility: (suffix: string) => ({
-      'justify-items': suffix,
-    }),
-    meta: { group: 'justifyItems', order: 1 },
+    suffixes: ['start', 'end', 'center', 'stretch', 'flex-start', 'flex-end'],
+    utility: (suffix) => {
+      const values: Record<string, string> = {
+        'start': 'start',
+        'end': 'end',
+        'center': 'center',
+        'stretch': 'stretch',
+        'flex-start': 'flex-start',
+        'flex-end': 'flex-end',
+      };
+      return { 'justify-items': values[suffix] };
+    },
+    meta: { group: 'alignment', order: 2 },
   },
 ];
 
-// ============================================================================
-// JUSTIFY SELF
-// ============================================================================
-
-const JUSTIFY_SELF_TEMPLATES: UtilityTemplate[] = [
+export const JUSTIFY_SELF_CONFIGS: UtilityTemplate[] = [
   {
     base: 'justify-self',
     aliases: ['js'],
-    suffixes: ['start', 'end', 'center', 'stretch', 'auto'],
-    utility: (suffix: string) => ({
-      '-ms-grid-column-align': suffix,
-      'justify-self': suffix,
-    }),
-    meta: { group: 'justifySelf', order: 1 },
+    suffixes: ['auto', 'start', 'end', 'center', 'stretch', 'flex-start', 'flex-end'],
+    utility: (suffix) => ({ 'justify-self': suffix }),
+    meta: { group: 'alignment', order: 3 },
   },
 ];
 
-// ============================================================================
-// ALIGN CONTENT
-// ============================================================================
-
-const ALIGN_CONTENT_TEMPLATES: UtilityTemplate[] = [
+export const ALIGN_CONTENT_CONFIGS: UtilityTemplate[] = [
   {
     base: 'content',
-    aliases: ['align-content', 'ac'],
-    suffixes: ['start', 'end', 'center', 'between', 'around', 'evenly', 'stretch'],
-    utility: (suffix: string) => {
-      const valueMap: Record<string, string> = {
+    aliases: ['ac'],
+    suffixes: [
+      'normal', 'start', 'end', 'center', 'between', 'around', 'evenly', 
+      'baseline', 'stretch', 'flex-start', 'flex-end', 'space-between', 'space-around', 'space-evenly'
+    ],
+    utility: (suffix) => {
+      const values: Record<string, string> = {
         'start': 'flex-start',
         'end': 'flex-end',
-        'center': 'center',
         'between': 'space-between',
         'around': 'space-around',
         'evenly': 'space-evenly',
-        'stretch': 'stretch',
+        'flex-start': 'flex-start',
+        'flex-end': 'flex-end',
+        'space-between': 'space-between',
+        'space-around': 'space-around',
+        'space-evenly': 'space-evenly',
       };
-      
-      const value = valueMap[suffix];
-      const prefixedValue = suffix === 'between' ? 'justify' : (suffix === 'around' ? 'distribute' : suffix);
-      
-      return {
-        '-ms-flex-line-pack': prefixedValue,
-        '-webkit-align-content': value,
-        'align-content': value,
-      };
+      return { 'align-content': values[suffix] || suffix };
     },
-    meta: { group: 'alignContent', order: 1 },
+    meta: { group: 'alignment', order: 4 },
   },
 ];
 
-// ============================================================================
-// ALIGN ITEMS
-// ============================================================================
-
-const ALIGN_ITEMS_TEMPLATES: UtilityTemplate[] = [
+export const ALIGN_ITEMS_CONFIGS: UtilityTemplate[] = [
   {
     base: 'items',
-    aliases: ['align-items', 'ai'],
-    suffixes: ['start', 'end', 'center', 'baseline', 'stretch'],
-    utility: (suffix: string) => {
-      const valueMap: Record<string, string> = {
+    aliases: ['ai'],
+    suffixes: ['start', 'end', 'center', 'baseline', 'stretch', 'flex-start', 'flex-end'],
+    utility: (suffix) => {
+      const values: Record<string, string> = {
         'start': 'flex-start',
         'end': 'flex-end',
-        'center': 'center',
-        'baseline': 'baseline',
-        'stretch': 'stretch',
+        'flex-start': 'flex-start',
+        'flex-end': 'flex-end',
       };
-      
-      return {
-        '-webkit-box-align': suffix,
-        '-ms-flex-align': suffix,
-        '-webkit-align-items': valueMap[suffix],
-        'align-items': valueMap[suffix],
-      };
+      return { 'align-items': values[suffix] || suffix };
     },
-    meta: { group: 'alignItems', order: 1 },
+    meta: { group: 'alignment', order: 5 },
   },
 ];
 
-// ============================================================================
-// ALIGN SELF
-// ============================================================================
-
-const ALIGN_SELF_TEMPLATES: UtilityTemplate[] = [
+export const ALIGN_SELF_CONFIGS: UtilityTemplate[] = [
   {
     base: 'self',
-    aliases: ['align-self', 'as'],
-    suffixes: ['start', 'end', 'center', 'stretch', 'auto', 'baseline'],
-    utility: (suffix: string) => {
-      const valueMap: Record<string, string> = {
+    aliases: ['as'],
+    suffixes: ['auto', 'start', 'end', 'center', 'stretch', 'baseline', 'flex-start', 'flex-end'],
+    utility: (suffix) => {
+      const values: Record<string, string> = {
         'start': 'flex-start',
         'end': 'flex-end',
-        'center': 'center',
-        'stretch': 'stretch',
-        'auto': 'auto',
-        'baseline': 'baseline',
+        'flex-start': 'flex-start',
+        'flex-end': 'flex-end',
       };
-      
-      return {
-        '-ms-flex-item-align': suffix,
-        '-ms-grid-row-align': suffix,
-        '-webkit-align-self': valueMap[suffix],
-        'align-self': valueMap[suffix],
-      };
+      return { 'align-self': values[suffix] || suffix };
     },
-    meta: { group: 'alignSelf', order: 1 },
+    meta: { group: 'alignment', order: 6 },
   },
 ];
 
-// ============================================================================
-// PLACE CONTENT
-// ============================================================================
-
-const PLACE_CONTENT_TEMPLATES: UtilityTemplate[] = [
+export const PLACE_CONTENT_CONFIGS: UtilityTemplate[] = [
   {
     base: 'place-content',
     aliases: ['pc'],
-    suffixes: ['start', 'end', 'center', 'between', 'around', 'evenly', 'stretch'],
-    utility: (suffix: string) => {
-      const value = suffix === 'between' ? 'space-between' 
-                  : suffix === 'around' ? 'space-around'
-                  : suffix === 'evenly' ? 'space-evenly'
-                  : suffix;
-      
-      return {
-        'place-content': value,
+    suffixes: ['center', 'start', 'end', 'between', 'around', 'evenly', 'baseline', 'stretch'],
+    utility: (suffix) => {
+      const values: Record<string, string> = {
+        'between': 'space-between',
+        'around': 'space-around',
+        'evenly': 'space-evenly',
       };
+      return { 'place-content': values[suffix] || suffix };
     },
-    meta: { group: 'placeContent', order: 1 },
+    meta: { group: 'alignment', order: 7 },
   },
 ];
 
-// ============================================================================
-// PLACE ITEMS
-// ============================================================================
-
-const PLACE_ITEMS_TEMPLATES: UtilityTemplate[] = [
+export const PLACE_ITEMS_CONFIGS: UtilityTemplate[] = [
   {
     base: 'place-items',
     aliases: ['pi'],
-    suffixes: ['start', 'end', 'center', 'stretch', 'auto'],
-    utility: (suffix: string) => ({
-      'place-items': suffix,
-    }),
-    meta: { group: 'placeItems', order: 1 },
+    suffixes: ['start', 'end', 'center', 'baseline', 'stretch'],
+    utility: (suffix) => ({ 'place-items': suffix }),
+    meta: { group: 'alignment', order: 8 },
   },
 ];
 
-// ============================================================================
-// PLACE SELF
-// ============================================================================
-
-const PLACE_SELF_TEMPLATES: UtilityTemplate[] = [
+export const PLACE_SELF_CONFIGS: UtilityTemplate[] = [
   {
     base: 'place-self',
-    aliases: ['ps'],
-    suffixes: ['start', 'end', 'center', 'stretch', 'auto'],
-    utility: (suffix: string) => ({
-      '-ms-grid-row-align': suffix,
-      '-ms-grid-column-align': suffix,
-      'place-self': suffix,
-    }),
-    meta: { group: 'placeSelf', order: 1 },
+    aliases: [],
+    suffixes: ['auto', 'start', 'end', 'center', 'stretch'],
+    utility: (suffix) => ({ 'place-self': suffix }),
+    meta: { group: 'alignment', order: 9 },
   },
 ];
-
-// ============================================================================
-// VERTICAL ALIGN
-// ============================================================================
-
-const VERTICAL_ALIGN_CONFIGS: SimpleUtilityConfig[] = [
-  {
-    name: 'align-baseline',
-    aliases: ['vertical-align-baseline', 'va-baseline'],
-    utility: { 'vertical-align': 'baseline' },
-    meta: { group: 'verticalAlign', order: 1 },
-  },
-  {
-    name: 'align-top',
-    aliases: ['vertical-align-top', 'va-top'],
-    utility: { 'vertical-align': 'top' },
-    meta: { group: 'verticalAlign', order: 2 },
-  },
-  {
-    name: 'align-middle',
-    aliases: ['vertical-align-middle', 'va-middle'],
-    utility: { 'vertical-align': 'middle' },
-    meta: { group: 'verticalAlign', order: 3 },
-  },
-  {
-    name: 'align-bottom',
-    aliases: ['vertical-align-bottom', 'va-bottom'],
-    utility: { 'vertical-align': 'bottom' },
-    meta: { group: 'verticalAlign', order: 4 },
-  },
-  {
-    name: 'align-text-top',
-    aliases: ['vertical-align-text-top', 'va-text-top'],
-    utility: { 'vertical-align': 'text-top' },
-    meta: { group: 'verticalAlign', order: 5 },
-  },
-  {
-    name: 'align-text-bottom',
-    aliases: ['vertical-align-text-bottom', 'va-text-bottom'],
-    utility: { 'vertical-align': 'text-bottom' },
-    meta: { group: 'verticalAlign', order: 6 },
-  },
-  {
-    name: 'align-sub',
-    aliases: ['vertical-align-sub', 'va-sub'],
-    utility: { 'vertical-align': 'sub' },
-    meta: { group: 'verticalAlign', order: 7 },
-  },
-  {
-    name: 'align-super',
-    aliases: ['vertical-align-super', 'va-super'],
-    utility: { 'vertical-align': 'super' },
-    meta: { group: 'verticalAlign', order: 8 },
-  },
-];
-
-// ============================================================================
-// GÉNÉRATION ET EXPORT
-// ============================================================================
-
-const staticJustifyContentUtilities = generateFromTemplates(JUSTIFY_CONTENT_TEMPLATES);
-const staticJustifyItemsUtilities = generateFromTemplates(JUSTIFY_ITEMS_TEMPLATES);
-const staticJustifySelfUtilities = generateFromTemplates(JUSTIFY_SELF_TEMPLATES);
-const staticAlignContentUtilities = generateFromTemplates(ALIGN_CONTENT_TEMPLATES);
-const staticAlignItemsUtilities = generateFromTemplates(ALIGN_ITEMS_TEMPLATES);
-const staticAlignSelfUtilities = generateFromTemplates(ALIGN_SELF_TEMPLATES);
-const staticPlaceContentUtilities = generateFromTemplates(PLACE_CONTENT_TEMPLATES);
-const staticPlaceItemsUtilities = generateFromTemplates(PLACE_ITEMS_TEMPLATES);
-const staticPlaceSelfUtilities = generateFromTemplates(PLACE_SELF_TEMPLATES);
-const staticVerticalAlignUtilities = generateSimpleUtilities(VERTICAL_ALIGN_CONFIGS);
-
-export const allStaticAlignUtilities = combineUtilities(
-  staticJustifyContentUtilities,
-  staticJustifyItemsUtilities,
-  staticJustifySelfUtilities,
-  staticAlignContentUtilities,
-  staticAlignItemsUtilities,
-  staticAlignSelfUtilities,
-  staticPlaceContentUtilities,
-  staticPlaceItemsUtilities,
-  staticPlaceSelfUtilities,
-  staticVerticalAlignUtilities
-);
