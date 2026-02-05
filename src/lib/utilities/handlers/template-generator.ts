@@ -30,3 +30,31 @@ export interface PatternConfig {
   /** Liste des alias (pour documentation) */
   aliases?: string[];
 }
+
+/**
+ * Template pour générer des utilitaires statiques
+ */
+export interface StaticTemplate {
+  /** Nom de base (ex: 'flex', 'stroke-2', 'bg-cover') */
+  base: string;
+  
+  /** Aliases du nom de base */
+  aliases?: string[];
+  
+  /** Suffixes optionnels (peuvent ne pas être utilisés) */
+  suffixes?: string[];
+  
+  /** 
+   * CSS utility à générer
+   * - Objet fixe : { display: 'flex' }
+   * - Fonction avec suffix : (suffix) => ({ ... })
+   * - Fonction sans suffix : () => ({ ... })
+   */
+  utility: Record<string, any> | ((suffix?: string) => Record<string, any>);
+  
+  /** Metadata */
+  meta: {
+    group: string;
+    order: number;
+  };
+}
