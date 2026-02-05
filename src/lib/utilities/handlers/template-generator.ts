@@ -172,3 +172,62 @@ export class PatternRegistry {
     return this.patterns.size;
   }
 }
+
+/**
+ * Génère des StaticUtility à partir de templates
+ * 
+ * @example
+ * // Sans suffixes
+ * const utilities = generateStaticUtilities([
+ *   {
+ *     base: 'flex',
+ *     aliases: ['flx', 'fx'],
+ *     utility: { display: 'flex' },
+ *     meta: { group: 'display', order: 1 }
+ *   }
+ * ]);
+ * 
+ * @example
+ * // Avec suffixes
+ * const utilities = generateStaticUtilities([
+ *   {
+ *     base: 'justify',
+ *     aliases: ['jc'],
+ *     suffixes: ['start', 'center', 'end'],
+ *     utility: (suffix) => ({ 'justify-content': suffix }),
+ *     meta: { group: 'justifyContent', order: 1 }
+ *   }
+ * ]);
+ */
+export function generateStaticUtilities(templates: StaticTemplate[]): StaticUtility {
+  const result: StaticUtility = {};
+  
+  templates.forEach(template => {
+    const allBases = [template.base, ...(template.aliases || [])];
+    
+    if (template.suffixes && template.suffixes.length > 0) {
+      // CAS 1 : Avec suffixes
+      allBases.forEach(base => {
+        template.suffixes!.forEach(suffix => {
+          const key = `${base}-${suffix}`;
+          const utility = typeof template.utility === 'function'
+            ? template.utility(suffix)
+            : template.utility;
+          
+          result[key] = { utility, meta: template.meta };
+        });
+      });
+    } else {
+      // CAS 2 : Sans suffixes
+      allBases.forEach(base => {
+        const utility = typeof template.utility === 'function'
+          ? template.utility()
+          : template.utility;
+          
+        result[base] = { utility, meta: template.meta };
+      });
+    }
+  });
+  
+  return result;
+}
