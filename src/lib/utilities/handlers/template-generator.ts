@@ -378,3 +378,87 @@ export function createDynamicConfig(
 ): DynamicConfig {
   return { name, aliases, handler, pattern };
 }
+
+/**
+ * Enregistre facilement un nouveau pattern d'alias
+ * 
+ * @example
+ * registerPattern('opacity', ['op', 'alpha']);
+ * // Génère automatiquement le pattern et le normalizer
+ */
+export function registerPattern(
+  canonical: string,
+  aliases: string[]
+): void {
+  const allVariants = [canonical, ...aliases];
+  const pattern = new RegExp(`^(${allVariants.join('|')})(?:-|$)`);
+  
+  const aliasesToReplace = aliases.filter(a => a !== canonical);
+  const normalizer = (raw: string) => {
+    for (const alias of aliasesToReplace) {
+      if (raw.startsWith(alias + '-') || raw === alias) {
+        return raw.replace(new RegExp(`^${alias}(?=-|$)`), canonical);
+      }
+    }
+    return raw;
+  };
+  
+  PatternRegistry.register({
+    name: canonical,
+    pattern,
+    normalizer,
+    aliases,
+  });
+}
+
+/**
+ * Valide qu'un template est bien formé
+ */
+export function validateStaticTemplate(template: StaticTemplate): boolean {
+  if (!template.base) return false;
+  if (!template.utility) return false;
+  if (!template.meta || !template.meta.group) return false;
+  
+  if (template.suffixes && template.suffixes.length > 0) {
+    // Avec suffixes : utility doit être une fonction
+    if (typeof template.utility !== 'function') {
+      console.warn(`Template "${template.base}" has suffixes but utility is not a function`);
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+/**
+ * Valide qu'une config dynamic est bien formée
+ */
+export function validateDynamicConfig(config: DynamicConfig): boolean {
+  if (!config.name) return false;
+  if (!config.handler || typeof config.handler !== 'function') return false;
+  return true;
+}
+
+/**
+ * Affiche les patterns enregistrés (debug)
+ */
+export function debugPatterns(): void {
+  console.log('=== REGISTERED PATTERNS ===');
+  const patterns = PatternRegistry.getAll();
+  
+  patterns.forEach((config, name) => {
+    console.log(`\n${name}:`);
+    console.log(`  Pattern: ${config.pattern}`);
+    console.log(`  Aliases: ${config.aliases?.join(', ') || 'none'}`);
+  });
+  
+  console.log(`\nTotal: ${patterns.size} patterns`);
+}
+
+/**
+ * Teste la normalisation d'un utilitaire
+ */
+export function testNormalization(raw: string): void {
+  const normalized = PatternRegistry.normalize(raw);
+  console.log(`"${raw}" → "${normalized}"`);
+}
