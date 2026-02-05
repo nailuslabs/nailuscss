@@ -359,3 +359,22 @@ export function createStaticTemplateWithSuffixes(
 ): StaticTemplate {
   return { base, aliases, suffixes, utility: utilityFn, meta: { group, order } };
 }
+
+/**
+ * Crée une config dynamic
+ * 
+ * @example
+ * const config = createDynamicConfig(
+ *   'fill',
+ *   ['fl', 'f'],
+ *   fillFunction
+ * );
+ */
+export function createDynamicConfig(
+  name: string,
+  aliases: string[],
+  handler: DynamicUtilityHandler,
+  pattern?: { regex: RegExp; normalizer: (raw: string) => string }
+): DynamicConfig {
+  return { name, aliases, handler, pattern };
+}
