@@ -294,3 +294,22 @@ export function generateDynamicUtilities(configs: DynamicConfig[]): DynamicUtili
   
   return result;
 }
+
+/**
+ * Combine plusieurs StaticUtility en un seul
+ */
+export function combineStaticUtilities(...utilities: StaticUtility[]): StaticUtility {
+  return Object.assign({}, ...utilities);
+}
+
+/**
+ * Combine plusieurs DynamicUtility en un seul
+ */
+export function combineDynamicUtilities(...utilities: DynamicUtility[]): DynamicUtility {
+  return Object.assign({}, ...utilities);
+}
+
+/**
+ * Alias pour rétrocompatibilité
+ */
+export const combineUtilities = combineStaticUtilities;
