@@ -58,3 +58,26 @@ export interface StaticTemplate {
     order: number;
   };
 }
+
+/**
+ * Configuration d'un utilitaire dynamique
+ */
+export interface DynamicConfig {
+  /** Nom de la fonction (ex: 'fill', 'background') */
+  name: string;
+  
+  /** Aliases (ex: ['fl', 'f'] pour 'fill') */
+  aliases?: string[];
+  
+  /** La fonction handler elle-même */
+  handler: Function;
+  
+  /** 
+   * Pattern de détection optionnel
+   * Si fourni, sera automatiquement enregistré dans PatternRegistry
+   */
+  pattern?: {
+    regex: RegExp;
+    normalizer: (raw: string) => string;
+  };
+}
