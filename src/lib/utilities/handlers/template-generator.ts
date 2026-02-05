@@ -13,3 +13,20 @@
  */
 
 import type { StaticUtility, DynamicUtility } from '../../../interfaces';
+
+/**
+ * Configuration d'un pattern de détection
+ */
+export interface PatternConfig {
+  /** Nom du pattern (ex: 'fill', 'stroke', 'bg') */
+  name: string;
+  
+  /** Regex pour détecter le pattern */
+  pattern: RegExp;
+  
+  /** Fonction de normalisation (alias → nom canonique) */
+  normalizer: (raw: string) => string;
+  
+  /** Liste des alias (pour documentation) */
+  aliases?: string[];
+}
