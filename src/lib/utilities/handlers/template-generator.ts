@@ -313,3 +313,49 @@ export function combineDynamicUtilities(...utilities: DynamicUtility[]): Dynamic
  * Alias pour rétrocompatibilité
  */
 export const combineUtilities = combineStaticUtilities;
+
+/**
+ * Crée un template static simple (sans suffixes)
+ * 
+ * @example
+ * const template = createStaticTemplate(
+ *   'flex',
+ *   ['flx', 'fx'],
+ *   { display: 'flex' },
+ *   'display',
+ *   1
+ * );
+ */
+export function createStaticTemplate(
+  base: string,
+  aliases: string[],
+  utility: Record<string, any>,
+  group: string,
+  order: number = 1
+): StaticTemplate {
+  return { base, aliases, utility, meta: { group, order } };
+}
+
+/**
+ * Crée un template static avec suffixes
+ * 
+ * @example
+ * const template = createStaticTemplateWithSuffixes(
+ *   'justify',
+ *   ['jc'],
+ *   ['start', 'center', 'end'],
+ *   (suffix) => ({ 'justify-content': suffix }),
+ *   'justifyContent',
+ *   1
+ * );
+ */
+export function createStaticTemplateWithSuffixes(
+  base: string,
+  aliases: string[],
+  suffixes: string[],
+  utilityFn: (suffix: string) => Record<string, any>,
+  group: string,
+  order: number = 1
+): StaticTemplate {
+  return { base, aliases, suffixes, utility: utilityFn, meta: { group, order } };
+}
