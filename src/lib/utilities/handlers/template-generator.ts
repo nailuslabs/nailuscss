@@ -1,5 +1,5 @@
 /**
- * GÉNÉRATEUR UNIVERSEL DE UTILITIES
+ * GÉNÉRATEUR UNIVERSEL DE UTILITIES 
  * 
  * Supporte :
  * StaticUtility (utilitaires statiques)
@@ -12,7 +12,13 @@
  * À utiliser dans TOUS les modules (svg.ts, background.ts, flex.ts, etc.)
  */
 
-import type { StaticUtility, DynamicUtility } from '../../../interfaces';
+import type {
+  StaticUtility,
+  DynamicUtility,
+  Utility,
+  PluginUtils,
+  Output
+} from '../../../interfaces';
 
 /**
  * Configuration d'un pattern de détection
@@ -70,7 +76,7 @@ export interface DynamicConfig {
   aliases?: string[];
   
   /** La fonction handler elle-même */
-  handler: Function;
+  handler: DynamicUtilityHandler;
   
   /** 
    * Pattern de détection optionnel
@@ -225,6 +231,63 @@ export function generateStaticUtilities(templates: StaticTemplate[]): StaticUtil
           : template.utility;
           
         result[base] = { utility, meta: template.meta };
+      });
+    }
+  });
+  
+  return result;
+}
+
+/**
+ * Alias pour rétrocompatibilité
+ */
+export const generateFromTemplates = generateStaticUtilities;
+
+/**
+ * Type pour les handlers de dynamic utilities
+ */
+export type DynamicUtilityHandler = (utility: Utility, context: PluginUtils) => Output;
+
+/**
+ * Génère des DynamicUtility à partir de configurations
+ * 
+ * @example
+ * const dynamicUtils = generateDynamicUtilities([
+ *   {
+ *     name: 'fill',
+ *     aliases: ['fl', 'f'],
+ *     handler: fillFunction,
+ *     pattern: {
+ *       regex: /^(fill|fl|f)(?:-|$)/,
+ *       normalizer: (raw) => raw.replace(/^(fl|f)(?=-|$)/, 'fill')
+ *     }
+ *   }
+ * ]);
+ * 
+ * // Résultat :
+ * // { fill: fillFunction, fl: fillFunction, f: fillFunction }
+ */
+export function generateDynamicUtilities(configs: DynamicConfig[]): DynamicUtility {
+  const result: DynamicUtility = {};
+  
+  configs.forEach(config => {
+    // Enregistrer le pattern si fourni
+    if (config.pattern) {
+      PatternRegistry.register({
+        name: config.name,
+        pattern: config.pattern.regex,
+        normalizer: config.pattern.normalizer,
+        aliases: config.aliases,
+      });
+    }
+    
+    // Ajouter le handler principal
+    result[config.name] = config.handler;
+    
+    // Ajouter les aliases
+    if (config.aliases) {
+      config.aliases.forEach(alias => {
+        result[alias] = config.handler;
       });
     }
   });

@@ -1,4 +1,5 @@
 import type { Utility } from './lib/utilities/handler';
+export type { Utility } from './lib/utilities/handler';
 
 import type { Property, Style, InlineAtRule, Keyframes } from './utils/style';
 
