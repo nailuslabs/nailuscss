@@ -16,7 +16,7 @@ import {
 export const JUSTIFY_CONTENT_CONFIGS: UtilityTemplate[] = [
   {
     base: 'justify',
-    aliases: ['jc'],
+    aliases: [],
     suffixes: [
       'normal', 'start', 'end', 'center', 'between', 'around', 'evenly', 
       'stretch', 'flex-start', 'flex-end', 'space-between', 'space-around', 'space-evenly'
@@ -43,7 +43,7 @@ export const JUSTIFY_CONTENT_CONFIGS: UtilityTemplate[] = [
 export const JUSTIFY_ITEMS_CONFIGS: UtilityTemplate[] = [
   {
     base: 'justify-items',
-    aliases: ['ji'],
+    aliases: [],
     suffixes: ['start', 'end', 'center', 'stretch', 'flex-start', 'flex-end'],
     utility: (suffix) => {
       const values: Record<string, string> = {
@@ -63,7 +63,7 @@ export const JUSTIFY_ITEMS_CONFIGS: UtilityTemplate[] = [
 export const JUSTIFY_SELF_CONFIGS: UtilityTemplate[] = [
   {
     base: 'justify-self',
-    aliases: ['js'],
+    aliases: [],
     suffixes: ['auto', 'start', 'end', 'center', 'stretch', 'flex-start', 'flex-end'],
     utility: (suffix) => ({ 'justify-self': suffix }),
     meta: { group: 'alignment', order: 3 },
@@ -73,7 +73,7 @@ export const JUSTIFY_SELF_CONFIGS: UtilityTemplate[] = [
 export const ALIGN_CONTENT_CONFIGS: UtilityTemplate[] = [
   {
     base: 'content',
-    aliases: ['ac'],
+    aliases: [],
     suffixes: [
       'normal', 'start', 'end', 'center', 'between', 'around', 'evenly', 
       'baseline', 'stretch', 'flex-start', 'flex-end', 'space-between', 'space-around', 'space-evenly'
@@ -100,7 +100,7 @@ export const ALIGN_CONTENT_CONFIGS: UtilityTemplate[] = [
 export const ALIGN_ITEMS_CONFIGS: UtilityTemplate[] = [
   {
     base: 'items',
-    aliases: ['ai'],
+    aliases: [],
     suffixes: ['start', 'end', 'center', 'baseline', 'stretch', 'flex-start', 'flex-end'],
     utility: (suffix) => {
       const values: Record<string, string> = {
@@ -118,7 +118,7 @@ export const ALIGN_ITEMS_CONFIGS: UtilityTemplate[] = [
 export const ALIGN_SELF_CONFIGS: UtilityTemplate[] = [
   {
     base: 'self',
-    aliases: ['as'],
+    aliases: [],
     suffixes: ['auto', 'start', 'end', 'center', 'stretch', 'baseline', 'flex-start', 'flex-end'],
     utility: (suffix) => {
       const values: Record<string, string> = {
@@ -136,7 +136,7 @@ export const ALIGN_SELF_CONFIGS: UtilityTemplate[] = [
 export const PLACE_CONTENT_CONFIGS: UtilityTemplate[] = [
   {
     base: 'place-content',
-    aliases: ['pc'],
+    aliases: [],
     suffixes: ['center', 'start', 'end', 'between', 'around', 'evenly', 'baseline', 'stretch'],
     utility: (suffix) => {
       const values: Record<string, string> = {
@@ -153,7 +153,7 @@ export const PLACE_CONTENT_CONFIGS: UtilityTemplate[] = [
 export const PLACE_ITEMS_CONFIGS: UtilityTemplate[] = [
   {
     base: 'place-items',
-    aliases: ['pi'],
+    aliases: [],
     suffixes: ['start', 'end', 'center', 'baseline', 'stretch'],
     utility: (suffix) => ({ 'place-items': suffix }),
     meta: { group: 'alignment', order: 8 },
@@ -169,3 +169,34 @@ export const PLACE_SELF_CONFIGS: UtilityTemplate[] = [
     meta: { group: 'alignment', order: 9 },
   },
 ];
+
+const STATIC_JUSTIFY_CONTENT_CONFIGS = generateFromTemplates(JUSTIFY_CONTENT_CONFIGS);
+
+const STATIC_JUSTIFY_ITEMS_CONFIGS = generateFromTemplates(JUSTIFY_ITEMS_CONFIGS);
+
+const STATIC_JUSTIFY_SELF_CONFIGS = generateFromTemplates(JUSTIFY_SELF_CONFIGS);
+
+const STATIC_ALIGN_CONTENT_CONFIGS = generateFromTemplates(ALIGN_CONTENT_CONFIGS);
+
+const STATIC_ALIGN_ITEMS_CONFIGS = generateFromTemplates(ALIGN_ITEMS_CONFIGS);
+
+const STATIC_ALIGN_SELF_CONFIGS = generateFromTemplates(ALIGN_SELF_CONFIGS);
+
+const STATIC_PLACE_CONTENT_CONFIGS = generateFromTemplates(PLACE_CONTENT_CONFIGS);
+
+const STATIC_PLACE_ITEMS_CONFIGS = generateFromTemplates(PLACE_ITEMS_CONFIGS);
+
+const STATIC_PLACE_SELF_CONFIGS = generateFromTemplates(PLACE_SELF_CONFIGS);
+
+export const allAlignUtilityConfigs = combineUtilities(
+  STATIC_JUSTIFY_CONTENT_CONFIGS,
+  STATIC_JUSTIFY_ITEMS_CONFIGS,
+  STATIC_JUSTIFY_SELF_CONFIGS,
+  STATIC_ALIGN_CONTENT_CONFIGS,
+  STATIC_ALIGN_ITEMS_CONFIGS,
+  STATIC_ALIGN_SELF_CONFIGS,
+  STATIC_PLACE_CONTENT_CONFIGS,
+  STATIC_PLACE_CONTENT_CONFIGS,
+  STATIC_PLACE_ITEMS_CONFIGS,
+  STATIC_PLACE_SELF_CONFIGS,
+);
