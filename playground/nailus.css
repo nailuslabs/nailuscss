@@ -57,35 +57,30 @@ html {
   font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   line-height: 1.5;
 }
-h1 {
-  margin: 0;
-  font-size: inherit;
-  font-weight: inherit;
+.fill-green-50 {
+  --ns-fill-color: 1;
+  fill: rgba(236, 253, 245, var(--ns-fill-color));
 }
-.inl {
-  display: inline;
+.fl-slate-900 {
+  --ns-fill-color: 1;
+  fill: rgba(15, 23, 42, var(--ns-fill-color));
 }
-.float-start {
-  float: inline-start;
+.f-blue-800 {
+  --ns-fill-color: 1;
+  fill: rgba(30, 64, 175, var(--ns-fill-color));
 }
-.clear-end {
-  clear: inline-end;
+.stroke-green-50 {
+  --ns-stroke-color: 1;
+  stroke: rgba(236, 253, 245, var(--ns-stroke-color));
 }
-.bka-auto {
-  break-after: auto;
+.strk-slate-900 {
+  --ns-stroke-color: 1;
+  stroke: rgba(15, 23, 42, var(--ns-stroke-color));
 }
-.flx-wrp {
-  flex: wrap;
+.sk-blue-800 {
+  --ns-stroke-color: 1;
+  stroke: rgba(30, 64, 175, var(--ns-stroke-color));
 }
-.flx-nwrp {
-  flex: nowrap;
-}
-.flx {
-  display: flex;
-}
-.grd {
-  display: grid;
-}
-.grid {
-  display: grid;
+.stroke-0 {
+  stroke-width: 0;
 }

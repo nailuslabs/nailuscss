@@ -1,25 +1,17 @@
-import type {
+import { 
   StaticUtility,
-  DynamicUtility
-} from '../../../interfaces';
-import { generateFromTemplates } from '../handlers/template-generator';
-import { allAlignUtilityConfigs } from './align';
-import { allflexUtilityConfigs } from './flex';
-import {allLayoutUtilityConfigs } from './layout';
+  DynamicUtility,
+} from "../../../interfaces";
 
-
-import { staticSvgConfigs } from './svg';
-import { staticAccessibilityConfigs } from './accessibility';
+import {
+  staticSvgUtilities,
+  dynamicSvgUtilities
+} from "./svg";
 
 export const staticUtilities: StaticUtility = {
-  ...allLayoutUtilityConfigs,
-  ...allflexUtilityConfigs,
-  ...allAlignUtilityConfigs,
+  ...staticSvgUtilities,
+};
 
-
-  // ACCESSIBILITY - FORCED COLOR ADJUST
-  ...staticSvgConfigs
-
-  // ACCESSIBILITY - FORCED COLOR ADJUST
-  ...staticAccessibilityConfigs
+export const dynamicUtilities: DynamicUtility = {
+  ...dynamicSvgUtilities,
 };
