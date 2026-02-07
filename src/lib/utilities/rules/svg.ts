@@ -689,7 +689,10 @@ export function strokeDasharray(utility: Utility, { theme }: PluginUtils): Outpu
     .handleStatic(theme('strokeDasharray'))
     .handleNumber(0, undefined, 'int')
     .handleVariable()
-    .handleBody((body: string) => {
+    .handleString(() => {
+      const raw = utility.raw;
+      const stripped = raw.replace(/^-?(stroke-dasharray|stroke-dash|strk-dash|sda)-/, '');
+      const body = stripped === raw ? utility.body : stripped;
       // Supporte les listes comme "5-10" -> "5 10"
       return body.replace(/-/g, ' ');
     })
@@ -738,7 +741,10 @@ export function clipPath(utility: Utility, { theme }: PluginUtils): Output {
   return utility.handler
     .handleStatic(theme('clipPath'))
     .handleVariable()
-    .handleBody((body: string) => {
+    .handleString(() => {
+      const raw = utility.raw;
+      const stripped = raw.replace(/^-?(clip-path|clip-p|cp)-/, '');
+      const body = stripped === raw ? utility.body : stripped;
       // Support pour url(#id)
       if (body.startsWith('url-')) {
         return `url(#${body.slice(4)})`;

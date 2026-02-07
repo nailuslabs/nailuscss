@@ -2,6 +2,21 @@ import { Utility } from './utilities/handler';
 import { staticUtilities, dynamicUtilities } from './utilities';
 import type { Processor } from './index';
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function matchDynamicKey(className: string, keys: string[]): string | undefined {
+  let best: string | undefined;
+  for (const key of keys) {
+    const exp = new RegExp(`^-?${escapeRegExp(key)}(?:-|$)`);
+    if (exp.test(className)) {
+      if (!best || key.length > best.length) best = key;
+    }
+  }
+  return best;
+}
+
 export function testStatic(processor: Processor, className:string): boolean {
   // eslint-disable-next-line no-prototype-builtins
   if (!staticUtilities.hasOwnProperty(className)) return false;
@@ -37,8 +52,7 @@ export default function test(
   }
 
   // handle dynamic base utilities
-  const matches = className.match(/\w+/);
-  const key = matches ? matches[0] : undefined;
+  const key = matchDynamicKey(className, Object.keys(dynamicUtilities));
   // eslint-disable-next-line no-prototype-builtins
   if (key && dynamicUtilities.hasOwnProperty(key)) {
     const style = dynamicUtilities[key](utility, processor.pluginUtils);
