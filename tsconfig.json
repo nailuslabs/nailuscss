@@ -5,7 +5,9 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "preserve",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -16,26 +18,51 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "target": "es2024",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "paths": {
-      "@nailuscss/core": ["packages-engine/core/src"],
-      "@nailuscss/core/*": ["packages-engine/core/src/*"],
-      "@nailuscss/config": ["packages-engine/config/src"],
-      "@nailuscss/config/*": ["packages-engine/config/src/*"],
-      "@nailuscss/cli": ["packages-engine/cli/src"],
-      "@nailuscss/cli/*": ["packages-engine/cli/src/*"],
-      "@nailuscss/autocomplete": ["packages-engine/autocomplete/src"],
-      "@nailuscss/autocomplete/*": ["packages-engine/autocomplete/src/*"],
-      "@nailuscss/inspector": ["packages-integrations/inspector/src"],
-      "@nailuscss/inspector/*": ["packages-integrations/inspector/src/*"],
-      "@nailuscss/preset-mini": ["packages-presets/preset-mini/src"],
-      "@nailuscss/preset-mini/*": ["packages-presets/preset-mini/src/*"],
-      "@nailuscss/preset-nailus": ["packages-presets/preset-nailus/src"],
-      "@nailuscss/preset-nailus/*": ["packages-presets/preset-nailus/src/*"],
-      "@nailuscss/*/*": [
-        "packages-engine/*/src/*",
-        "packages-integrations/*/src/*",
-        "packages-presets/*/src/*"
+      "@nailuscss/core": [
+        "packages-engine/core/src"
+      ],
+      "@nailuscss/core/*": [
+        "packages-engine/core/src/*"
+      ],
+      "@nailuscss/config": [
+        "packages-engine/config/src"
+      ],
+      "@nailuscss/config/*": [
+        "packages-engine/config/src/*"
+      ],
+      "@nailuscss/cli": [
+        "packages-engine/cli/src"
+      ],
+      "@nailuscss/cli/*": [
+        "packages-engine/cli/src/*"
+      ],
+      "@nailuscss/autocomplete": [
+        "packages-engine/autocomplete/src"
+      ],
+      "@nailuscss/autocomplete/*": [
+        "packages-engine/autocomplete/src/*"
+      ],
+      "@nailuscss/inspector": [
+        "packages-integrations/inspector/src"
+      ],
+      "@nailuscss/inspector/*": [
+        "packages-integrations/inspector/src/*"
+      ],
+      "@nailuscss/preset-mini": [
+        "packages-presets/preset-mini/src"
+      ],
+      "@nailuscss/preset-mini/*": [
+        "packages-presets/preset-mini/src/*"
+      ],
+      "@nailuscss/preset-nailus": [
+        "packages-presets/preset-nailus/src"
+      ],
+      "@nailuscss/preset-nailus/*": [
+        "packages-presets/preset-nailus/src/*"
       ],
       "@nailuscss/*": [
         "packages-engine/*/src",
