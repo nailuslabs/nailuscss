@@ -1,5 +1,5 @@
-import type { Processor } from 'nailuscss/lib';
-import type { ResolvedVariants } from 'nailuscss/types/interfaces';
+import type { Processor } from '@nailuscss/core';
+import type { ResolvedVariants } from '@nailuscss/core/interfaces';
 
 export type DictStr = { [key: string]: string | string[] };
 
@@ -54,5 +54,6 @@ export interface Completion {
   }[]
   attr: Attr
 }
+
 
 

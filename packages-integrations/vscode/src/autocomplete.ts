@@ -1,13 +1,13 @@
 import { hex2RGB } from './utils';
 import { buildStyle, buildEmptyStyle } from './helpers';
-import { Style } from 'nailuscss/utils/style';
+import { Style } from '@nailuscss/core/utils/style';
 import { patterns, allowAttr } from './configs';
 import { generateCompletions } from './completions';
 import { languages, Range, Position, CompletionItem, SnippetString, CompletionItemKind } from 'vscode';
 
 import type Extension from './contextLoader';
 import type { DocumentSelector } from 'vscode';
-import type { Processor } from 'nailuscss/lib';
+import type { Processor } from '@nailuscss/core';
 import type { Completion } from './interfaces';
 
 export default class Completions {
@@ -390,6 +390,7 @@ function attrKey(label: string, kind: CompletionItemKind, order: number) {
   };
   return item;
 }
+
 
 
 

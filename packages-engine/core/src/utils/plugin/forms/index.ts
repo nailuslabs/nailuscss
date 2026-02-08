@@ -2,7 +2,7 @@ import plugin from '../index';
 import { colors, baseConfig } from '@nailuscss/config';
 import { staticUtilities } from '@nailuscss/preset-nailus';
 import svgToDataUri from 'mini-svg-data-uri';
-import type { DefaultTheme } from '../../interfaces';
+import type { DefaultTheme } from '../../../interfaces';
 
 const defaultTheme = baseConfig.theme as unknown as DefaultTheme;
 const [baseFontSize, { lineHeight: baseLineHeight }] = defaultTheme.fontSize.base;

@@ -1,11 +1,11 @@
 import { languages, ColorInformation, Position, Range, Color, window, DecorationOptions } from 'vscode';
 import { arrayEqual, rgb2Hex, hex2RGB, isDarkColor } from './utils';
-import { ClassParser } from 'nailuscss/utils/parser';
+import { ClassParser } from '@nailuscss/core/utils/parser';
 import { HTMLParser } from './parser';
 
 import type Extension from './contextLoader';
 import type { TextDocument, DocumentSelector, TextEditor, TextEditorDecorationType } from 'vscode';
-import type { Processor } from 'nailuscss/lib';
+import type { Processor } from '@nailuscss/core';
 
 type Decorator = { decoration: TextEditorDecorationType, option: DecorationOptions, id: string };
 
@@ -190,5 +190,6 @@ export default class Decorations {
   }
 
 }
+
 
 

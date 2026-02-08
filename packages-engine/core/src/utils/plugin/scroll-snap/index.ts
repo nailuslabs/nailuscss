@@ -1,5 +1,6 @@
 import plugin from '../index';
-import { dashToCamel, expandDirection } from '../../utils';
+import { dashToCamel } from '../../tools';
+import { expandDirection } from '../../helpers';
 
 // TODO: tsconfig -> ES2019 (node 12+)
 // https://node.green/#ES2019-features--Object-fromEntries

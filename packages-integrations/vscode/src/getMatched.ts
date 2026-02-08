@@ -3,7 +3,7 @@ import { buildStyle } from './helpers';
 import { applyRegex } from './configs';
 import type Extension from './contextLoader';
 import type { DocumentSelector } from 'vscode';
-import type { Processor } from 'nailuscss/lib';
+import type { Processor } from '@nailuscss/core';
 
 export default class Hovers {
   extension: Extension;
@@ -52,5 +52,6 @@ export default class Hovers {
     });
   }
 }
+
 
 

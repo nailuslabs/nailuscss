@@ -1,6 +1,6 @@
-import { ClassParser } from 'nailuscss/utils/parser';
+import { ClassParser } from '@nailuscss/core/utils/parser';
 import { keyOrder } from './order';
-import type { colorObject, DictStr } from 'nailuscss/types/interfaces';
+import type { colorObject, DictStr } from '@nailuscss/core/interfaces';
 
 export function flatColors(colors: colorObject, head?: string): DictStr {
   let flatten: { [ key:string ]: string } = {};
@@ -127,5 +127,6 @@ export function isDarkColor(r: number, g: number, b: number) {
 export function arrayEqual(array1: unknown[], array2: unknown[]) {
   return array1.length === array2.length && array1.every((value, index) => value === array2[index]);
 }
+
 
 

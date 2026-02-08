@@ -4,7 +4,7 @@ import type {
   Config,
   DictStr,
   PluginWithOptions,
-} from '../interfaces';
+} from '../../interfaces';
 
 const createPlugin: PluginBuilder = (
   plugin: (utils: PluginUtils) => void,

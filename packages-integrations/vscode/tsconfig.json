@@ -1,19 +1,24 @@
 {
-	"compilerOptions": {
-		"module": "esnext",
-		"moduleResolution": "node",
-		"target": "es5",
-		"outDir": "out",
-		"lib": [
-			"es6"
-		],
-		"sourceMap": true,
-		"rootDir": ".",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es5",
+    "outDir": "out",
+    "lib": [
+      "es6"
+    ],
+    "sourceMap": true,
+    "rootDir": ".",
     "allowSyntheticDefaultImports": true,
-		"strict": true
-	},
-	"exclude": [
-		"node_modules",
-		".vscode-test"
-	]
+    "strict": true,
+    "types": [
+      "node",
+      "vscode"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    ".vscode-test"
+  ]
 }

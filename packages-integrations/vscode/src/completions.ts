@@ -2,8 +2,9 @@ import { utilities, negative } from './utilities';
 import { flatColors } from './utils';
 
 import type { Attr, Completion } from './interfaces';
-import type { Processor } from 'nailuscss/lib';
-import type { colorObject } from 'nailuscss/types/interfaces';
+import type { Processor } from '@nailuscss/core';
+import type { colorObject } from '@nailuscss/core/interfaces';
+import type { Style } from '@nailuscss/core/utils/style';
 
 export function generateCompletions(processor: Processor, colors: colorObject, attributify = true, prefix = '') {
   const completions: Completion = {
@@ -18,9 +19,9 @@ export function generateCompletions(processor: Processor, colors: colorObject, a
       dynamic: {},
     },
   };
-  const staticUtilities = processor.resolveStaticUtilities(true);
+  const staticUtilities = processor.resolveStaticUtilities(true) as Record<string, Style[]>;
   // generate normal utilities completions
-  for (const [config, list] of Object.entries({ ...utilities, ...processor._plugin.completions })) {
+  for (const [config, list] of Object.entries({ ...utilities, ...processor._plugin.completions }) as [string, string[]][]) {
     for (const utility of list) {
       const bracket = utility.indexOf('[');
       if (bracket !== -1) {
@@ -41,7 +42,7 @@ export function generateCompletions(processor: Processor, colors: colorObject, a
           }
           break;
         case '{color}':
-          for (const [k, v] of Object.entries(flatColors(processor.theme(config, colors) as colorObject))) {
+          for (const [k, v] of Object.entries(flatColors(processor.theme(config, colors) as colorObject)) as [string, string][]) {
             if (k === 'DEFAULT') continue;
             completions.color.push({
               label: `${key}-${k}`,
@@ -89,7 +90,7 @@ export function generateCompletions(processor: Processor, colors: colorObject, a
     addAttr('backdrop', '~');
     addAttr('backdrop', 'none');
 
-    for (const [key, style] of Object.entries(staticUtilities)) {
+    for (const [key, style] of Object.entries(staticUtilities) as [string, Style[]][]) {
       if (!style[0]) continue;
       switch (style[0].meta.group) {
       case 'fontStyle':
@@ -292,6 +293,7 @@ function split(utility: string) {
   const body = (negative ? utility.slice(1,): utility).match(/-.+/)?.[0].slice(1) || '~';
   return { key, body: negative ? '-' + body : body };
 }
+
 
 
 

@@ -1,7 +1,7 @@
 import { Property, Style, StyleSheet, InlineAtRule, Keyframes } from '../style';
 import { isSpace, searchFrom, searchPropEnd, deepCopy } from '../tools';
 import { layerOrder } from '@nailuscss/config';
-import type { Processor } from '../../lib';
+import type { Processor } from '../../generator';
 
 export default class CSSParser {
   css?: string;

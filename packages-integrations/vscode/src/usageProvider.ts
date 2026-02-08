@@ -1,14 +1,14 @@
 import { commands, Range, Position, workspace, ViewColumn, window, Uri } from 'vscode';
 import { writeFileSync, readFileSync } from 'fs';
 import { dirname, join } from 'path';
-import { StyleSheet } from 'nailuscss/utils/style';
+import { StyleSheet } from '@nailuscss/core/utils/style';
 
 import { Log } from './log';
 import { HTMLParser } from './parser';
 import { combineSeparators, getAllSeparators, sortClassNames } from './utils';
 import { toggleConfig } from './helpers';
 
-import type { Processor } from 'nailuscss/lib';
+import type { Processor } from '@nailuscss/core';
 import type { ExtensionContext } from 'vscode';
 
 export default class Commands {
@@ -174,11 +174,12 @@ export default class Commands {
         panel.webview.html = html;
         // console.log(html)
       } catch (error) {
-        Log.warning(error);
+        Log.warning(error instanceof Error ? error.message : String(error));
       }
     });
   }
 
 }
+
 
 

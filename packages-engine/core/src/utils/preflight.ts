@@ -1,7 +1,7 @@
 import { baseUtilities } from '@nailuscss/preset-nailus';
-import { Style, Property, StyleSheet } from '../utils/style';
+import { Style, Property, StyleSheet } from './style';
 import type { ThemeUtil } from '../interfaces';
-import type { Processor } from './index';
+import type { Processor } from '../generator';
 
 export default function preflight(
   processor: Processor,

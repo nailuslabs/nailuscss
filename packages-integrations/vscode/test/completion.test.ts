@@ -1,5 +1,5 @@
-import { Processor } from 'nailuscss/lib';
-import { colorObject } from 'nailuscss/types/interfaces';
+import { Processor } from '@nailuscss/core';
+import { colorObject } from '@nailuscss/core/interfaces';
 import { generateCompletions } from '../src/completions';
 
 const processor = new Processor();
@@ -449,4 +449,5 @@ it('generate sr utilities', () => {
     'only', 'not-only',
   ]);
 });
+
 

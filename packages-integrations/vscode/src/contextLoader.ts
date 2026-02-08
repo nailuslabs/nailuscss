@@ -11,18 +11,18 @@ import { hex2RGB, flatColors } from './utils';
 import { getConfig } from './helpers';
 import { allowAttr, fileTypes } from './configs';
 import { Disposable, workspace, window, commands } from 'vscode';
-import { toRGBA } from 'nailuscss/utils';
+import { toRGBA } from '@nailuscss/core/utils';
 
 import type { JITI } from 'jiti';
 import type { Attr } from './interfaces';
-import { Processor } from 'nailuscss/lib';
+import { Processor } from '@nailuscss/core';
 import type { ExtensionContext, GlobPattern, Uri } from 'vscode';
 import type {
   DictStr,
   ResolvedVariants,
   colorObject,
   Config,
-} from 'nailuscss/types/interfaces';
+} from '@nailuscss/core/interfaces';
 import { loadConfig } from 'unconfig';
 
 export default class Extension {
@@ -394,5 +394,6 @@ export default class Extension {
     return {};
   }
 }
+
 
 

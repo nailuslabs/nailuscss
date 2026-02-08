@@ -1,5 +1,5 @@
 import { Utility, staticUtilities, dynamicUtilities } from '@nailuscss/preset-nailus';
-import type { Processor } from './index';
+import type { Processor } from '../generator';
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

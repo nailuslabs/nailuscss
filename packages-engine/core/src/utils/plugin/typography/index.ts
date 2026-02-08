@@ -1,10 +1,10 @@
-import { DeepNestObject, ThemeUtil } from '../../interfaces';
+import { DeepNestObject, ThemeUtil } from '../../../interfaces';
 import { uniq, castArray, isUsableColor } from './utils';
 import plugin from '../index';
 import styles from './styles';
 import rtlStyles from './rtl';
 import darkStyles from './dark';
-import combineConfig from '../../utils/algorithm/combineConfig';
+import combineConfig from '../../algorithm/combineConfig';
 
 const computed: {
   [key: string]: (color: string) => Record<string, unknown>;

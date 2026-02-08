@@ -1,6 +1,6 @@
 import { Diagnostic, DiagnosticSeverity, languages, Range, window, workspace } from 'vscode';
 
-import type { Processor } from 'nailuscss/lib';
+import type { Processor } from '@nailuscss/core';
 import type { TextDocument, TextLine, DiagnosticCollection } from 'vscode';
 
 export default class Diagnostics {
@@ -71,5 +71,6 @@ function _createDiagnostic(doc: TextDocument, lineOfText: TextLine, lineIndex: n
   diagnostic.code = code;
   return diagnostic;
 }
+
 
 

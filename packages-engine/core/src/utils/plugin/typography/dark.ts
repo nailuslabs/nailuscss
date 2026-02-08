@@ -1,5 +1,5 @@
 import { defaultColors as colors } from '@nailuscss/config';
-import type { ThemeUtil } from '../../interfaces';
+import type { ThemeUtil } from '../../../interfaces';
 
 const styles: (
   theme: ThemeUtil
