@@ -1,4 +1,4 @@
-import { HTMLParser } from '../src/utils/parser';
+import { HTMLParser } from '../src/parser';
 import {
   sortClassNames,
   combineSeparators,
@@ -130,3 +130,4 @@ it('sorts apply directives', () => {
   const toReplace = combineSeparators(separators, sortedP);
   expect(toReplace).toBe(expected);
 });
+

@@ -1,6 +1,6 @@
 import { Processor } from 'nailuscss/lib';
 import { colorObject } from 'nailuscss/types/interfaces';
-import { generateCompletions } from '../src/utils/completions';
+import { generateCompletions } from '../src/completions';
 
 const processor = new Processor();
 const completions = generateCompletions(processor, processor.theme('colors') as colorObject, true, '');
@@ -449,3 +449,4 @@ it('generate sr utilities', () => {
     'only', 'not-only',
   ]);
 });
+

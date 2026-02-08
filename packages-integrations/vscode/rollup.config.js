@@ -30,7 +30,7 @@ const onwarn = warning => {
 
 export default [
   {
-    input: 'src/extension.ts',
+    input: 'src/index.ts',
     output: [
       {
         file: dump("extension.js"),
@@ -48,7 +48,7 @@ export default [
     onwarn
   },
   {
-    input: 'src/lib/dependencies.ts',
+    input: 'src/dependencies.ts',
     output: [
       {
         file: dump("dependencies.js"),
@@ -65,3 +65,4 @@ export default [
     onwarn
   }
 ]
+

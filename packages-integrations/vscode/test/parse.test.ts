@@ -1,4 +1,4 @@
-import { HTMLParser } from '../src/utils/parser';
+import { HTMLParser } from '../src/parser';
 
 it('ignore dynamic', () => {
   const parser = new HTMLParser();
@@ -15,3 +15,4 @@ it('ignore dynamic', () => {
     'p-4 hover:p-2 dark:(shadow-xl mt-[5px])',
   ]);
 });
+

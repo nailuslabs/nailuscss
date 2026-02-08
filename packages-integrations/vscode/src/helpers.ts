@@ -1,6 +1,6 @@
 import { workspace, MarkdownString, Range, Position, DecorationOptions } from 'vscode';
 import { HTMLParser } from './parser';
-import { rem2px } from './index';
+import { rem2px } from './contextLoader';
 import { ClassParser } from 'nailuscss/utils/parser';
 import type { Style, StyleSheet } from 'nailuscss/utils/style';
 
@@ -70,3 +70,5 @@ export async function decorateWithCount(index: number, line: string, count = 3, 
   });
   return decorations;
 }
+
+

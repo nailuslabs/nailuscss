@@ -1,5 +1,5 @@
-import { connectList } from '../utils';
-import { decorateWithLength, decorateWithCount, getConfig } from '../utils/helpers';
+import { connectList } from './utils';
+import { decorateWithLength, decorateWithCount, getConfig } from './helpers';
 
 import { window } from 'vscode';
 import type { TextEditor, DecorationOptions, TextEditorDecorationType } from 'vscode';
@@ -56,3 +56,5 @@ export default class CodeFolding {
     this.editor.setDecorations(this.placeholder, []);
   }
 }
+
+
