@@ -1,5 +1,5 @@
 import { Style } from '@nailuscss/core/utils/style';
-import { isString, increaseWithUnit } from '../../utils';
+import { isString, increaseWithUnit } from '../utils';
 
 type RawBreakpoint = { raw: string }
 type MinMaxBreakpoint = { min?: string, max?: string }

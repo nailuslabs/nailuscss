@@ -13,7 +13,7 @@ import { Logger } from './debug';
 import { ConfigLoadError } from './errors';
 import { fuzzy } from './cli-start';
 import type { CLIArgs, CLIConfig, TemplateResult } from './types';
-import type { Extractor } from '../../../interfaces';
+import type { Extractor } from '@nailuscss/core/interfaces';
 
 export function globArray(patterns: string[], options?: fg.Options): string[] {
   const list: string[] = [];

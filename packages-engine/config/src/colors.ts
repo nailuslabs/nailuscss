@@ -1,4 +1,4 @@
-import { Console } from '../utils/tools';
+import { Console } from '@nailuscss/core';
 
 type Colors =
   'inherit'

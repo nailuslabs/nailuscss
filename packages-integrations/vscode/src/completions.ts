@@ -1,5 +1,5 @@
 import { utilities, negative } from './utilities';
-import { flatColors } from './contextLoader';
+import { flatColors } from './utils';
 
 import type { Attr, Completion } from './interfaces';
 import type { Processor } from 'nailuscss/lib';
@@ -292,5 +292,6 @@ function split(utility: string) {
   const body = (negative ? utility.slice(1,): utility).match(/-.+/)?.[0].slice(1) || '~';
   return { key, body: negative ? '-' + body : body };
 }
+
 
 

@@ -72,9 +72,6 @@
     }
   },
   "include": [
-    "packages-engine/**/src/**/*.ts",
-    "packages-presets/**/src/**/*.ts",
-    "packages-integrations/**/src/**/*.ts",
     "test/**/*.ts",
     "example/**/*.ts"
   ],
