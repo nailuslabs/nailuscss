@@ -1,7 +1,7 @@
 import fs from 'fs';
-import { Processor } from '../src/lib';
-import { HTMLParser } from '../src/utils/parser';
-import { StyleSheet } from '../src/utils/style';
+import { Processor } from '../packages-engine/core/src/lib';
+import { HTMLParser } from '../packages-engine/core/src/utils/parser';
+import { StyleSheet } from '../packages-engine/core/src/utils/style';
 
 const html = fs.readFileSync('../test/assets/example.html').toString();
 const parser = new HTMLParser(html); // Simple html parser, only has two methods.
@@ -38,3 +38,4 @@ fs.writeFileSync(
     .combine()
     .build(false) // Build css, set true to minify build
 );
+

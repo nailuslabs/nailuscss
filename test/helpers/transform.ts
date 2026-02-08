@@ -1,4 +1,4 @@
-import { convert } from '../../src/helpers';
+import { convert } from '../../packages-engine/core/src/helpers';
 
 describe('transform', () => {
   it('convert code', () => {
@@ -15,3 +15,4 @@ describe('transform', () => {
     `);
   });
 });
+

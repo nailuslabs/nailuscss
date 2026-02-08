@@ -1,6 +1,6 @@
-import { Processor } from '../../src/lib';
-import plugin from '../../src/plugin';
-import type { PluginFunction, PluginUtils } from '../../src/interfaces';
+import { Processor } from '../../packages-engine/core/src/lib';
+import plugin from '../../packages-engine/core/src/plugin';
+import type { PluginFunction, PluginUtils } from '../../packages-engine/core/src/interfaces';
 
 describe('plugin interface test', () => {
   it('import', () => {
@@ -41,10 +41,10 @@ describe('plugin interface test', () => {
       utils.addComponents({
         '.btn-disabled,.btn[disabled]': {
           '-TwBgOpacity':['1', '0.2'],
-          'backgroundColor':'hsla(var(--n,219 14% 28%)/var(--tw-bg-opacity))',
+          'backgroundColor':'hsla(var(--n,219 14% 28%)/var(--ns-bg-opacity))',
           '-TwBorderOpacity':'0',
           '-TwTextOpacity':['1', '0.2'],
-          'color':'hsla(var(--bc,215 28% 17%)/var(--tw-text-opacity))',
+          'color':'hsla(var(--bc,215 28% 17%)/var(--ns-text-opacity))',
         },
       });
     };
@@ -112,3 +112,4 @@ describe('plugin interface test', () => {
     expect(processor.interpret('variant:text-black').styleSheet.build()).toMatchSnapshot('css');
   });
 });
+

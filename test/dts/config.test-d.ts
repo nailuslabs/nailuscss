@@ -1,4 +1,4 @@
-import { defineConfig } from '../../src/helpers';
+import { defineConfig } from '../../packages-engine/core/src/helpers';
 
 defineConfig({
   theme: {
@@ -56,3 +56,4 @@ defineConfig({
 defineConfig({
   random: [],
 });
+

@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import { generateCompletions } from '../../src/utils/completions';
+import { Processor } from '../../packages-engine/core/src/lib';
+import { generateCompletions } from '../../packages-engine/autocomplete/src';
 
 describe('generate completions', () => {
   it('completions', () => {
@@ -37,3 +37,4 @@ describe('generate completions', () => {
     expect(completions.static.includes('max-h-screen-abc')).toBeTrue();
   });
 });
+

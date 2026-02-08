@@ -1,0 +1,9 @@
+{
+  "name": "@nailuscss/cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@nailuscss/core": "workspace:*"
+  }
+}

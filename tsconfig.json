@@ -19,16 +19,35 @@
     "types": ["node"],
     "paths": {
       "@nailuscss/core": ["packages-engine/core/src"],
+      "@nailuscss/core/*": ["packages-engine/core/src/*"],
       "@nailuscss/config": ["packages-engine/config/src"],
+      "@nailuscss/config/*": ["packages-engine/config/src/*"],
       "@nailuscss/cli": ["packages-engine/cli/src"],
-      "@nailuscss/inspector": ["packages-engine/inspector/src"],
-      "@nailuscss/preset-mini": ["packages-presets/preset-mini/src"]
+      "@nailuscss/cli/*": ["packages-engine/cli/src/*"],
+      "@nailuscss/autocomplete": ["packages-engine/autocomplete/src"],
+      "@nailuscss/autocomplete/*": ["packages-engine/autocomplete/src/*"],
+      "@nailuscss/inspector": ["packages-integrations/inspector/src"],
+      "@nailuscss/inspector/*": ["packages-integrations/inspector/src/*"],
+      "@nailuscss/preset-mini": ["packages-presets/preset-mini/src"],
+      "@nailuscss/preset-mini/*": ["packages-presets/preset-mini/src/*"],
+      "@nailuscss/preset-nailus": ["packages-presets/preset-nailus/src"],
+      "@nailuscss/preset-nailus/*": ["packages-presets/preset-nailus/src/*"],
+      "@nailuscss/*/*": [
+        "packages-engine/*/src/*",
+        "packages-integrations/*/src/*",
+        "packages-presets/*/src/*"
+      ],
+      "@nailuscss/*": [
+        "packages-engine/*/src",
+        "packages-integrations/*/src",
+        "packages-presets/*/src"
+      ]
     }
   },
   "include": [
-    "packages-engine/**/*.ts",
-    "packages-presets/**/*.ts",
-    "packages-integrations/**/*.ts",
+    "packages-engine/**/src/**/*.ts",
+    "packages-presets/**/src/**/*.ts",
+    "packages-integrations/**/src/**/*.ts",
     "test/**/*.ts",
     "example/**/*.ts"
   ],

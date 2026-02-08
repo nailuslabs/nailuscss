@@ -1,4 +1,4 @@
-import { ClassParser } from '../../src/utils/parser';
+import { ClassParser } from '../../packages-engine/core/src/utils/parser';
 
 describe('ClassParser', () => {
   it('should remove duplicated classes', () => {
@@ -59,3 +59,4 @@ describe('ClassParser', () => {
     expect(result).toMatchSnapshot('jsx function component');
   });
 });
+

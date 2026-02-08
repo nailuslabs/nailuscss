@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import filters from '../../src/plugin/filters';
+import { Processor } from '../../packages-engine/core/src/lib';
+import filters from '../../packages-engine/core/src/plugin/filters';
 
 describe('filter plugin', () => {
   it('interpret test', () => {
@@ -86,3 +86,4 @@ describe('filter plugin', () => {
     expect(processor._plugin.completions).toMatchSnapshot('completions');
   });
 });
+

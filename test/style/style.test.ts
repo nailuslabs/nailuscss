@@ -5,7 +5,7 @@ import {
   GlobalStyle,
   StyleSheet,
   InlineAtRule,
-} from '../../src/utils/style';
+} from '../../packages-engine/core/src/utils/style';
 
 describe('Style', () => {
   const p1 = new Property('padding', '1rem');
@@ -304,27 +304,27 @@ describe('Style', () => {
     s.add(new Property('position', 'relative'));
     s.add(new Property(['padding-left', 'padding-right'], '1rem'));
     s.add(new Property(['padding-top', 'padding-bottom'], '2.5rem'));
-    s.add(new Property('--tw-bg-opacity', '1'));
+    s.add(new Property('--ns-bg-opacity', '1'));
     s.add(
       new Property(
         'background-color',
-        'rgba(255, 255, 255, var(--tw-bg-opacity))'
+        'rgba(255, 255, 255, var(--ns-bg-opacity))'
       )
     );
     s.add(
       new Property(
-        '--tw-shadow',
+        '--ns-shadow',
         '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
       )
     );
     s.add(
       new Property(
         ['-webkit-box-shadow', 'box-shadow'],
-        'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)'
+        'var(--ns-ring-offset-shadow, 0 0 #0000), var(--ns-ring-shadow, 0 0 #0000), var(--ns-shadow)'
       )
     );
     expect(s.flat().sort().build(true)).toBe(
-      '.nailus-14r5bq6{--tw-shadow:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--tw-bg-opacity:1;-webkit-box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);background-color:rgba(255, 255, 255, var(--tw-bg-opacity));box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);padding-bottom:2.5rem;padding-top:2.5rem;padding-right:1rem;padding-left:1rem;position:relative}'
+      '.nailus-14r5bq6{--ns-shadow:0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);--ns-bg-opacity:1;-webkit-box-shadow:var(--ns-ring-offset-shadow, 0 0 #0000), var(--ns-ring-shadow, 0 0 #0000), var(--ns-shadow);background-color:rgba(255, 255, 255, var(--ns-bg-opacity));box-shadow:var(--ns-ring-offset-shadow, 0 0 #0000), var(--ns-ring-shadow, 0 0 #0000), var(--ns-shadow);padding-bottom:2.5rem;padding-top:2.5rem;padding-right:1rem;padding-left:1rem;position:relative}'
     );
   });
 
@@ -506,3 +506,4 @@ describe('Keyframes', () => {
     expect(clone2.property[0].build()).toEqual('padding: 2rem;');
   });
 });
+

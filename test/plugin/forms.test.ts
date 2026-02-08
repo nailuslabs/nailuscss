@@ -1,5 +1,5 @@
-import forms from '../../src/plugin/forms';
-import { Processor } from '../../src/lib';
+import forms from '../../packages-engine/core/src/plugin/forms';
+import { Processor } from '../../packages-engine/core/src/lib';
 import { writeFileSync } from 'fs';
 
 describe('forms plugin', () => {
@@ -10,3 +10,4 @@ describe('forms plugin', () => {
     writeFileSync('forms.css', css);
   });
 });
+

@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import scrollSnap from '../../src/plugin/scroll-snap';
+import { Processor } from '../../packages-engine/core/src/lib';
+import scrollSnap from '../../packages-engine/core/src/plugin/scroll-snap';
 
 describe('Scroll Snap plugin', () => {
   it('interpret test', () => {
@@ -58,3 +58,4 @@ describe('Scroll Snap plugin', () => {
     expect(processor._plugin.completions).toMatchSnapshot('completions');
   });
 });
+

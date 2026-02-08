@@ -1,4 +1,4 @@
-import { sortMediaQuery } from '../../src/utils/algorithm';
+import { sortMediaQuery } from '../../packages-engine/core/src/utils/algorithm';
 
 const screens = [
   // no units
@@ -33,3 +33,4 @@ describe('sortMediaQuery', () => {
     expect(screens.sort(sortMediaQuery)).toMatchSnapshot('query');
   });
 });
+

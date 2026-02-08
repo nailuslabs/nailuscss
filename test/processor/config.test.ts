@@ -1,10 +1,10 @@
 import { resolve } from 'path';
-import { toType } from '../../src/utils/tools';
-import { Processor } from '../../src/lib';
-import { twExclude } from '../../src/config';
-import { CSSParser } from '../../src/utils/parser';
-import type { colorObject } from '../../src/interfaces';
-import aspectRatio from '../../src/plugin/aspect-ratio';
+import { toType } from '../../packages-engine/core/src/utils/tools';
+import { Processor } from '../../packages-engine/core/src/lib';
+import { twExclude } from '../../packages-engine/config/src';
+import { CSSParser } from '../../packages-engine/core/src/utils/parser';
+import type { colorObject } from '../../packages-engine/core/src/interfaces';
+import aspectRatio from '../../packages-engine/core/src/plugin/aspect-ratio';
 
 const configPath = resolve('./test/assets/nailus.config.js');
 const userConfig = require(configPath);
@@ -109,9 +109,9 @@ describe('Config', () => {
   });
 
   it('add prefix test', () => {
-    const processor = new Processor({ prefix: 'tw-' });
-    expect(processor.interpret('sm:tw-bg-black').styleSheet.build()).toBe(
-      '@media (min-width: 640px) {\n  .sm\\:tw-bg-black {\n    --tw-bg-opacity: 1;\n    background-color: rgba(0, 0, 0, var(--tw-bg-opacity));\n  }\n}'
+    const processor = new Processor({ prefix: 'ns-' });
+    expect(processor.interpret('sm:ns-bg-black').styleSheet.build()).toBe(
+      '@media (min-width: 640px) {\n  .sm\\:ns-bg-black {\n    --ns-bg-opacity: 1;\n    background-color: rgba(0, 0, 0, var(--ns-bg-opacity));\n  }\n}'
     );
   });
 
@@ -129,7 +129,7 @@ describe('Config', () => {
   it('important test', () => {
     const processor = new Processor({ important: true });
     expect(processor.interpret('sm:bg-black').styleSheet.build()).toBe(
-      '@media (min-width: 640px) {\n  .sm\\:bg-black {\n    --tw-bg-opacity: 1 !important;\n    background-color: rgba(0, 0, 0, var(--tw-bg-opacity)) !important;\n  }\n}'
+      '@media (min-width: 640px) {\n  .sm\\:bg-black {\n    --ns-bg-opacity: 1 !important;\n    background-color: rgba(0, 0, 0, var(--ns-bg-opacity)) !important;\n  }\n}'
     );
   });
 
@@ -354,8 +354,8 @@ describe('Config', () => {
       },
     });
     expect(processor.interpret('bg-background').styleSheet.build()).toEqual(`.bg-background {
-  --tw-bg-opacity: 0.5;
-  background-color: rgba(255, 0, 0, var(--tw-bg-opacity));
+  --ns-bg-opacity: 0.5;
+  background-color: rgba(255, 0, 0, var(--ns-bg-opacity));
 }`);
   });
 
@@ -566,3 +566,4 @@ describe('Config', () => {
     expect(processor.interpret('print:bg-black container').styleSheet.build()).toMatchSnapshot('css');
   });
 });
+

@@ -1,4 +1,4 @@
-import { nailus } from '../../src/helpers';
+import { nailus } from '../../packages-engine/core/src/helpers';
 
 describe('template', () => {
   it('template literal', () => {
@@ -7,3 +7,4 @@ describe('template', () => {
     expect(style).toEqual('bg-gray-100 text-red-500 rounded');
   });
 });
+

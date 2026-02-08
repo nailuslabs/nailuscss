@@ -24,9 +24,9 @@ import {
   splitSelectors,
   guessClassName,
   increaseWithUnit,
-} from '../../src/utils';
+} from '../../packages-engine/core/src/utils';
 
-import { Property, Style } from '../../src/utils/style';
+import { Property, Style } from '../../packages-engine/core/src/utils/style';
 
 describe('Tools', () => {
   it('hash', () => {
@@ -273,3 +273,4 @@ describe('Tools', () => {
     expect(increaseWithUnit('var(--cool)', -5)).toEqual('var(--cool)');
   });
 });
+

@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { HTMLParser } from '../../src/utils/parser';
+import { HTMLParser } from '../../packages-engine/core/src/utils/parser';
 
 const EXAMPLE_1 = readFileSync('./test/assets/example.html').toString();
 const EXAMPLE_2 = readFileSync('./test/assets/example2.html').toString();
@@ -31,3 +31,4 @@ describe('HTMLParser', () => {
     expect(parser.parseClasses()).toMatchSnapshot('className');
   });
 });
+

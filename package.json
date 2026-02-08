@@ -33,10 +33,10 @@
   },
   "scripts": {
     "dev": "rollup -cw",
-    "tsd": "tsc -p ./src --emitDeclarationOnly",
+    "tsd": "tsc -p ./packages-engine/core --emitDeclarationOnly",
     "lint": "eslint . --ext .ts",
     "lint:fix": "npm run lint -- --fix",
-    "typecheck": "tsc -p ./src --noEmit",
+    "typecheck": "tsc -p ./packages-engine/core --noEmit",
     "build": "rollup -c && pnpm tsd",
     "build:prod": "cross-env NODE_ENV=production pnpm build",
     "test": "sucrase-node test/run.ts",
@@ -66,6 +66,14 @@
     "./config": {
       "import": "./config/index.mjs",
       "require": "./config/index.cjs"
+    },
+    "./autocomplete": {
+      "import": "./autocomplete/index.mjs",
+      "require": "./autocomplete/index.cjs"
+    },
+    "./preset-nailus": {
+      "import": "./preset-nailus/index.mjs",
+      "require": "./preset-nailus/index.cjs"
     },
     "./lib": {
       "import": "./lib/index.mjs",

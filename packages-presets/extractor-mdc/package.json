@@ -1,0 +1,6 @@
+{
+    "private":  true,
+    "name":  "@nailuscss/extractor-mdc",
+    "version":  "1.0.0",
+    "type":  "module"
+}

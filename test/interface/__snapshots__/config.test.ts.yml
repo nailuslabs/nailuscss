@@ -351,9 +351,9 @@ Tools / should load all plugins correctly / css / 0: |-
     background-color: #cc1f1a;
   }
   .aspect-w-4 {
-    --tw-aspect-w: 4;
+    --ns-aspect-w: 4;
     position: relative;
-    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+    padding-bottom: calc(var(--ns-aspect-h) / var(--ns-aspect-w) * 100%);
   }
   .aspect-w-4 > * {
     position: absolute;
@@ -365,7 +365,7 @@ Tools / should load all plugins correctly / css / 0: |-
     left: 0;
   }
   .aspect-h-6 {
-    --tw-aspect-h: 6;
+    --ns-aspect-h: 6;
   }
   .aspect-9\/16 {
     position: relative;
@@ -381,8 +381,8 @@ Tools / should load all plugins correctly / css / 0: |-
     left: 0;
   }
   .bg-red-500 {
-    --tw-bg-opacity: 1;
-    background-color: rgba(244, 63, 94, var(--tw-bg-opacity));
+    --ns-bg-opacity: 1;
+    background-color: rgba(244, 63, 94, var(--ns-bg-opacity));
   }
   @keyframes ping {
     0% {
@@ -660,16 +660,16 @@ Tools / should load all plugins correctly / css / 0: |-
   }
   @media (min-width: 976px) {
     .lg\:backdrop-filter {
-      --tw-backdrop-blur: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-brightness: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-contrast: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-grayscale: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-hue-rotate: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-invert: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-opacity: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-saturate: var(--tw-empty,/*!*/ /*!*/);
-      --tw-backdrop-sepia: var(--tw-empty,/*!*/ /*!*/);
-      -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-      backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+      --ns-backdrop-blur: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-brightness: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-contrast: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-grayscale: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-hue-rotate: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-invert: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-opacity: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-saturate: var(--ns-empty,/*!*/ /*!*/);
+      --ns-backdrop-sepia: var(--ns-empty,/*!*/ /*!*/);
+      -webkit-backdrop-filter: var(--ns-backdrop-blur) var(--ns-backdrop-brightness) var(--ns-backdrop-contrast) var(--ns-backdrop-grayscale) var(--ns-backdrop-hue-rotate) var(--ns-backdrop-invert) var(--ns-backdrop-opacity) var(--ns-backdrop-saturate) var(--ns-backdrop-sepia);
+      backdrop-filter: var(--ns-backdrop-blur) var(--ns-backdrop-brightness) var(--ns-backdrop-contrast) var(--ns-backdrop-grayscale) var(--ns-backdrop-hue-rotate) var(--ns-backdrop-invert) var(--ns-backdrop-opacity) var(--ns-backdrop-saturate) var(--ns-backdrop-sepia);
     }
   }

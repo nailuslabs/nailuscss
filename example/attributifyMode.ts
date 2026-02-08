@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { Processor } from '../src/lib';
-import { HTMLParser } from '../src/utils/parser';
+import { Processor } from '../packages-engine/core/src/lib';
+import { HTMLParser } from '../packages-engine/core/src/utils/parser';
 
 const html = fs.readFileSync('../test/assets/example2.html').toString();
 
@@ -23,3 +23,4 @@ const attrs: { [key: string]: string | string[] } = parser
 
 const result = processor.attributify(attrs);
 fs.writeFileSync('attributify_test.css', result.styleSheet.extend(preflightSheet, false).build(false)); // Build css, set true to minify build
+

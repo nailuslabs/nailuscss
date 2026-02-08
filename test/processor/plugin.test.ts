@@ -1,8 +1,8 @@
 import { FontSize } from '../../dist/types/interfaces';
-import { Property, Style } from '../../src/utils/style';
-import { Processor } from '../../src/lib';
-import { hex2RGB } from '../../src/utils';
-import plugin from '../../src/plugin';
+import { Property, Style } from '../../packages-engine/core/src/utils/style';
+import { Processor } from '../../packages-engine/core/src/lib';
+import { hex2RGB } from '../../packages-engine/core/src/utils';
+import plugin from '../../packages-engine/core/src/plugin';
 
 const processor = new Processor();
 
@@ -387,7 +387,7 @@ describe('Plugin Method', () => {
     expect(ssPrimary).toEqual('.bg-primary {\n  background-color: var(--testvar);\n}');
 
     const ssSecondary = processor.interpret('bg-secondary').styleSheet.build();
-    expect(ssSecondary).toEqual('.bg-secondary {\n  --tw-bg-opacity: 1;\n  background-color: rgba(219, 240, 228, var(--tw-bg-opacity));\n}');
+    expect(ssSecondary).toEqual('.bg-secondary {\n  --ns-bg-opacity: 1;\n  background-color: rgba(219, 240, 228, var(--ns-bg-opacity));\n}');
 
     const ssSecondVar = processor.interpret('bg-secondaryvar').styleSheet.build();
     expect(ssSecondVar).toEqual('.bg-secondaryvar {\n  background-color: hsla(var(--testvar / 1));\n}');
@@ -400,10 +400,10 @@ describe('Plugin Method', () => {
           addDynamic('bg', ({ Utility, Style, Property }) => {
             if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(Utility.body)) {
               return Style(Utility.class, [
-                Property('--tw-bg-opacity', '1'),
+                Property('--ns-bg-opacity', '1'),
                 Property(
                   'background-color',
-                  `rgba(${hex2RGB(Utility.body)?.join(', ')}, var(--tw-bg-opacity))`
+                  `rgba(${hex2RGB(Utility.body)?.join(', ')}, var(--ns-bg-opacity))`
                 ),
               ]);
             }
@@ -413,8 +413,8 @@ describe('Plugin Method', () => {
     });
     expect(processor.interpret('bg-#1c1c1e').styleSheet.build()).toEqual(
       `.bg-\\#1c1c1e {
-  --tw-bg-opacity: 1;
-  background-color: rgba(28, 28, 30, var(--tw-bg-opacity));
+  --ns-bg-opacity: 1;
+  background-color: rgba(28, 28, 30, var(--ns-bg-opacity));
 }`);
 
   });
@@ -482,3 +482,4 @@ describe('Plugin Method', () => {
     expect(processor.preflight(undefined, false, false, true).build()).toMatchSnapshot('css');
   });
 });
+

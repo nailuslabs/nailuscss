@@ -1,4 +1,4 @@
-import { Processor } from '../../src/lib';
+import { Processor } from '../../packages-engine/core/src/lib';
 
 const processor = new Processor();
 
@@ -776,3 +776,4 @@ describe('Attributify Mode', () => {
     }).styleSheet.build()).toMatchSnapshot('css');
   });
 });
+

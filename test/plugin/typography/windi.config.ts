@@ -1,5 +1,5 @@
-import typography from '../../../src/plugin/typography';
-import { defineConfig } from '../../../src/helpers';
+import typography from '../../../packages-engine/core/src/plugin/typography';
+import { defineConfig } from '../../../packages-engine/core/src/helpers';
 
 export default defineConfig({
   darkMode: 'class',
@@ -10,3 +10,4 @@ export default defineConfig({
     }),
   ],
 });
+

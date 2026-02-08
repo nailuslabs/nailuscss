@@ -12,12 +12,17 @@ const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
 const output_dir = './dist';
+const core_src = './packages-engine/core/src';
+const cli_src = './packages-engine/cli/src';
+const config_src = './packages-engine/config/src';
+const autocomplete_src = './packages-engine/autocomplete/src';
+const preset_src = './packages-presets/preset-nailus/src';
 const prod = process.env.NODE_ENV === 'production';
 
 const ts_plugin = prod
   ? typescript({
     target: 'es5',
-    include: 'src/**',
+    include: [ `${core_src}/**`, `${cli_src}/**`, `${config_src}/**`, `${autocomplete_src}/**`, `${preset_src}/**` ],
     outDir: output_dir,
     typescript: require('typescript'),
   })
@@ -64,21 +69,24 @@ const types = (dest = "index.d.ts", src = "../types/index", module = "*") => {
 export default [
   // main
   {
-    input: 'src/index.ts',
+    input: `${core_src}/index.ts`,
     output: [
       {
         file: dump('index.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.cjs`,
       },
       {
         file: dump('index.mjs'),
         format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.mjs`,
       },
     ],
-    external: (id) => id.startsWith('./'),
+    external: (id) =>
+      id.startsWith('./') ||
+      id.startsWith('@nailuscss/preset-nailus') ||
+      id.startsWith('@nailuscss/config'),
     plugins: [
       ts_plugin,
       rmdir(output_dir),
@@ -90,18 +98,18 @@ export default [
 
   // colors
   {
-    input: 'src/colors.ts',
+    input: `${core_src}/colors.ts`,
     output: [
       {
         file: dump('colors.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.cjs`,
       },
       {
         file: dump('colors.mjs'),
         format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.mjs`,
       },
     ],
     external: (id) => id.startsWith('./'),
@@ -111,20 +119,91 @@ export default [
     ],
   },
 
+  // config (package)
+  {
+    input: `${config_src}/index.ts`,
+    output: [
+      {
+        file: dump('config/index.cjs'),
+        format: 'cjs',
+      },
+      {
+        file: dump('config/index.mjs'),
+        format: 'esm',
+      },
+    ],
+    plugins: [
+      ts_plugin,
+      json(),
+      resolve(),
+      commonjs(),
+      pack('config'),
+      types(`config/index.d.ts`, `../types/config/index`),
+    ],
+  },
+
+  // autocomplete (package)
+  {
+    input: `${autocomplete_src}/index.ts`,
+    output: [
+      {
+        file: dump('autocomplete/index.cjs'),
+        format: 'cjs',
+      },
+      {
+        file: dump('autocomplete/index.mjs'),
+        format: 'esm',
+      },
+    ],
+    external: (id) => id.startsWith('@nailuscss/core'),
+    plugins: [
+      ts_plugin,
+      resolve(),
+      commonjs(),
+      pack('autocomplete'),
+      types(`autocomplete/index.d.ts`, `../types/autocomplete/index`),
+    ],
+  },
+
+  // preset-nailus (package)
+  {
+    input: `${preset_src}/index.ts`,
+    output: [
+      {
+        file: dump('preset-nailus/index.cjs'),
+        format: 'cjs',
+      },
+      {
+        file: dump('preset-nailus/index.mjs'),
+        format: 'esm',
+      },
+    ],
+    external: (id) =>
+      id.startsWith('@nailuscss/core') ||
+      id.startsWith('@nailuscss/config'),
+    plugins: [
+      ts_plugin,
+      resolve(),
+      commonjs(),
+      pack('preset-nailus'),
+      types(`preset-nailus/index.d.ts`, `../types/preset-nailus/index`),
+    ],
+  },
+
   // defaultConfig
   {
-    input: 'src/defaultConfig.ts',
+    input: `${core_src}/defaultConfig.ts`,
     output: [
       {
         file: dump('defaultConfig.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.cjs`,
       },
       {
         file: dump('defaultConfig.mjs'),
         format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.mjs`,
       },
     ],
     external: (id) => id.startsWith('./'),
@@ -136,18 +215,18 @@ export default [
 
   // defaultTheme
   {
-    input: 'src/defaultTheme.ts',
+    input: `${core_src}/defaultTheme.ts`,
     output: [
       {
         file: dump('defaultTheme.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.cjs`,
       },
       {
         file: dump('defaultTheme.mjs'),
         format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.mjs`,
       },
     ],
     external: (id) => id.startsWith('./'),
@@ -159,18 +238,18 @@ export default [
 
   // resolveConfig
   {
-    input: 'src/resolveConfig.ts',
+    input: `${core_src}/resolveConfig.ts`,
     output: [
       {
         file: dump('resolveConfig.cjs'),
         format: 'cjs',
         exports: 'default',
-        paths: (id) => `./${path.relative('./src', id)}/index.cjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.cjs`,
       },
       {
         file: dump('resolveConfig.mjs'),
         format: 'esm',
-        paths: (id) => `./${path.relative('./src', id)}/index.mjs`,
+        paths: (id) => `./${path.relative(core_src, id)}/index.mjs`,
       },
     ],
     external: (id) => id.startsWith('./'),
@@ -182,7 +261,7 @@ export default [
 
   // plugin
   {
-    input: 'src/plugin/index.ts',
+    input: `${core_src}/plugin/index.ts`,
     output: [
       {
         file: dump('plugin/index.cjs'),
@@ -194,6 +273,7 @@ export default [
         format: 'esm',
       },
     ],
+    external: (id) => id.startsWith('@nailuscss/preset-nailus'),
     plugins: [
       ts_plugin,
       resolve(),
@@ -203,9 +283,9 @@ export default [
   },
 
   // plugin deep
-  ...fs.readdirSync('src/plugin').filter(dir => fs.statSync(`src/plugin/${dir}`).isDirectory())
+  ...fs.readdirSync(`${core_src}/plugin`).filter(dir => fs.statSync(`${core_src}/plugin/${dir}`).isDirectory())
     .map((dir) => ({
-      input: `src/plugin/${dir}/index.ts`,
+      input: `${core_src}/plugin/${dir}/index.ts`,
       output: [
         {
           file: dump(`plugin/${dir}/index.cjs`),
@@ -218,6 +298,7 @@ export default [
           format: 'esm',
         },
       ],
+      external: (id) => id.startsWith('@nailuscss/preset-nailus'),
       plugins: [
         ts_plugin,
         resolve(),
@@ -228,22 +309,27 @@ export default [
 
   // cli - CHEMIN CORRIGÉ
   {
-    input: 'src/packages-engine/cli/src/index.ts',
+    input: `${cli_src}/index.ts`,
     output: [
       {
         file: dump('cli/index.mjs'),
         banner: '#!/usr/bin/env node',
         format: 'esm',
-        paths: (id) =>
-          id.match(/\/src\/(lib|utils|plugin|config|colors)/) &&
-          `../${path.dirname(path.relative('./src', id))}/index.mjs`,
+        paths: (id) => {
+          if (id.match(/\/packages-engine\/config\/src/)) return '../config/index.mjs';
+          if (id.match(/\/packages-engine\/core\/src\/(lib|utils|plugin|colors)/))
+            return `../${path.dirname(path.relative(core_src, id))}/index.mjs`;
+          return undefined;
+        },
       },
     ],
     onwarn: (warning) => {
       if (warning.code === 'CIRCULAR_DEPENDENCY') return;
     },
     external: (id) =>
-      id.match(/\/src\/(lib|utils|plugin|config|colors)/) ||
+      id.match(/\/packages-engine\/core\/src\/(lib|utils|plugin|colors)/) ||
+      id.match(/\/packages-engine\/config\/src/) ||
+      id.startsWith('@nailuscss/preset-nailus') ||
       id.match(/@nailuscss\/core/),
     plugins: [
       replace({
@@ -258,9 +344,9 @@ export default [
   },
 
   // utils
-  ...fs.readdirSync('src/').filter((dir) => ['config', 'lib', 'utils', 'helpers'].includes(dir) && fs.statSync(`src/${dir}`).isDirectory())
+  ...fs.readdirSync(core_src).filter((dir) => ['lib', 'utils', 'helpers'].includes(dir) && fs.statSync(`${core_src}/${dir}`).isDirectory())
     .map((dir) => ({
-      input: `src/${dir}/index.ts`,
+      input: `${core_src}/${dir}/index.ts`,
       output: [
         {
           file: dump(`${dir}/index.cjs`),
@@ -283,13 +369,13 @@ export default [
 
   // utils deep
   ...fs
-    .readdirSync('src/utils')
+    .readdirSync(`${core_src}/utils`)
     .filter(
       (dir) =>
-        dir !== 'algorithm' && fs.statSync(`src/utils/${dir}`).isDirectory()
+        dir !== 'algorithm' && fs.statSync(`${core_src}/utils/${dir}`).isDirectory()
     )
     .map((dir) => ({
-      input: `src/utils/${dir}/index.ts`,
+      input: `${core_src}/utils/${dir}/index.ts`,
       output: [
         {
           file: dump(`utils/${dir}/index.cjs`),

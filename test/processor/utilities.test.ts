@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import { Style, StyleSheet } from '../../src/utils/style';
+import { Processor } from '../../packages-engine/core/src/lib';
+import { Style, StyleSheet } from '../../packages-engine/core/src/utils/style';
 import classNames from '../assets/testClasses';
 import { writeFileSync } from 'fs';
 
@@ -465,3 +465,4 @@ describe('Utilities', () => {
     `).styleSheet.build()).toMatchSnapshot('css');
   });
 });
+

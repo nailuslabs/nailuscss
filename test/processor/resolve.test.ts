@@ -1,6 +1,6 @@
-import { Processor } from '../../src/lib';
+import { Processor } from '../../packages-engine/core/src/lib';
 import { resolve } from 'path';
-import { pseudoClassNames } from '../../src/config/order';
+import { pseudoClassNames } from '../../packages-engine/config/src/order';
 
 const processor = new Processor(require(resolve('./test/assets/nailus.plugin.config.js')));
 
@@ -75,3 +75,4 @@ describe('Resolve Tests', () => {
     expect(processor3.config('corePlugins')).toMatchSnapshot('list3');
   });
 });
+

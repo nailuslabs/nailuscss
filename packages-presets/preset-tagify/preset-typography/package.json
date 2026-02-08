@@ -1,0 +1,6 @@
+{
+    "private":  true,
+    "name":  "@nailuscss/preset-typography",
+    "version":  "1.0.0",
+    "type":  "module"
+}

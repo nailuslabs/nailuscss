@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import { CSSParser } from '../../src/utils/parser';
+import { Processor } from '../../packages-engine/core/src/lib';
+import { CSSParser } from '../../packages-engine/core/src/utils/parser';
 
 const PROCESSOR = new Processor();
 const PARSER = new CSSParser();
@@ -551,3 +551,4 @@ describe('CSSParser', () => {
     expect(new CSSParser(css, PROCESSOR).parse().build()).toMatchSnapshot('css');
   });
 });
+

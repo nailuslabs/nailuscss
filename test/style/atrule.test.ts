@@ -1,4 +1,4 @@
-import { InlineAtRule } from '../../src/utils/style';
+import { InlineAtRule } from '../../packages-engine/core/src/utils/style';
 
 describe('AtRule', () => {
   it('build', () => {
@@ -32,3 +32,4 @@ describe('AtRule', () => {
     expect(!v5 || v5.important).toBeTrue();
   });
 });
+

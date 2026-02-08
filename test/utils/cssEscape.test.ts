@@ -1,4 +1,4 @@
-import { cssEscape } from '../../src/utils/algorithm';
+import { cssEscape } from '../../packages-engine/core/src/utils/algorithm';
 
 describe('CSS Escape', () => {
   it('escape', () => {
@@ -24,3 +24,4 @@ describe('CSS Escape', () => {
     expect(cssEscape('text-[rgb(1,2,3)]')).toBe(String.raw`text-\[rgb\(1\2c 2\2c 3\)\]`);
   });
 });
+

@@ -3,9 +3,9 @@ import {
   breakpoints,
   generateFontSize,
   expandDirection,
-} from '../../src/utils';
+} from '../../packages-engine/core/src/utils';
 
-import { Style } from '../../src/utils/style';
+import { Style } from '../../packages-engine/core/src/utils/style';
 
 describe('Helpers', () => {
   it('negative', () => {
@@ -84,3 +84,4 @@ describe('Helpers', () => {
     expect(expandDirection('br')).toEqual(['bottom-right']);
   });
 });
+

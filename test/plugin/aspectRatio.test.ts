@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import aspectRatio from '../../src/plugin/aspect-ratio';
+import { Processor } from '../../packages-engine/core/src/lib';
+import aspectRatio from '../../packages-engine/core/src/plugin/aspect-ratio';
 
 describe('aspect ratio plugin', () => {
   it('interpret test', () => {
@@ -42,3 +42,4 @@ describe('aspect ratio plugin', () => {
     expect(processor._plugin.completions).toMatchSnapshot('completions');
   });
 });
+

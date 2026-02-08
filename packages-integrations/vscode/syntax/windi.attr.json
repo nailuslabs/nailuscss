@@ -1,0 +1,48 @@
+{
+  "scopeName": "source.nailus.attr",
+  "injectionSelector": "L:meta.attribute",
+  "patterns": [
+    { "include": "#variant" },
+    { "include": "#separator" },
+    { "include": "#alias" },
+		{ "include": "#important" },
+		{ "include": "#bracket" }
+  ],
+  "repository": {
+    "variant":   {
+      "match": "[<@\\w!-]+(?=:)",
+      "name": "entity.name.tag.nailus"
+    },
+    "separator": {
+      "match": "(?<=(\\w|-|\\+)+?):",
+      "name": "punctuation.separator.key-value.css"
+    },
+		"important": {
+			"match": "(?<=\\s|\"|'|`)!(?=(\\w|-|:|\\*)+)",
+			"name": "entity.name.tag.nailus"
+		},
+    "alias": {
+			"match": "(?<=\\s|\"|'|`)\\*(\\w|-)+",
+			"name": "support.class.nailuscss"
+		},
+		"bracket": {
+			"begin": "(?i)(?<![\\w-])(\\()",
+      "beginCaptures": {
+        "1": {
+          "name": "constant.character.escape.nailuscss"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "constant.character.escape.nailuscss"
+        }
+      },
+      "patterns": [
+        {
+          "include": "source.css#property-values"
+        }
+      ]
+		}
+  }
+}

@@ -1,4 +1,4 @@
-import { Lexer, Parser } from '../../src/lang';
+import { Lexer, Parser } from '../../packages-engine/core/src/lang';
 
 describe('Parser', () => {
   it('simple syntax', () => {
@@ -101,3 +101,4 @@ describe('Parser', () => {
     expect(parser.parse()).toMatchSnapshot('ast');
   });
 });
+

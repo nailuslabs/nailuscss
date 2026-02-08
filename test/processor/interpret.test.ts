@@ -1,4 +1,4 @@
-import { Processor } from '../../src/lib';
+import { Processor } from '../../packages-engine/core/src/lib';
 
 const processor = new Processor();
 
@@ -150,3 +150,4 @@ describe('Interpretation Mode', () => {
     expect(processor.interpret('p-1/2 p-1/100 m-4/5 m-10/1000').styleSheet.build()).toMatchSnapshot('css');
   });
 });
+

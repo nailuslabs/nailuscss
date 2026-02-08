@@ -1,4 +1,4 @@
-import { Processor } from '../../src/lib';
+import { Processor } from '../../packages-engine/core/src/lib';
 
 const processor = new Processor();
 
@@ -40,8 +40,8 @@ describe('Compilation Mode', () => {
 
   it('compile important', () => {
     // .nailus-17we48r {
-    //   --tw-text-opacity: 1 !important;
-    //   color: rgba(110, 231, 183, var(--tw-text-opacity)) !important;
+    //   --ns-text-opacity: 1 !important;
+    //   color: rgba(110, 231, 183, var(--ns-text-opacity)) !important;
     //   font-weight: 700 !important;
     // font-weight should not be important here, something went wrong. Will fix later
     // }
@@ -54,3 +54,4 @@ describe('Compilation Mode', () => {
     expect(processor.compile('relative fixed').styleSheet.build()).toMatchSnapshot('css');
   });
 });
+

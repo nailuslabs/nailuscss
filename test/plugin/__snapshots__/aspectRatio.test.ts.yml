@@ -30,9 +30,9 @@ Tools / interpret test / aspect-ratio base / 0: |-
     aspect-ratio: 16 / 9;
   }
   .aspect-w-16 {
-    --tw-aspect-w: 16;
+    --ns-aspect-w: 16;
     position: relative;
-    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+    padding-bottom: calc(var(--ns-aspect-h) / var(--ns-aspect-w) * 100%);
   }
   .aspect-w-16 > * {
     position: absolute;
@@ -44,7 +44,7 @@ Tools / interpret test / aspect-ratio base / 0: |-
     left: 0;
   }
   .aspect-h-9 {
-    --tw-aspect-h: 9;
+    --ns-aspect-h: 9;
   }
   .aspect-9\/16 {
     position: relative;
@@ -83,9 +83,9 @@ Tools / works with prefix / aspect-ratio with prefix / 0: |-
     aspect-ratio: 16 / 9;
   }
   .nailus-aspect-w-16 {
-    --tw-aspect-w: 16;
+    --ns-aspect-w: 16;
     position: relative;
-    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+    padding-bottom: calc(var(--ns-aspect-h) / var(--ns-aspect-w) * 100%);
   }
   .nailus-aspect-w-16 > * {
     position: absolute;
@@ -97,7 +97,7 @@ Tools / works with prefix / aspect-ratio with prefix / 0: |-
     left: 0;
   }
   .nailus-aspect-h-9 {
-    --tw-aspect-h: 9;
+    --ns-aspect-h: 9;
   }
   @media (min-width: 640px) {
     .sm\:nailus-aspect-9\/16 {

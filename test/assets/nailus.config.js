@@ -1,4 +1,4 @@
-// windi.config.js
+// nailus.config.js
 const colors = require('../../dist/colors');
 
 module.exports = {

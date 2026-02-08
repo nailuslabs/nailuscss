@@ -1,4 +1,4 @@
-import { combineConfig } from '../../src/utils/algorithm';
+import { combineConfig } from '../../packages-engine/core/src/utils/algorithm';
 
 describe('combineConfig', () => {
   it('should combine different keys', () => {
@@ -46,3 +46,4 @@ describe('combineConfig', () => {
     ).toEqual({ a: { b: { c: [1, 2, 3, 4] } } });
   });
 });
+

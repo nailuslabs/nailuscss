@@ -1,0 +1,6 @@
+{
+    "private":  true,
+    "name":  "@nailuscss/extractor-pug",
+    "version":  "1.0.0",
+    "type":  "module"
+}

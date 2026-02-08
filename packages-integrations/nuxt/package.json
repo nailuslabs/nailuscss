@@ -1,0 +1,6 @@
+{
+    "private":  true,
+    "name":  "@nailuscss/nuxt",
+    "version":  "1.0.0",
+    "type":  "module"
+}

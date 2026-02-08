@@ -1,4 +1,4 @@
-import { toRGB, toRGBA, toColor } from '../../src/utils/color';
+import { toRGB, toRGBA, toColor } from '../../packages-engine/core/src/utils/color';
 
 describe('color utils', () => {
   it('convert color', () => {
@@ -34,3 +34,4 @@ describe('color utils', () => {
     });
   });
 });
+

@@ -1,0 +1,6 @@
+{
+    "private":  true,
+    "name":  "@nailuscss/extractor-arbitrary-variants",
+    "version":  "1.0.0",
+    "type":  "module"
+}

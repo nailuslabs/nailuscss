@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import lineClamp from '../../src/plugin/line-clamp';
+import { Processor } from '../../packages-engine/core/src/lib';
+import lineClamp from '../../packages-engine/core/src/plugin/line-clamp';
 
 describe('line clamp plugin', () => {
   it('interpret test', () => {
@@ -54,3 +54,4 @@ describe('line clamp plugin', () => {
     expect(processor._plugin.completions).toMatchSnapshot('completions');
   });
 });
+

@@ -1,5 +1,5 @@
-import { Token, TokenType } from '../../src/lang/tokens';
-import { Lexer } from '../../src/lang';
+import { Token, TokenType } from '../../packages-engine/core/src/lang/tokens';
+import { Lexer } from '../../packages-engine/core/src/lang';
 
 describe('Lexer', () => {
   it('lexer with number', () => {
@@ -127,3 +127,4 @@ describe('Lexer', () => {
     expect(lexer.get_next_token()).toEqual(new Token(TokenType.EOF, undefined));
   });
 });
+

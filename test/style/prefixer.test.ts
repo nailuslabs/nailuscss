@@ -1,16 +1,16 @@
-import { Processor } from '../../src/lib';
-import { linearGradient, minMaxContent, Property, Style, StyleSheet } from '../../src/utils/style';
-import lineClamp from '../../src/plugin/line-clamp';
+import { Processor } from '../../packages-engine/core/src/lib';
+import { linearGradient, minMaxContent, Property, Style, StyleSheet } from '../../packages-engine/core/src/utils/style';
+import lineClamp from '../../packages-engine/core/src/plugin/line-clamp';
 
 describe('linearGradient', () => {
   it('gradient input', () => {
     const p = linearGradient(
-      'linear-gradient(to left, var(--tw-gradient-stops))'
+      'linear-gradient(to left, var(--ns-gradient-stops))'
     );
     expect(p).toEqual([
-      '-o-linear-gradient(right, var(--tw-gradient-stops))',
-      '-webkit-gradient(linear, right top, left top, from(var(--tw-gradient-stops)))',
-      'linear-gradient(to left, var(--tw-gradient-stops))',
+      '-o-linear-gradient(right, var(--ns-gradient-stops))',
+      '-webkit-gradient(linear, right top, left top, from(var(--ns-gradient-stops)))',
+      'linear-gradient(to left, var(--ns-gradient-stops))',
     ]);
   });
 
@@ -79,3 +79,4 @@ describe('closePrefixer', () => {
     expect(processor.interpret('line-clamp-2').styleSheet.build()).toMatchSnapshot('line-clamp-2');
   });
 });
+

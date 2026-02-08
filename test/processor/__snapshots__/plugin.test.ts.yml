@@ -157,8 +157,8 @@ Tools / addVariant pseudoClass / extend / 0: |-
   }
 Tools / dump config / css / 0: |-
   .bg-nord0 {
-    --tw-bg-opacity: 1;
-    background-color: rgba(46, 52, 64, var(--tw-bg-opacity));
+    --ns-bg-opacity: 1;
+    background-color: rgba(46, 52, 64, var(--ns-bg-opacity));
   }
 Tools / interpret order should follow add components order / css / 0: |-
   .btn {

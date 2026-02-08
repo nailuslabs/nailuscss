@@ -1,14 +1,14 @@
-import { Property } from '../../src/utils/style';
-import type { Style } from '../../src/utils/style';
-import { baseConfig } from '../../src/config';
+import { Property } from '../../packages-engine/core/src/utils/style';
+import type { Style } from '../../packages-engine/core/src/utils/style';
+import { baseConfig } from '../../packages-engine/config/src';
 import {
   generateOrientations,
   generateScreens,
   generateStates,
   generateThemes,
   resolveVariants,
-} from '../../src/lib/variants';
-import { Processor } from '../../src/lib';
+} from '../../packages-engine/core/src/lib/variants';
+import { Processor } from '../../packages-engine/core/src/lib';
 
 function _generateTestVariants(variants: { [key: string]: () => Style }) {
   const output: { [key: string]: string } = {};
@@ -108,3 +108,4 @@ describe('Variants', () => {
     expect(_generateTestVariants(orientations)).toMatchSnapshot('css');
   });
 });
+

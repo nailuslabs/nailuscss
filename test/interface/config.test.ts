@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { Processor } from '../../src/lib';
+import { Processor } from '../../packages-engine/core/src/lib';
 
 const configPath = resolve('./test/assets/nailus.plugin.config.js');
 
@@ -36,3 +36,4 @@ describe('Load Plugin', () => {
   });
 
 });
+

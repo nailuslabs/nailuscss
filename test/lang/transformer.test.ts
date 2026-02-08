@@ -1,4 +1,4 @@
-import { Lexer, Parser, Transformer } from '../../src/lang';
+import { Lexer, Parser, Transformer } from '../../packages-engine/core/src/lang';
 
 describe('Transformer', () => {
   it('simple syntax', () => {
@@ -209,3 +209,4 @@ describe('Transformer', () => {
     expect(transformer.transform()).toMatchSnapshot('js');
   });
 });
+

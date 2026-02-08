@@ -1,4 +1,4 @@
-import { Property, InlineAtRule } from '../../src/utils/style';
+import { Property, InlineAtRule } from '../../packages-engine/core/src/utils/style';
 
 describe('Property', () => {
   it('normal build', () => {
@@ -106,3 +106,4 @@ describe('Property', () => {
     expect(clone.build()).toEqual(p.build());
   });
 });
+

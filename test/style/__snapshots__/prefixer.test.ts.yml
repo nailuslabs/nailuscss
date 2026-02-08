@@ -3,7 +3,7 @@ Tools / processor prefix / css / 1: |-
     background-clip: padding-box;
   }
   .bg-gradient-to-bl {
-    background-image: linear-gradient(to bottom left, var(--tw-gradient-stops));
+    background-image: linear-gradient(to bottom left, var(--ns-gradient-stops));
   }
   .flex {
     display: flex;
@@ -15,8 +15,8 @@ Tools / processor prefix / css / 1: |-
     flex-shrink: 1;
   }
   .placeholder-gray-200::placeholder {
-    --tw-placeholder-opacity: 1;
-    color: rgba(229, 231, 235, var(--tw-placeholder-opacity));
+    --ns-placeholder-opacity: 1;
+    color: rgba(229, 231, 235, var(--ns-placeholder-opacity));
   }
   @keyframes ping {
     0% {
@@ -44,13 +44,13 @@ Tools / processor prefix / preflight / 0: |-
     border-color: #e5e7eb;
   }
   * {
-    --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
-    --tw-ring-offset-width: 0px;
-    --tw-ring-offset-color: #fff;
-    --tw-ring-color: rgba(59, 130, 246, 0.5);
-    --tw-ring-offset-shadow: 0 0 #0000;
-    --tw-ring-shadow: 0 0 #0000;
-    --tw-shadow: 0 0 #0000;
+    --ns-ring-inset: var(--ns-empty,/*!*/ /*!*/);
+    --ns-ring-offset-width: 0px;
+    --ns-ring-offset-color: #fff;
+    --ns-ring-color: rgba(59, 130, 246, 0.5);
+    --ns-ring-offset-shadow: 0 0 #0000;
+    --ns-ring-shadow: 0 0 #0000;
+    --ns-shadow: 0 0 #0000;
   }
   :root {
     -moz-tab-size: 4;

@@ -1,4 +1,4 @@
-import { Processor } from '../../src/lib';
+import { Processor } from '../../packages-engine/core/src/lib';
 import { readFileSync } from 'fs';
 
 const html = readFileSync('./test/assets/example.html').toString();
@@ -16,3 +16,4 @@ describe('Preflight', () => {
     expect(processor.preflight().build()).toMatchSnapshot('tags');
   });
 });
+

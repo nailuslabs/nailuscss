@@ -1,4 +1,4 @@
-import diffConfig from '../../src/utils/algorithm/diffConfig';
+import diffConfig from '../../packages-engine/core/src/utils/algorithm/diffConfig';
 
 describe('diff config', () => {
   it('different', () => {
@@ -13,3 +13,4 @@ describe('diff config', () => {
     expect(diffConfig({ a: [3, 4] }, { a: [3, 4] })).toBeUndefined();
   });
 });
+

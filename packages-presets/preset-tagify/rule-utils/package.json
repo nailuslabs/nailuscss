@@ -1,0 +1,6 @@
+{
+    "private":  true,
+    "name":  "@nailuscss/rule-utils",
+    "version":  "1.0.0",
+    "type":  "module"
+}

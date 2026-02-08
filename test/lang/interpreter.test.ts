@@ -1,4 +1,4 @@
-// import { Lexer, Parser, Interpreter } from '../../src/lang';
+// import { Lexer, Parser, Interpreter } from '../../packages-engine/core/src/lang';
 
 // describe('Interpreter', () => {
 //   it('simple syntax', () => {
@@ -16,3 +16,4 @@
 //     expect(interpreter.GLOBAL_SCOPE).toEqual({ number: 2, a: 2, b: 25, c: 27 });
 //   });
 // });
+

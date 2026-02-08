@@ -1,0 +1,522 @@
+{
+  "name": "nailus",
+  "scopeName": "source.nailus",
+  "patterns": [
+    { "include": "#strings" },
+    { "include": "#template" },
+    { "include": "#important" },
+    { "include": "#alias" },
+    { "include": "#shortcut" },
+    { "include": "#apply" },
+    { "include": "#attr" },
+    { "include": "#variables" },
+    { "include": "#apply_short" },
+    { "include": "#nailus_constants" },
+    { "include": "#class_selector" },
+    { "include": "#hex" },
+    { "include": "#id_selector" },
+    { "include": "#multiline_comments" },
+    { "include": "source.css#numeric-values" },
+    { "include": "#attribute_selector" },
+    { "include": "#atrules" },
+    { "include": "source.css#media-features" },
+    { "include": "screen_constants" },
+    { "include": "#singleline_comments" },
+    { "include": "#style_block" },
+    { "include": "#operators" },
+    { "include": "source.css#pseudo-elements" },
+    { "include": "source.css#pseudo-classes" },
+    { "include": "#brace_curly" },
+    { "include": "#brace_round" },
+    { "include": "#brace_square" },
+    { "include": "#semi" },
+    { "include": "#colon" },
+    { "include": "#booleans" },
+    { "include": "source.css#color-keywords" },
+    { "include": "source.js#statements" },
+    { "include": "source.css#property-keywords" },
+    { "include": "source.css#commas" }
+  ],
+  "repository": {
+    "atrules": {
+      "patterns": [
+        {
+          "captures": {
+            "1": { "name": "keyword.control.at-rule.import.css" },
+            "2": { "name": "punctuation.definition.keyword.css" }
+          },
+          "match": "^\\s*((@)import\\b)",
+          "name": "meta.at-rule.import.css"
+        },
+        {
+          "captures": {
+            "1": { "name": "keyword.control.at-rule.fontface.css" },
+            "2": { "name": "punctuation.definition.keyword.css" }
+          },
+          "match": "^\\s*((@)font-face\\b)",
+          "name": "meta.at-rule.fontface.css"
+        },
+        {
+          "captures": {
+            "1": { "name": "keyword.control.at-rule.media.css" },
+            "2": { "name": "punctuation.definition.keyword.css" }
+          },
+          "match": "^\\s*((@)media\\b)",
+          "name": "meta.at-rule.media.css"
+        },
+        {
+          "captures": {
+            "1": { "name": "keyword.control.at-rule.nailus.css" },
+            "2": { "name": "punctuation.definition.keyword.css" }
+          },
+          "match": "^\\s*((@)(layer|var|screen|variants|apply|attr|config|important|func|load|log|warn|error|assert|if|for|while|with|try|js|break|continue|yield|return|raise|del)\\b)",
+          "name": "meta.at-rule.nailus.css"
+        },
+        {
+          "captures": {
+            "1": { "name": "keyword.control.at-rule.nailus.css" },
+            "2": { "name": "punctuation.definition.keyword.css" }
+          },
+          "match": "((@)(elif|else|except|finally)\\b)",
+          "name": "meta.at-rule.nailus.css"
+        }
+      ]
+    },
+    "attribute_selector": {
+      "captures": {
+        "1": { "name": "punctuation.definition.begin.entity.css" },
+        "2": { "name": "entity.other.attribute-name.attribute.css" },
+        "3": { "name": "punctuation.separator.operator.css" },
+        "4": { "name": "string.unquoted.attribute-value.css" },
+        "5": { "name": "string.quoted.double.attribute-value.css" },
+        "6": { "name": "punctuation.definition.string.begin.css" },
+        "7": { "name": "punctuation.definition.string.end.css" },
+        "8": { "name": "punctuation.definition.end.entity.css" }
+      },
+      "match": "(?i)(\\[)\\s*(-?[_a-z\\\\[[:^ascii:]]][_a-z0-9\\-\\\\[[:^ascii:]]]*)(?:\\s*([~|^$*]?=)\\s*(?:(-?[_a-z\\\\[[:^ascii:]]][_a-z0-9\\-\\\\[[:^ascii:]]]*)|((?>(['\"])(?:[^\\\\]|\\\\.)*?(\\6)))))?\\s*(\\])",
+      "name": "meta.attribute-selector.css"
+    },
+    "booleans": {
+      "patterns": [
+        { "match": "\\True\\b", "name": "constant.language.boolean.nailus" },
+        { "match": "\\False\\b", "name": "constant.language.boolean.nailus" },
+        { "match": "\\None\\b", "name": "constant.language.boolean.nailus" }
+      ]
+    },
+    "brace_curly": {
+      "patterns": [
+        {
+          "captures": {
+            "1": { "name": "punctuation.section.property-list.begin.css" },
+            "2": { "name": "punctuation.section.property-list.end.css" }
+          },
+          "match": "(\\{)(\\})",
+          "name": "meta.brace.curly.css"
+        },
+        { "match": "\\{|\\}", "name": "meta.brace.curly.css" }
+      ]
+    },
+    "brace_round": { "match": "\\(|\\)", "name": "meta.brace.round.css" },
+    "brace_square": { "match": "\\[|\\]", "name": "meta.brace.square.nailus" },
+    "class_selector": {
+      "patterns": [
+        {
+          "name": "entity.other.attribute-name.class.css",
+          "match": "(?<=\\${[^}]+})[\\w-]+"
+        },
+        {
+          "name": "entity.other.attribute-name.class.css",
+          "match": "((\\.)([_a-zA-Z]|(@{[a-zA-Z0-9_-]+}))([\\w-]|\\\\\\W)*)"
+        },
+        {
+          "captures": {
+            "1": { "name": "entity.other.attribute-name.class.mixin.css" }
+          },
+          "match": "(\\.[_a-zA-Z][a-zA-Z0-9_-]*(?=\\())"
+        },
+        {
+          "captures": {
+            "1": { "name": "entity.other.attribute-name.class.css" },
+            "2": { "name": "punctuation.definition.entity.css" },
+            "4": { "name": "variable.other.interpolation.nailus" }
+          },
+          "match": "((\\.)([_a-zA-Z]|(@{[a-zA-Z0-9_-]+}))[a-zA-Z0-9_-]*)"
+        },
+        {
+          "captures": {
+            "0": { "name": "entity.name.tag.parent-selector.nailus" },
+            "1": { "name": "punctuation.definition.entity.css" }
+          },
+          "match": "(&)(?=[a-zA-Z0-9_-]*)"
+        },
+        {
+          "captures": {
+            "0": { "name": "entity.other.attribute-name.parent-selector.css" },
+            "1": { "name": "punctuation.definition.entity.css" }
+          },
+          "match": "(?<=&)[a-zA-Z0-9_-]*"
+        }
+      ]
+    },
+    "colon": { "match": ":", "name": "punctuation.separator.key-value.css" },
+    "hex": {
+      "match": "(#)([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\\b(?!.*?(?<!@){)",
+      "name": "constant.other.rgb-value.css"
+    },
+    "id_selector": {
+      "captures": {
+        "1": { "name": "entity.other.attribute-name.id" },
+        "2": { "name": "punctuation.definition.entity.css" },
+        "4": { "name": "variable.other.interpolation.nailus" }
+      },
+      "match": "((#)([_a-zA-Z]|(@{[a-zA-Z0-9_-]+}))[a-zA-Z0-9_-]*)",
+      "name": "meta.selector.css"
+    },
+    "important": { "match": "\\!\\s*important", "name": "entity.name.tag.nailus" },
+    "multiline_comments": {
+      "begin": "/\\*",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.comment.begin.css" }
+      },
+      "end": "\\*/",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.comment.end.css" }
+      },
+      "name": "comment.block.css"
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "\\*|\\/|\\-|\\+|~|=|<=|>=|<|>",
+          "name": "keyword.operator.nailus"
+        },
+        {
+          "match": "\\b(not|and|or)\\b",
+          "name": "keyword.operator.expression.logic.nailus"
+        }
+      ]
+    },
+    "property_values": {
+      "begin": "(?<!&)(:)\\s*(?!(\\s*{))(?!.*(?<!@){)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.separator.key-value.css" }
+      },
+      "end": "\\s*(;)|\\s*(?=})",
+      "endCaptures": { "1": { "name": "punctuation.terminator.rule.css" } },
+      "contentName": "meta.property-value.css",
+      "patterns": [
+        {
+          "begin": "url(\\()",
+          "beginCaptures": { "1": { "name": "meta.brace.round.css" } },
+          "end": "\\)",
+          "endCaptures": { "0": { "name": "meta.brace.round.css" } },
+          "name": "support.function.any-method.builtin.url.css",
+          "patterns": [
+            { "include": "#strings" },
+            { "match": "(\\b|\\.{0,2}/)[^)]*\\b", "name": "string.url.css" }
+          ]
+        },
+        { "include": "source.css#property-keywords" },
+        { "include": "source.css#color-keywords" },
+        { "include": "source.css#commas" },
+        { "include": "source.css#functions" },
+        { "include": "$self" }
+      ]
+    },
+    "screen_constants": {
+      "patterns": [
+        {
+          "match": "\\b(tv|tty|screen|projection|print|handheld|embossed|braille|aural|all)\\b",
+          "name": "support.constant.media-type.media.css"
+        },
+        {
+          "match": "\\b(portrait|landscape)\\b",
+          "name": "support.constant.property-value.media-property.media.css"
+        }
+      ]
+    },
+    "semi": { "match": ";", "name": "punctuation.terminator.rule.css" },
+    "strings": {
+      "patterns": [
+        {
+          "begin": "\"",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.string.begin.css" }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.css" }
+          },
+          "name": "string.quoted.double.css",
+          "patterns": [
+            {
+              "match": "\\\\([0-9A-Fa-f]{1,6}|.)",
+              "name": "constant.character.escape.css"
+            }
+          ]
+        },
+        {
+          "begin": "'",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.string.begin.css" }
+          },
+          "end": "'",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.css" }
+          },
+          "name": "string.quoted.single.css",
+          "patterns": [
+            {
+              "match": "\\\\([0-9A-Fa-f]{1,6}|.)",
+              "name": "constant.character.escape.css"
+            }
+          ]
+        }
+      ]
+    },
+    "style_block": {
+      "begin": "{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.property-list.begin.bracket.curly.css"
+        }
+      },
+      "end": "}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.property-list.end.bracket.curly.css"
+        }
+      },
+      "name": "meta.property-list.css",
+      "patterns": [
+        { "include": "source.css#pseudo-elements" },
+        { "include": "source.css#pseudo-classes" },
+        { "include": "source.css#commas" },
+        { "include": "source.css#property-names" },
+        { "include": "#property_values" },
+        { "include": "$self" }
+      ]
+    },
+    "singleline_comments": {
+      "begin": "(^[ \\t]+)?(?=//)",
+      "beginCaptures": {
+        "1": { "name": "punctuation.whitespace.comment.leading.nailus" }
+      },
+      "end": "(?!\\G)",
+      "patterns": [
+        {
+          "begin": "//",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.comment.nailus" }
+          },
+          "end": "\\n",
+          "name": "comment.line.double-slash.nailus"
+        }
+      ]
+    },
+    "template": {
+      "name": "meta.template.expression.js",
+      "begin": "\\$\\{",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.begin.js" }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.end.js" }
+      },
+      "patterns": [{ "include": "#expression" }],
+      "contentName": "meta.embedded.line.js"
+    },
+    "variables": {
+      "match": "((?<=@var\\s+)|\\-\\-)[\\w-]+(?=\\s*)",
+      "name": "variable.assign.nailus",
+      "captures": { "1": { "name": "punctuation.definition.variable.nailus" } }
+    },
+    "expression": {
+      "patterns": [
+        { "include": "source.css#color-keywords" },
+        { "include": "source.css#numeric-values" },
+        { "include": "#booleans" },
+        { "include": "source.js#expression" }
+      ]
+    },
+    "nailus_constants": {
+      "patterns": [
+        {
+          "match": "(?<=@config\\s+)(local|global)",
+          "name": "variable.constant.nailus",
+          "captures": { "1": { "name": "punctuation.definition.variable.nailus" } }
+        },
+        {
+          "match": "(?<=@layer\\s+)(base|components|utilities)",
+          "name": "variable.constant.nailus",
+          "captures": { "1": { "name": "punctuation.definition.variable.nailus" } }
+        },
+        {
+          "match": "(?<=@screen\\s+)([<@]?(sm|md|lg|xl|xs|2xl))",
+          "name": "variable.constant.nailus",
+          "captures": { "1": { "name": "punctuation.definition.variable.nailus" } }
+        },
+        {
+          "match": "(?<=@variants\\s+)([.@]?(dark|light)|hover|focus)",
+          "name": "variable.constant.nailus",
+          "captures": { "1": { "name": "punctuation.definition.variable.nailus" } }
+        },
+        {
+          "name": "keyword.operator.expression.in.nailus",
+          "match": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))in(?![_$[:alnum:]])(?:(?=\\.\\.\\.)|(?!\\.))(?!\\()"
+        },
+        {
+          "name": "keyword.operator.expression.not_in.nailus",
+          "match": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))not\\s*in(?![_$[:alnum:]])(?:(?=\\.\\.\\.)|(?!\\.))(?!\\()"
+        },
+        {
+          "name": "keyword.operator.expression.as.nailus",
+          "match": "as(?![_$[:alnum:]])(?:(?=\\.\\.\\.)|(?!\\.))(?!\\()"
+        },
+        {
+          "name": "keyword.operator.expression.from.nailus",
+          "match": "(?<![_$[:alnum:]])(?:(?<=\\.\\.\\.)|(?<!\\.))from(?![_$[:alnum:]])(?:(?=\\.\\.\\.)|(?!\\.))(?!\\()"
+        }
+      ]
+    },
+    "alias": {
+      "patterns": [
+        {
+          "match": "^\\s*\\*[\\w-]+(?=\\s*:)",
+          "name": "support.class.nailuscss",
+          "captures": { "1": { "name": "punctuation.definition.variable.nailus" } }
+        },
+        {
+          "match": "(?<=^\\s*\\*[\\w-]+\\s*:\\s+[\\s\\S]*?[<@\\w-]+:)[\\w-]+",
+          "name": "variable.alias.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\*[\\w-]+\\s*:\\s+[\\s\\S]*?\\s?)[\\w-]+(?=[\\s;)])",
+          "name": "variable.alias.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\*[\\w-]+\\s*:\\s+[\\s\\S]*?)[<@\\w-]+(?=:)",
+          "name": "entity.name.tag.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\*[\\w-]+\\s*:\\s+[\\s\\S]*?)[*][\\w-]+",
+          "name": "support.class.nailuscss"
+        },
+        {
+          "match": "(?<=^\\s*\\*[\\w-]+\\s*:\\s+[\\s\\S]*?)[!](?=[<@:*\\w-]+)",
+          "name": "entity.name.tag.nailus"
+        }
+      ]
+    },
+    "shortcut": {
+      "patterns": [
+        {
+          "match": "^\\s*\\.[\\w-]+(?=\\s*:[^{]*;)",
+          "name": "support.class.nailuscss",
+          "captures": { "1": { "name": "punctuation.definition.variable.nailus" } }
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*:\\s+[\\s\\S]*?[<@\\w-]+:)[\\w-]+",
+          "name": "variable.shortcut.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*:\\s+[\\s\\S]*?\\s?)[\\w-]+(?=[\\s;)])",
+          "name": "variable.shortcut.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*:\\s+[\\s\\S]*?)[<@\\w-]+(?=:)",
+          "name": "entity.name.tag.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*:\\s+[\\s\\S]*?)[*][\\w-]+",
+          "name": "support.class.nailuscss"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*:\\s+[\\s\\S]*?)[!](?=[<@:*\\w-]+)",
+          "name": "entity.name.tag.nailus"
+        }
+      ]
+    },
+    "apply": {
+      "patterns": [
+        {
+          "match": "(?<=@apply\\s+[\\s\\S]*?[<@\\w-]+:)[\\w-]+",
+          "name": "variable.apply.nailus"
+        },
+        {
+          "match": "(?<=@apply\\s+[\\s\\S]*?\\s?)[\\w-]+(?=[\\s;)])",
+          "name": "variable.apply.nailus"
+        },
+        {
+          "match": "(?<=@apply\\s+[\\s\\S]*?)[<@\\w-]+(?=:)",
+          "name": "entity.name.tag.nailus"
+        },
+        {
+          "match": "(?<=@apply\\s+[\\s\\S]*?)[*][\\w-]+",
+          "name": "support.class.nailuscss"
+        },
+        {
+          "match": "(?<=@apply\\s+[\\s\\S]*?)[!](?=[<@:*\\w-]+)",
+          "name": "entity.name.tag.nailus"
+        }
+      ]
+    },
+    "apply_short": {
+      "patterns": [
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*{\\s+[\\s\\S]*?[<@\\w-]+:\\(?)[\\w-]+",
+          "name": "variable.apply.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*{\\s+[\\s\\S]*?\\s?)[\\w-]+(?=[\\s;}\\)])",
+          "name": "variable.apply.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*{\\s+[\\s\\S]*?)[<@\\w-]+(?=:)",
+          "name": "entity.name.tag.nailus"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*{\\s+[\\s\\S]*?)[*][\\w-]+",
+          "name": "support.class.nailuscss"
+        },
+        {
+          "match": "(?<=^\\s*\\.[\\w-]+\\s*{\\s+[\\s\\S]*?)[!](?=[<@:*\\w-]+)",
+          "name": "entity.name.tag.nailus"
+        }
+      ]
+    },
+    "attr": {
+      "patterns": [
+        {
+          "match": "(?<=@attr\\[[!<@:\\w-]+\\]\\s+[\\s\\S]*?[<@\\w-]+:)[\\w-]+",
+          "name": "variable.attr.nailus"
+        },
+        {
+          "match": "(?<=@attr\\[[!<@:\\w-]+\\]\\s+[\\s\\S]*?\\s?)[\\w-]+(?=[\\s;)])",
+          "name": "variable.attr.nailus"
+        },
+        {
+          "match": "(?<=@attr\\[[!<@:\\w-]+\\]\\s+[\\s\\S]*?)[<@\\w-]+(?=:)",
+          "name": "entity.name.tag.nailus"
+        },
+        {
+          "match": "(?<=@attr\\[[!<@:\\w-]+\\]\\s+[\\s\\S]*?)[*][\\w-]+",
+          "name": "support.class.nailuscss"
+        },
+        {
+          "match": "(?<=@attr\\[[!<@:\\w-]+\\]\\s+[\\s\\S]*?)[!](?=[<@:*\\w-]+)",
+          "name": "entity.name.tag.nailus"
+        },
+        {
+          "match": "(?<=@attr\\[[!<@:\\w-]*[!<@\\w-]+):",
+          "name": "punctuation.separator.key-value.css"
+        },
+        {
+          "match": "(?<=@attr\\[[!<@:\\w-]*)[!<@\\w-]+(?=:)",
+          "name": "entity.name.tag.nailus"
+        }
+      ]
+    }
+  }
+}

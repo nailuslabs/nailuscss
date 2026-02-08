@@ -11,8 +11,8 @@
     "noEmit": true
   },
   "include": [
-    "../../src/interfaces.ts", 
-    "../../src/jsx.ts",
+    "../../packages-engine/core/src/interfaces.ts",
+    "../../packages-engine/core/src/jsx.ts",
     "."
   ],
 }

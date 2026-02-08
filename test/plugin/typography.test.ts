@@ -1,5 +1,5 @@
-import { Processor } from '../../src/lib';
-import typography from '../../src/plugin/typography';
+import { Processor } from '../../packages-engine/core/src/lib';
+import typography from '../../packages-engine/core/src/plugin/typography';
 
 describe('typography plugin', () => {
   it('interpret test', () => {
@@ -191,3 +191,4 @@ describe('typography plugin', () => {
     expect(processor.interpret('prose-deep-blush').styleSheet.build()).toMatchSnapshot('css');
   });
 });
+
