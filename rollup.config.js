@@ -75,7 +75,7 @@ export default [
       {
         file: dump('index.cjs'),
         format: 'cjs',
-        exports: 'default',
+        exports: 'named',
         paths: (id) => `./${path.relative(core_src, id)}/index.cjs`,
       },
       {
