@@ -17,6 +17,7 @@ const cli_src = './packages-engine/cli/src';
 const config_src = './packages-engine/config/src';
 const autocomplete_src = './packages-engine/autocomplete/src';
 const preset_src = './packages-presets/preset-nailus/src';
+const plugin_src = `${core_src}/utils/plugin`;
 const prod = process.env.NODE_ENV === 'production';
 
 const ts_plugin = prod
@@ -261,7 +262,7 @@ export default [
 
   // plugin
   {
-    input: `${core_src}/plugin/index.ts`,
+    input: `${plugin_src}/index.ts`,
     output: [
       {
         file: dump('plugin/index.cjs'),
@@ -283,9 +284,9 @@ export default [
   },
 
   // plugin deep
-  ...fs.readdirSync(`${core_src}/plugin`).filter(dir => fs.statSync(`${core_src}/plugin/${dir}`).isDirectory())
+  ...fs.readdirSync(plugin_src).filter(dir => fs.statSync(`${plugin_src}/${dir}`).isDirectory())
     .map((dir) => ({
-      input: `${core_src}/plugin/${dir}/index.ts`,
+      input: `${plugin_src}/${dir}/index.ts`,
       output: [
         {
           file: dump(`plugin/${dir}/index.cjs`),
@@ -372,7 +373,9 @@ export default [
     .readdirSync(`${core_src}/utils`)
     .filter(
       (dir) =>
-        dir !== 'algorithm' && fs.statSync(`${core_src}/utils/${dir}`).isDirectory()
+        dir !== 'algorithm' &&
+        dir !== 'plugin' &&
+        fs.statSync(`${core_src}/utils/${dir}`).isDirectory()
     )
     .map((dir) => ({
       input: `${core_src}/utils/${dir}/index.ts`,
