@@ -2,3 +2,4 @@ packages:
   - "packages-engine/*"
   - "packages-integrations/*"
   - "packages-presets/*"
+  - "packages-presets/preset-tagify/*"
