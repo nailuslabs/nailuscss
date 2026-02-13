@@ -1,0 +1,37 @@
+{
+  "iconDefinitions": {
+    "_file_nailus": {
+      "iconPath": "../res/logo.png"
+    }
+  },
+  "languageIds": {
+    "nailus": "_file_nailus"
+  },
+  "fileNames": {
+    "nailus.config.js": "_file_nailus",
+    "nailus.config.cjs": "_file_nailus",
+    "nailus.config.mjs": "_file_nailus",
+    "nailus.config.ts": "_file_nailus",
+    "nailus.config.cts": "_file_nailus",
+    "nailus.config.mts": "_file_nailus",
+    "nailuscss.config.js": "_file_nailus",
+    "nailuscss.config.cjs": "_file_nailus",
+    "nailuscss.config.mjs": "_file_nailus",
+    "nailuscss.config.ts": "_file_nailus",
+    "nailuscss.config.cts": "_file_nailus",
+    "nailuscss.config.mts": "_file_nailus",
+    "nailus.css": "_file_nailus",
+    "nailus.scss": "_file_nailus",
+    "nailus.js": "_file_nailus",
+    "nailuscss.js": "_file_nailus",
+    "nailuscss.css": "_file_nailus"
+  },
+  "fileExtensions": {
+    "nailus": "_file_nailus",
+    "nailus.css": "_file_nailus",
+    "nailus.scss": "_file_nailus",
+    "nailus.js": "_file_nailus",
+    "nailuscss.css": "_file_nailus",
+    "nailuscss.js": "_file_nailus"
+  }
+}

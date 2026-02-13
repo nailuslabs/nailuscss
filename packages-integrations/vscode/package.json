@@ -7,6 +7,7 @@
   ],
   "bugs": "https://github.com/nailuscss/nailuscss-intellisense/issues",
   "categories": [
+    "Themes",
     "Other"
   ],
   "contributes": {
@@ -72,6 +73,13 @@
           "text/nailus"
         ],
         "configuration": "./syntax/lang.config.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "nailuscss-icons",
+        "label": "nailusCSS Icons",
+        "path": "./icons/nailus-icon-theme.json"
       }
     ],
     "grammars": [
@@ -264,7 +272,7 @@
   },
   "displayName": "nailusCSS IntelliSense",
   "engines": {
-    "vscode": ">=1.63.0"
+    "vscode": ">=1.109.0"
   },
   "homepage": "https://github.com/nailuscss/nailuscss-intellisense",
   "icon": "res/logo.png",
@@ -280,7 +288,7 @@
   ],
   "license": "MIT",
   "main": "./out/extension.js",
-  "publisher": "voorjaar",
+  "publisher": "naïloth esdras nsounda nsilulu",
   "repository": {
     "type": "git",
     "url": "https://github.com/nailuscss/nailuscss-intellisense"
