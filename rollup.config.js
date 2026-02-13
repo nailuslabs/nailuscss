@@ -113,7 +113,7 @@ export default [
         paths: (id) => `./${path.relative(core_src, id)}/index.mjs`,
       },
     ],
-    external: (id) => id.startsWith('./'),
+    external: (id) => id.startsWith('./') || id.startsWith('@nailuscss/config'),
     plugins: [
       ts_plugin,
       types("colors.d.ts", "./types/config", "{ colors as default }"),
@@ -133,6 +133,7 @@ export default [
         format: 'esm',
       },
     ],
+    external: (id) => id.startsWith('@nailuscss/core'),
     plugins: [
       ts_plugin,
       json(),
@@ -274,7 +275,9 @@ export default [
         format: 'esm',
       },
     ],
-    external: (id) => id.startsWith('@nailuscss/preset-nailus'),
+    external: (id) =>
+      id.startsWith('@nailuscss/preset-nailus') ||
+      id.startsWith('@nailuscss/config'),
     plugins: [
       ts_plugin,
       resolve(),
@@ -299,7 +302,9 @@ export default [
           format: 'esm',
         },
       ],
-      external: (id) => id.startsWith('@nailuscss/preset-nailus'),
+      external: (id) =>
+        id.startsWith('@nailuscss/preset-nailus') ||
+        id.startsWith('@nailuscss/config'),
       plugins: [
         ts_plugin,
         resolve(),
@@ -358,6 +363,7 @@ export default [
           format: 'esm',
         },
       ],
+      external: (id) => id.startsWith('@nailuscss/config'),
       plugins: [
         ts_plugin,
         json(),
