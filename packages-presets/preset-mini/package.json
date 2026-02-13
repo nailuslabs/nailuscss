@@ -5,6 +5,6 @@
     "type":  "module",
     "types": "src/index.d.ts",
     "dependencies": {
-      "@nailuscss/core": "workspace:*"
+      "@nailuscss/core": "file:../../packages-engine/core"
     }
 }
