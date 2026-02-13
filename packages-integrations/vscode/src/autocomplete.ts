@@ -107,17 +107,18 @@ export default class Completions {
         },
 
         resolveCompletionItem: (item) => {
+          const itemLabel = getCompletionItemLabel(item);
           switch (item.kind) {
           case CompletionItemKind.Constant:
-            item.documentation = buildStyle(this.processor.interpret(item.label).styleSheet);
+            item.documentation = buildStyle(this.processor.interpret(itemLabel).styleSheet);
             break;
           case CompletionItemKind.Module:
             item.documentation = this.buildVariantDoc(item.detail);
             item.detail = undefined;
             break;
           case CompletionItemKind.Struct:
-            item.documentation = buildStyle(this.processor.interpret(item.label).styleSheet);
-            item.insertText = new SnippetString(`${item.label.replace('-[', '-[${1:').slice(0, -1)}}]`);
+            item.documentation = buildStyle(this.processor.interpret(itemLabel).styleSheet);
+            item.insertText = new SnippetString(`${itemLabel.replace('-[', '-[${1:').slice(0, -1)}}]`);
             break;
           case CompletionItemKind.Variable:
             this.generateDynamicInfo(item, false);
@@ -125,10 +126,10 @@ export default class Completions {
           case CompletionItemKind.Color:
             const color = (item.documentation || 'currentColor') as string;
             item.documentation = ['transparent', 'currentColor'].includes(color) ? color : `rgb(${hex2RGB(color)?.join(', ')})`;
-            item.detail = this.processor.interpret(item.label).styleSheet.build();
+            item.detail = this.processor.interpret(itemLabel).styleSheet.build();
             break;
           case CompletionItemKind.Unit:
-            item.documentation = item.detail ? buildStyle(this.processor.interpret(`${item.detail}/${item.label}`).styleSheet) : undefined;
+            item.documentation = item.detail ? buildStyle(this.processor.interpret(`${item.detail}/${itemLabel}`).styleSheet) : undefined;
             item.detail = undefined;
             break;
           }
@@ -179,12 +180,13 @@ export default class Completions {
           return [];
         },
         resolveCompletionItem: item => {
+          const itemLabel = getCompletionItemLabel(item);
           switch (item.kind) {
           case CompletionItemKind.Field:
-            item.documentation = this.buildAttrDoc(item.label);
+            item.documentation = this.buildAttrDoc(itemLabel);
             break;
           case CompletionItemKind.Module:
-            item.documentation = this.buildVariantDoc(item.label, true);
+            item.documentation = this.buildVariantDoc(itemLabel, true);
             break;
           }
           return item;
@@ -278,9 +280,10 @@ export default class Completions {
         },
 
         resolveCompletionItem: item => {
+          const itemLabel = getCompletionItemLabel(item);
           switch (item.kind) {
           case CompletionItemKind.Constant:
-            item.documentation = buildStyle(this.processor.attributify({ [item.detail ?? ''] : [ item.label ] }).styleSheet);
+            item.documentation = buildStyle(this.processor.attributify({ [item.detail ?? ''] : [ itemLabel ] }).styleSheet);
             item.detail = undefined;
             break;
           case CompletionItemKind.Module:
@@ -289,8 +292,8 @@ export default class Completions {
             item.detail = undefined;
             break;
           case CompletionItemKind.Struct:
-            item.documentation = buildStyle(this.processor.attributify({ [item.detail ?? ''] : [ item.label ] }).styleSheet);
-            item.insertText = new SnippetString(`${item.label.replace('[', '[${1:').slice(0, -1)}}]`);
+            item.documentation = buildStyle(this.processor.attributify({ [item.detail ?? ''] : [ itemLabel ] }).styleSheet);
+            item.insertText = new SnippetString(`${itemLabel.replace('[', '[${1:').slice(0, -1)}}]`);
             item.detail = undefined;
             break;
           case CompletionItemKind.Variable:
@@ -299,11 +302,11 @@ export default class Completions {
           case CompletionItemKind.Color:
             const color = (item.documentation || 'currentColor') as string;
             item.documentation = ['transparent', 'currentColor'].includes(color) ? color : `rgb(${hex2RGB(color)?.join(', ')})`;
-            item.detail = this.processor.attributify({ [item.detail ?? ''] : [ item.label ] }).styleSheet.build();
+            item.detail = this.processor.attributify({ [item.detail ?? ''] : [ itemLabel ] }).styleSheet.build();
             break;
           case CompletionItemKind.Unit:
             const [ key, utility ] = item.detail?.split('____') || [];
-            item.documentation = buildStyle(this.processor.attributify({ [key] : [ `${utility}/${item.label}` ] }).styleSheet);
+            item.documentation = buildStyle(this.processor.attributify({ [key] : [ `${utility}/${itemLabel}` ] }).styleSheet);
             item.detail = undefined;
             break;
           }
@@ -319,7 +322,8 @@ export default class Completions {
   }
 
   generateDynamicInfo(item: CompletionItem, attributify = false) {
-    const match = item.label.match(/{\w+}$/);
+    const itemLabel = getCompletionItemLabel(item);
+    const match = itemLabel.match(/{\w+}$/);
     if (!match) return;
     switch (match[0]) {
     case '{int}':
@@ -351,9 +355,10 @@ export default class Completions {
 
   setDynamicInfo(item: CompletionItem, type: string, example: string, attributify = false) {
     const regex = new RegExp(`{${type}}$`);
-    item.documentation = buildStyle(attributify? this.processor.attributify({ [item.detail ?? ''] : [ item.label.replace(regex, example) ] }).styleSheet : this.processor.interpret(item.label.replace(regex, example)).styleSheet);
+    const itemLabel = getCompletionItemLabel(item);
+    item.documentation = buildStyle(attributify? this.processor.attributify({ [item.detail ?? ''] : [ itemLabel.replace(regex, example) ] }).styleSheet : this.processor.interpret(itemLabel.replace(regex, example)).styleSheet);
     item.detail = `type.${type}(${example})`;
-    item.insertText = new SnippetString(item.label.replace(regex, `\${1:${example}}`));
+    item.insertText = new SnippetString(itemLabel.replace(regex, `\${1:${example}}`));
   }
 
   buildAttrDoc(attr: string, variant?: string, separator?: string) {
@@ -389,6 +394,10 @@ function attrKey(label: string, kind: CompletionItemKind, order: number) {
     title: label,
   };
   return item;
+}
+
+function getCompletionItemLabel(item: CompletionItem): string {
+  return typeof item.label === 'string' ? item.label : item.label.label;
 }
 
 

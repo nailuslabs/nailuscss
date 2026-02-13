@@ -34,7 +34,7 @@ const CUBE = window.createTextEditorDecorationType({
 export default class Decorations {
   extension: Extension;
   processor: Processor;
-  timeout?: NodeJS.Timer;
+  timeout?: ReturnType<typeof setTimeout>;
   constructor(extension: Extension, processor: Processor) {
     this.extension = extension;
     this.processor = processor;
@@ -73,11 +73,13 @@ export default class Decorations {
           if (element.type === 'group' && Array.isArray(element.content)) {
             for (const e of element.content) {
               const color = this.extension.isValidColor(e.raw);
-              if(color.color) colors.push(provider(document, attr.value.start, e.start, e.raw, color.color));
+              const rgb = this.toRGB(color.color);
+              if (rgb) colors.push(provider(document, attr.value.start, e.start, e.raw, rgb));
             }
           }
           const color = element.type === 'utility' && this.extension.isValidColor(element.raw);
-          if(color && color.color) colors.push(provider(document, attr.value.start, element.start, element.raw, color.color));
+          const rgb = color && this.toRGB(color.color);
+          if (rgb) colors.push(provider(document, attr.value.start, element.start, element.raw, rgb));
         }
       }
     }
@@ -89,11 +91,13 @@ export default class Decorations {
         if (element.type === 'group' && Array.isArray(element.content)) {
           for (const e of element.content) {
             const color = this.extension.isValidColor(e.raw);
-            if(color && color.color) colors.push(provider(document, className.start, e.start, e.raw, color.color));
+            const rgb = color && this.toRGB(color.color);
+            if (rgb) colors.push(provider(document, className.start, e.start, e.raw, rgb));
           }
         }
         const color = element.type === 'utility' && this.extension.isValidColor(element.raw);
-        if(color && color.color) colors.push(provider(document, className.start, element.start, element.raw, color.color));
+        const rgb = color && this.toRGB(color.color);
+        if (rgb) colors.push(provider(document, className.start, element.start, element.raw, rgb));
       }
     }
 
@@ -113,7 +117,8 @@ export default class Decorations {
           const range = context.document.getWordRangeAtPosition(context.range.end, /[@<:-\w]+/) as Range;
           const utility = document.getText(range);
           const vcolor = this.extension.isValidColor(utility);
-          if (!arrayEqual(vcolor.color as number[], [color.red * 255, color.green * 255, color.blue * 255]) && range) {
+          const rgb = this.toRGB(vcolor.color);
+          if (rgb && !arrayEqual(rgb, [color.red * 255, color.green * 255, color.blue * 255]) && range) {
             const vrange = new Range(new Position(range.start.line, range.start.character + utility.indexOf(vcolor.key as string)), range.end);
             editor.edit(editBuilder => {
               editBuilder.replace(vrange, `hex-${rgb2Hex(color.red, color.green, color.blue).slice(1,)}`);
@@ -187,6 +192,13 @@ export default class Decorations {
       DECORATIONS[bgColor] = decoration;
     }
     return { decoration, option: { range: new Range(document.positionAt(start + offset), document.positionAt(start + offset + raw.length)) }, id: decoration.key };
+  }
+
+  toRGB(color: Array<number | undefined> | undefined) {
+    if (!color) return;
+    const [r, g, b] = color;
+    if (typeof r !== 'number' || typeof g !== 'number' || typeof b !== 'number') return;
+    return [r, g, b];
   }
 
 }

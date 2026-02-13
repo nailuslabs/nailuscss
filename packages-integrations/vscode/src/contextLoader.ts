@@ -13,7 +13,6 @@ import { allowAttr, fileTypes } from './configs';
 import { Disposable, workspace, window, commands } from 'vscode';
 import { toRGBA } from '@nailuscss/core/utils';
 
-import type { JITI } from 'jiti';
 import type { Attr } from './interfaces';
 import { Processor } from '@nailuscss/core';
 import type { ExtensionContext, GlobPattern, Uri } from 'vscode';
@@ -26,7 +25,6 @@ import type {
 import { loadConfig } from 'unconfig';
 
 export default class Extension {
-  jiti?: JITI;
   ctx: ExtensionContext;
   pattern: GlobPattern;
   processor: Processor | undefined;
