@@ -9,7 +9,7 @@
       "es6"
     ],
     "sourceMap": true,
-    "rootDir": ".",
+    "rootDir": "../..",
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "types": [
