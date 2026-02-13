@@ -2,6 +2,12 @@
   "name": "nailuscss",
   "version": "1.0.0",
   "packageManager": "pnpm@10.28.0",
+  "workspaces": [
+    "packages-engine/*",
+    "packages-integrations/*",
+    "packages-presets/*",
+    "packages-presets/preset-tagify/*"
+  ],
   "description": "The instant on demand atomic css (frist utility) engine and components",
   "keywords": [
     "css",
