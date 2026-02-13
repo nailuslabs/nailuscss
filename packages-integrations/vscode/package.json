@@ -1,7 +1,7 @@
 {
   "name": "nailuscss-intellisense",
   "description": "Intelligent nailusCSS tooling for VS Code",
-  "version": "0.23.6",
+  "version": "1.0.0",
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -259,7 +259,7 @@
     "ts-jest": "27.1.4",
     "tslib": "2.3.1",
     "typescript": "4.6.3",
-    "nailuscss": "3.5.1",
+    "nailuscss": "1.0.0",
     "windicss-analysis": "0.3.5",
     "unconfig": "0.3.3"
   },
